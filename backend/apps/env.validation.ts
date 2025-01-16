@@ -25,6 +25,12 @@ export class EnvironmentVariables {
   PORT: number;
 
   @IsString()
+  JWT_SECRET: string;
+
+  @IsString()
+  JWT_SECRET_EXPIRES_IN: string;
+
+  @IsString()
   AUTH_SERVICE_HOST: string;
 
   @IsNumber()
