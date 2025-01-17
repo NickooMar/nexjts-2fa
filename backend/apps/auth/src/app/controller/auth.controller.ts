@@ -1,18 +1,21 @@
-import { Controller, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus, Inject } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { AuthPatterns } from 'apps/constants';
+import { AuthPatterns, Services } from 'apps/constants';
 import { catchError, Observable } from 'rxjs';
-import { LoginDto } from 'libs/shared/dto/login.dto';
 import { AuthService } from '../../domain/service/auth.service';
 import { AccessTokenEntity } from '../../domain/entities/access-token.entity';
+import { signinRequestDto } from 'libs/shared/dto/signin.dto';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    @Inject(Services.AUTH_SERVICE)
+    private readonly authService: AuthService,
+  ) {}
 
-  @MessagePattern({ cmd: AuthPatterns.LOGIN })
-  login(input: LoginDto): Observable<AccessTokenEntity> {
-    return this.authService.login(input).pipe(
+  @MessagePattern({ cmd: AuthPatterns.SIGNIN })
+  signin(input: signinRequestDto): Observable<AccessTokenEntity> {
+    return this.authService.signin(input).pipe(
       catchError((err) => {
         throw new HttpException(
           { message: err.message },

@@ -1,22 +1,25 @@
-import { Injectable } from '@nestjs/common';
-import { LoginDto } from 'libs/shared/dto/login.dto';
-import { map, Observable, of } from 'rxjs';
-import { AccessTokenEntity } from '../entities/access-token.entity';
+import { map } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
+import { Services } from 'apps/constants';
+import { Inject, Injectable } from '@nestjs/common';
+import { signinRequestDto } from 'libs/shared/dto/signin.dto';
+import { UserService } from 'apps/user/src/domain/service/user.service';
+import { AuthServiceAbstract } from '../contracts/auth.service.abstract';
 
 @Injectable()
-export class AuthService {
-  constructor(private readonly jwtService: JwtService) {}
+export class AuthService implements AuthServiceAbstract {
+  constructor(
+    private readonly jwtService: JwtService,
+    @Inject(Services.USER_SERVICE) private readonly userService: UserService,
+  ) {}
 
-  validateUser(email: string, password: string): Observable<boolean> {
-    return of(true);
-  }
-
-  login(input: LoginDto): Observable<AccessTokenEntity> {
-    return this.validateUser(input.email, input.password).pipe(
+  signin(input: signinRequestDto) {
+    return this.userService.findOneByEmail(input.email).pipe(
       map((user) => {
         console.log({ user });
-        return new AccessTokenEntity();
+        // const accessToken = this.jwtService.sign({ email: user.email });
+        const accessToken = '';
+        return { accessToken };
       }),
     );
   }

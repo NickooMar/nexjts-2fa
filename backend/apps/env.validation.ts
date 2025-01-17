@@ -37,6 +37,14 @@ export class EnvironmentVariables {
   @Min(0)
   @Max(65535)
   AUTH_SERVICE_PORT: number;
+
+  @IsString()
+  USER_SERVICE_HOST: string;
+
+  @IsNumber()
+  @Min(0)
+  @Max(65535)
+  USER_SERVICE_PORT: number;
 }
 
 export function validate(config: Record<string, unknown>) {
