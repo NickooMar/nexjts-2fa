@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { Clients } from 'apps/constants';
+import { Clients, Services } from 'apps/constants';
 import { AuthController } from './auth.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { AuthService } from './auth.service';
+import { AuthProxy } from 'apps/auth/src/infrastructure/external/auth.proxy';
 
 @Module({
   imports: [
@@ -23,7 +23,12 @@ import { AuthService } from './auth.service';
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
-  exports: [AuthService, ClientsModule],
+  providers: [
+    {
+      provide: Services.AUTH_SERVICE,
+      useClass: AuthProxy,
+    },
+  ],
+  exports: [ClientsModule],
 })
 export class AuthModule {}

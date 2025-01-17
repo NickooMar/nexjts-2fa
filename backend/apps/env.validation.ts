@@ -1,62 +1,28 @@
-import { plainToInstance } from 'class-transformer';
-import {
-  Max,
-  Min,
-  IsEnum,
-  IsString,
-  IsNumber,
-  validateSync,
-} from 'class-validator';
+import * as Joi from 'joi';
 
-enum Environment {
-  Development = 'development',
-  Production = 'production',
+export enum Environment {
   Test = 'test',
-  Provision = 'provision',
+  Production = 'production',
+  Development = 'development',
 }
 
-export class EnvironmentVariables {
-  @IsEnum(Environment)
-  NODE_ENV: Environment;
+export const validationSchema = Joi.object({
+  // Application
+  PORT: Joi.number().default(3000).required(),
+  NODE_ENV: Joi.string()
+    .valid(...Object.values(Environment))
+    .default(Environment.Development)
+    .required(),
 
-  @IsNumber()
-  @Min(0)
-  @Max(65535)
-  PORT: number;
+  // JWT
+  JWT_SECRET: Joi.string().required(),
+  JWT_SECRET_EXPIRES_IN: Joi.string().default('1d').required(),
 
-  @IsString()
-  JWT_SECRET: string;
+  // Auth Service
+  AUTH_SERVICE_HOST: Joi.string().default('localhost').required(),
+  AUTH_SERVICE_PORT: Joi.number().default(3001).required(),
 
-  @IsString()
-  JWT_SECRET_EXPIRES_IN: string;
-
-  @IsString()
-  AUTH_SERVICE_HOST: string;
-
-  @IsNumber()
-  @Min(0)
-  @Max(65535)
-  AUTH_SERVICE_PORT: number;
-
-  @IsString()
-  USER_SERVICE_HOST: string;
-
-  @IsNumber()
-  @Min(0)
-  @Max(65535)
-  USER_SERVICE_PORT: number;
-}
-
-export function validate(config: Record<string, unknown>) {
-  const validatedConfig = plainToInstance(EnvironmentVariables, config, {
-    enableImplicitConversion: true,
-  });
-  const errors = validateSync(validatedConfig, {
-    skipMissingProperties: false,
-  });
-
-  if (errors.length > 0) {
-    throw new Error(errors.toString());
-  }
-  return validatedConfig;
-}
+  // User Service
+  USER_SERVICE_HOST: Joi.string().default('localhost').required(),
+  USER_SERVICE_PORT: Joi.number().default(3002).required(),
+});

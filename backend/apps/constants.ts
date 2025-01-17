@@ -19,5 +19,5 @@ export const MongoDatabases = {
 } as const;
 
 export const AuthPatterns = {
-  SIGNIN: 'signin',
+  SIGNIN: 'SIGNIN',
 } as const;

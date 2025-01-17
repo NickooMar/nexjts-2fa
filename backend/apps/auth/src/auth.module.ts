@@ -1,8 +1,8 @@
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { Services } from 'apps/constants';
-import { validate } from 'apps/env.validation';
 import { UserModule } from 'apps/user/src/user.module';
+import { validationSchema } from 'apps/env.validation';
 import { AuthService } from './domain/service/auth.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthController } from './app/controller/auth.controller';
@@ -10,7 +10,7 @@ import { AuthController } from './app/controller/auth.controller';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      validate,
+      validationSchema,
       isGlobal: true,
       envFilePath: '.env',
     }),

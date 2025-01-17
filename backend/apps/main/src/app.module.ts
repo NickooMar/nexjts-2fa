@@ -1,14 +1,14 @@
-import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { validate } from 'apps/env.validation';
+import { Global, Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
+import { validationSchema } from 'apps/env.validation';
 
 @Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
-      validate,
       isGlobal: true,
+      validationSchema,
       envFilePath: '.env',
     }),
     AuthModule,

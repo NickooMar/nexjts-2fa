@@ -1,12 +1,16 @@
 import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
-import { Controller, Post, Body } from '@nestjs/common';
+import { Services } from 'apps/constants';
+import { Controller, Post, Body, Inject } from '@nestjs/common';
+import { AuthService } from 'apps/auth/src/domain/service/auth.service';
 import { signinRequestDto } from '../../../../libs/shared/dto/signin.dto';
 import { AccessTokenEntity } from 'apps/auth/src/domain/entities/access-token.entity';
 
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    @Inject(Services.AUTH_SERVICE)
+    private readonly authService: AuthService,
+  ) {}
 
   @Post('signin')
   singin(@Body() input: signinRequestDto): Observable<AccessTokenEntity> {

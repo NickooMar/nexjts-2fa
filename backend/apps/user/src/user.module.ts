@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { validationSchema } from 'apps/env.validation';
 import { Repositories, Services } from 'apps/constants';
-import { validate } from 'apps/env.validation';
-import { UserRepository } from './infrastructure/repository/user.repository';
 import { UserService } from './domain/service/user.service';
+import { UserRepository } from './infrastructure/repository/user.repository';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      validate,
       isGlobal: true,
+      validationSchema,
       envFilePath: '.env',
     }),
   ],

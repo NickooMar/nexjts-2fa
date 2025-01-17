@@ -1,12 +1,12 @@
 import { Observable } from 'rxjs';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { AuthPatterns, Clients } from 'apps/constants';
-import { signinRequestDto } from '../../../../libs/shared/dto/signin.dto';
-import { AccessTokenEntity } from 'apps/auth/src/domain/entities/access-token.entity';
+import { signinRequestDto } from 'libs/shared/dto/signin.dto';
+import { AccessTokenEntity } from '../../domain/entities/access-token.entity';
+import { AuthServiceAbstract } from '../../domain/contracts/auth.service.abstract';
 
-@Injectable()
-export class AuthService {
+export class AuthProxy implements AuthServiceAbstract {
   constructor(
     @Inject(Clients.AUTH_CLIENT) private readonly client: ClientProxy,
   ) {}
