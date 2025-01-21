@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
+import { Clients, Services } from 'apps/constants';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { Clients, Services } from 'apps/constants';
 import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';
 
 @Module({
