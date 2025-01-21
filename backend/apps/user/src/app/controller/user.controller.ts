@@ -1,8 +1,8 @@
+import { Observable } from 'rxjs';
 import { Controller, Inject } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { Services, UserPatterns } from 'apps/constants';
 import { UserService } from '../../domain/service/user.service';
-import { Observable } from 'rxjs';
 import { User } from '../../infrastructure/schemas/user.schema';
 
 @Controller({ path: 'user', version: '1' })

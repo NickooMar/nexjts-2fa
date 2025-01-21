@@ -1,10 +1,10 @@
-import { Controller, HttpException, HttpStatus, Inject } from '@nestjs/common';
+import { catchError, Observable } from 'rxjs';
 import { MessagePattern } from '@nestjs/microservices';
 import { AuthPatterns, Services } from 'apps/constants';
-import { catchError, Observable } from 'rxjs';
-import { AuthService } from '../../domain/service/auth.service';
-import { AccessTokenEntity } from '../../domain/entities/access-token.entity';
 import { signinRequestDto } from 'libs/shared/dto/signin.dto';
+import { AuthService } from '../../domain/service/auth.service';
+import { Controller, HttpException, HttpStatus, Inject } from '@nestjs/common';
+import { AccessTokenEntity } from '../../domain/entities/access-token.entity';
 
 @Controller()
 export class AuthController {

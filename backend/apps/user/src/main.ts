@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { UserModule } from './user.module';
-import { MicroserviceOptions } from '@nestjs/microservices';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { MicroserviceOptions } from '@nestjs/microservices';
 import { HttpToRpcExceptionFilter } from 'libs/shared/exceptions/http-to-rpc.exception';
 import { LoggingInterceptor } from 'libs/shared/interceptors/logging.interceptor';
 

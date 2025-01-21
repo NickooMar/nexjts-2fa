@@ -1,7 +1,7 @@
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AuthModule } from './auth.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const host = process.env.AUTH_SERVICE_HOST ?? 'localhost';

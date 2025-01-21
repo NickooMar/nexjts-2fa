@@ -1,5 +1,5 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
 export enum UserRole {
   REGULAR = 'regular',
