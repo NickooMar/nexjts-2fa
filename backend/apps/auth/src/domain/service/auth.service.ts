@@ -3,14 +3,15 @@ import { JwtService } from '@nestjs/jwt';
 import { Services } from 'apps/constants';
 import { Inject, Injectable } from '@nestjs/common';
 import { signinRequestDto } from 'libs/shared/dto/signin.dto';
-import { UserService } from 'apps/user/src/domain/service/user.service';
 import { AuthServiceAbstract } from '../contracts/auth.service.abstract';
+import { UserServiceAbstract } from 'apps/user/src/domain/contracts/user.service.abstract';
 
 @Injectable()
 export class AuthService implements AuthServiceAbstract {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject(Services.USER_SERVICE) private readonly userService: UserService,
+    @Inject(Services.USER_SERVICE)
+    private readonly userService: UserServiceAbstract,
   ) {}
 
   signin(input: signinRequestDto) {

@@ -1,6 +1,7 @@
 import { ConfigModule } from '@nestjs/config';
 import { Global, Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 import { validationSchema } from 'apps/env.validation';
 
 @Global()
@@ -12,6 +13,7 @@ import { validationSchema } from 'apps/env.validation';
       envFilePath: '.env',
     }),
     AuthModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],

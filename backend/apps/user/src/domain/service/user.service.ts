@@ -13,6 +13,7 @@ export class UserService implements UserServiceAbstract {
   ) {}
 
   findOneByEmail(email: string): Observable<User> {
+    console.log('EMAIL FROM USER SERVICE');
     return from(this.userRepository.findByEmail(email));
   }
 }

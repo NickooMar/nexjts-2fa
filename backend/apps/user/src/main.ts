@@ -27,7 +27,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new LoggingInterceptor());
 
   await app.listen().then(() => {
-    Logger.log(`Auth service is running 🚀`, 'Bootstrap');
+    Logger.log(`User service is running 🚀`, 'Bootstrap');
   });
 }
 

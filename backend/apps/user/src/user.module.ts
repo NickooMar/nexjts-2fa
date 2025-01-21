@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { validationSchema } from 'apps/env.validation';
 import { Repositories, Services } from 'apps/constants';
 import { UserService } from './domain/service/user.service';
+import { UserController } from './app/controller/user.controller';
 import { UserRepository } from './infrastructure/repository/user.repository';
 
 @Module({
@@ -13,6 +14,7 @@ import { UserRepository } from './infrastructure/repository/user.repository';
       envFilePath: '.env',
     }),
   ],
+  controllers: [UserController],
   providers: [
     {
       provide: Services.USER_SERVICE,
@@ -23,6 +25,5 @@ import { UserRepository } from './infrastructure/repository/user.repository';
       useClass: UserRepository,
     },
   ],
-  exports: [Services.USER_SERVICE, Repositories.USER_REPOSITORY],
 })
 export class UserModule {}
