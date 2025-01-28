@@ -1,26 +1,28 @@
-import { map } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { JwtService } from '@nestjs/jwt';
-import { Services } from 'apps/constants';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { signinRequestDto } from 'libs/shared/dto/signin.dto';
 import { AuthServiceAbstract } from '../contracts/auth.service.abstract';
-import { UserServiceAbstract } from 'apps/user/src/domain/contracts/user.service.abstract';
+import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';
+import { AccessTokenEntity } from '../entities/access-token.entity';
 
 @Injectable()
 export class AuthService implements AuthServiceAbstract {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject(Services.USER_SERVICE)
-    private readonly userService: UserServiceAbstract,
+    private readonly userProxy: UserProxy,
   ) {}
 
   signin(input: signinRequestDto) {
-    return this.userService.findOneByEmail(input.email).pipe(
+    return this.userProxy.findOneByEmail(input.email).pipe(
       map((user) => {
         console.log({ user });
-        // const accessToken = this.jwtService.sign({ email: user.email });
-        const accessToken = '';
-        return { accessToken };
+
+        // if (!user) throw new Error('User not found');
+
+        // const payload = { email: user.email, sub: user.id };
+        // const accessToken = this.jwtService.sign(payload);
+        return new AccessTokenEntity();
       }),
     );
   }

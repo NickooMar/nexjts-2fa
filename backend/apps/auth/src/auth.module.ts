@@ -1,6 +1,6 @@
 import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
-import { Clients, Services } from 'apps/constants';
+import { Clients } from 'apps/constants';
 import { validationSchema } from 'apps/env.validation';
 import { AuthService } from './domain/service/auth.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -42,15 +42,6 @@ import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';
     ]),
   ],
   controllers: [AuthController],
-  providers: [
-    {
-      provide: Services.AUTH_SERVICE,
-      useClass: AuthService,
-    },
-    {
-      provide: Services.USER_SERVICE,
-      useClass: UserProxy,
-    },
-  ],
+  providers: [AuthService, UserProxy],
 })
 export class AuthModule {}
