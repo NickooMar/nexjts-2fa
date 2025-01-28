@@ -20,7 +20,7 @@ export class User {
   password: string;
 
   @Prop({ required: false, default: UserRole.REGULAR, enum: UserRole })
-  role: UserRole[];
+  role?: UserRole[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

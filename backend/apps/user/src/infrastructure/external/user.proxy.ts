@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs';
-import { User } from '../schemas/user.schema';
-import { Clients, UserPatterns } from 'apps/constants';
-import { ClientProxy } from '@nestjs/microservices';
-import { UserServiceAbstract } from '../../domain/contracts/user.service.abstract';
 import { Inject } from '@nestjs/common';
+import { User } from '../schemas/user.schema';
+import { ClientProxy } from '@nestjs/microservices';
+import { Clients, UserPatterns } from 'apps/constants';
+import { UserServiceAbstract } from '../../domain/contracts/user.service.abstract';
 
 export class UserProxy implements UserServiceAbstract {
   constructor(
