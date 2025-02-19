@@ -1,27 +1,22 @@
-import mongoose from 'mongoose';
+import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { User } from '../schemas/user.schema';
-import { UserRepositoryAbstract } from '../../domain/contracts/user.repository.abstract';
-import { BaseRepository } from 'libs/shared/repositories/base.repository';
 import { InjectModel } from '@nestjs/mongoose';
+import { UserDocument } from '../schemas/user.schema';
+import { User } from '../../domain/entities/user.entity';
+import { BaseRepository } from 'libs/shared/repositories/base.repository';
+import { UserRepositoryAbstract } from '../../domain/contracts/user.repository.abstract';
 
 @Injectable()
-export class UserRepository<T extends User>
+export class UserRepository<T extends UserDocument>
   extends BaseRepository<T>
   implements UserRepositoryAbstract
 {
-  constructor(
-    @InjectModel(User.name) private readonly userModel: mongoose.Model<T>,
-  ) {
-    super();
+  constructor(@InjectModel(User.name) protected readonly userModel: Model<T>) {
+    super(userModel);
   }
 
   async findByEmail(email: string): Promise<User> {
-    return {
-      _id: new mongoose.Types.ObjectId(),
-      email: 'test@test.com',
-      password: 'password',
-      username: 'test',
-    };
+    const user = await super.findOne({ email });
+    return new User(user);
   }
 }

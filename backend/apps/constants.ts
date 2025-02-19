@@ -23,5 +23,5 @@ export const AuthPatterns = {
 } as const;
 
 export const UserPatterns = {
-  FIND_ONE_BY_EMAIL: 'FIND_ONE_BY_EMAIL',
+  FIND_BY_EMAIL: 'FIND_BY_EMAIL',
 };

@@ -14,7 +14,6 @@ import { AuthProxy } from 'apps/auth/src/infrastructure/external/auth.proxy';
       validationSchema,
       envFilePath: '.env',
     }),
-
     ClientsModule.registerAsync([
       {
         imports: [ConfigModule],

@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
-import { User } from '../../infrastructure/schemas/user.schema';
+import { User } from '../entities/user.entity';
 
 export abstract class UserServiceAbstract {
-  abstract findOneByEmail(email: string): Observable<User>;
+  abstract findByEmail(email: string): Observable<User>;
 }

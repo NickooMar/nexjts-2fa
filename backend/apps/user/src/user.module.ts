@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 import { validationSchema } from 'apps/env.validation';
 import { UserService } from './domain/service/user.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserSchema } from './infrastructure/schemas/user.schema';
 import { UserController } from './app/controller/user.controller';
 import { UserRepository } from './infrastructure/repository/user.repository';
 
@@ -12,6 +14,17 @@ import { UserRepository } from './infrastructure/repository/user.repository';
       validationSchema,
       envFilePath: '.env',
     }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>(
+          'MONGO_URI',
+          'mongodb://localhost:27017/nextjs_nestjs_2fa',
+        ),
+      }),
+      inject: [ConfigService],
+    }),
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
   ],
   controllers: [UserController],
   providers: [UserService, UserRepository],

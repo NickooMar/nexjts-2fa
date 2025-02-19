@@ -13,19 +13,9 @@ export class AuthService implements AuthServiceAbstract {
     private readonly userProxy: UserProxy,
   ) {}
 
-  // return this.client.send<YourType>({ cmd: 'fetchData' }).pipe(
-  //   switchMap(response => {
-  //     // Perform additional operations with the received data
-  //     // For example, make another service call based on the initial response
-  //     return this.client.send<YourType>({ cmd: 'processData', data: response });
-  //   })
-  // );
-
   signin(input: signinRequestDto) {
-    return this.userProxy.findOneByEmail(input.email).pipe(
+    return this.userProxy.findByEmail(input.email).pipe(
       map((user) => {
-        console.log({ user });
-
         // if (!user) throw new Error('User not found');
 
         // const payload = { email: user.email, sub: user.id };

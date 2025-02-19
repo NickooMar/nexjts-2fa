@@ -1,13 +1,9 @@
 import { Types } from 'mongoose';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-
-export enum UserRole {
-  REGULAR = 'regular',
-  ADMIN = 'admin',
-}
+import { Role } from 'apps/auth/src/domain/entities/role.entity';
 
 @Schema({ timestamps: true })
-export class User {
+export class UserDocument {
   _id: Types.ObjectId;
 
   @Prop({ unique: true, required: true, trim: true })
@@ -19,8 +15,12 @@ export class User {
   @Prop({ required: true, trim: true })
   password: string;
 
-  @Prop({ required: false, default: UserRole.REGULAR, enum: UserRole })
-  role?: UserRole[];
+  @Prop({
+    required: true,
+    default: [Role.REGULAR],
+    type: [{ type: String, enum: Object.values(Role) }],
+  })
+  roles?: Role[];
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(UserDocument);

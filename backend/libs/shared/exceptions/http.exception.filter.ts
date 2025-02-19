@@ -1,14 +1,14 @@
 import {
-  Catch,
-  HttpStatus,
   ArgumentsHost,
-  HttpException,
+  Catch,
   ExceptionFilter,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 
 @Catch(HttpException)
-export class HttpToRpcExceptionFilter implements ExceptionFilter {
+export class HttpExceptionFilter implements ExceptionFilter {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   catch(exception: HttpException, host: ArgumentsHost): Observable<any> {
     return throwError(() => {

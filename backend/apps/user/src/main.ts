@@ -2,8 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { UserModule } from './user.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
-import { HttpToRpcExceptionFilter } from 'libs/shared/exceptions/http-to-rpc.exception';
-import { LoggingInterceptor } from 'libs/shared/interceptors/logging.interceptor';
 
 async function bootstrap() {
   const host = process.env.USER_SERVICE_HOST ?? 'localhost';
@@ -23,8 +21,6 @@ async function bootstrap() {
   );
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.useGlobalFilters(new HttpToRpcExceptionFilter());
-  app.useGlobalInterceptors(new LoggingInterceptor());
 
   await app.listen().then(() => {
     Logger.log(`User service is running 🚀`, 'Bootstrap');
