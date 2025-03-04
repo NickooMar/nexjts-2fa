@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+
+  main-service:
+    container_name: nestjs-main-service
+    build:
+      context: .
+      dockerfile: apps/main/Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - AUTH_SERVICE_HOST=auth-service
+      - AUTH_SERVICE_PORT=3001
+      - USER_SERVICE_HOST=user-service
+      - USER_SERVICE_PORT=3002
+      - JWT_SECRET=your-secret-key
+      - JWT_SECRET_EXPIRES_IN=1d
+      - MONGO_URI=mongodb://mongodb:27017/nextjs_nestjs_2fa
+    depends_on:
+      - auth-service
+      - user-service
+    networks:
+      - app-network
+
+  auth-service:
+    container_name: nestjs-auth-service
+    build:
+      context: .
+      dockerfile: apps/auth/Dockerfile
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - AUTH_SERVICE_HOST=auth-service
+      - AUTH_SERVICE_PORT=3001
+      - USER_SERVICE_HOST=user-service
+      - USER_SERVICE_PORT=3002
+      - JWT_SECRET=your-secret-key
+      - JWT_SECRET_EXPIRES_IN=1d
+      - MONGO_URI=mongodb://mongodb:27017/nextjs_nestjs_2fa
+    depends_on:
+      - mongodb
+      - user-service
+    networks:
+      - app-network
+
+  user-service:
+    container_name: nestjs-user-service
+    build:
+      context: .
+      dockerfile: apps/user/Dockerfile
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - AUTH_SERVICE_HOST=auth-service
+      - AUTH_SERVICE_PORT=3001
+      - USER_SERVICE_HOST=user-service
+      - USER_SERVICE_PORT=3002
+      - JWT_SECRET=your-secret-key
+      - JWT_SECRET_EXPIRES_IN=1d
+      - MONGO_URI=mongodb://mongodb:27017/nextjs_nestjs_2fa
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
