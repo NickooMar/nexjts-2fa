@@ -23,8 +23,8 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 
 # Set environment and expose port
-ENV NODE_ENV=production
-EXPOSE 3002
+ENV NODE_ENV=${NODE_ENV}
+EXPOSE ${PORT}
 
 # Start the application
 CMD ["node", "dist/apps/user/main"]

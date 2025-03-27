@@ -6,21 +6,19 @@ services:
       dockerfile: apps/main/Dockerfile
     ports:
       - '3000:3000'
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - PORT=${PORT}
-      - AUTH_SERVICE_HOST=${AUTH_SERVICE_HOST}
-      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT}
-      - USER_SERVICE_HOST=${USER_SERVICE_HOST}
-      - USER_SERVICE_PORT=${USER_SERVICE_PORT}
-      - JWT_SECRET=${JWT_SECRET}
-      - JWT_SECRET_EXPIRES_IN=${JWT_SECRET_EXPIRES_IN}
-      - MONGO_URI=${MONGO_URI}
+    env_file:
+      - .env
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /usr/src/app
+        - action: rebuild
+          path: apps/main/
     depends_on:
       - auth-service
       - user-service
-    networks:
-      - app-network
+    network_mode: host
 
   auth-service:
     container_name: nestjs-auth-service
@@ -29,20 +27,18 @@ services:
       dockerfile: apps/auth/Dockerfile
     ports:
       - '3001:3001'
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - PORT=${PORT}
-      - AUTH_SERVICE_HOST=${AUTH_SERVICE_HOST}
-      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT}
-      - USER_SERVICE_HOST=${USER_SERVICE_HOST}
-      - USER_SERVICE_PORT=${USER_SERVICE_PORT}
-      - JWT_SECRET=${JWT_SECRET}
-      - JWT_SECRET_EXPIRES_IN=${JWT_SECRET_EXPIRES_IN}
-      - MONGO_URI=${MONGO_URI}
+    env_file:
+      - .env
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /usr/src/app
+        - action: rebuild
+          path: apps/auth/
     depends_on:
       - user-service
-    networks:
-      - app-network
+    network_mode: host
 
   user-service:
     container_name: nestjs-user-service
@@ -51,19 +47,13 @@ services:
       dockerfile: apps/user/Dockerfile
     ports:
       - '3002:3002'
-    environment:
-      - NODE_ENV=${NODE_ENV}
-      - PORT=${PORT}
-      - AUTH_SERVICE_HOST=${AUTH_SERVICE_HOST}
-      - AUTH_SERVICE_PORT=${AUTH_SERVICE_PORT}
-      - USER_SERVICE_HOST=${USER_SERVICE_HOST}
-      - USER_SERVICE_PORT=${USER_SERVICE_PORT}
-      - JWT_SECRET=${JWT_SECRET}
-      - JWT_SECRET_EXPIRES_IN=${JWT_SECRET_EXPIRES_IN}
-      - MONGO_URI=${MONGO_URI}
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
+    env_file:
+      - .env
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /usr/src/app
+        - action: rebuild
+          path: apps/user/
+    network_mode: host
