@@ -1,0 +1,39 @@
+{
+  "general": {
+    "loading": "Cargando..."
+  },
+  "navbar": {
+    "home": "Inicio",
+    "singin": "Iniciar sesión",
+    "signup": "Registrarse",
+    "signout": "Cerrar sesión"
+  },
+  "signin": {
+    "title": "Iniciar sesión en tu cuenta",
+    "description": "Ingresa la información de tu cuenta a continuación para acceder a la plataforma.",
+    "google_auth": "Iniciar sesión con Google",
+    "github_auth": "Iniciar sesión con Github",
+    "continue_with": "o continuar con",
+    "email": {
+      "title": "Correo electrónico",
+      "required": "El correo electrónico es requerido",
+      "invalid": "El correo electrónico no es válido",
+      "placeholder": "Correo electrónico"
+    },
+    "password": {
+      "title": "Contraseña",
+      "required": "La contraseña es requerida"
+    },
+    "forgot_password": "¿Olvidaste tu contraseña?",
+    "login": "Iniciar sesión",
+    "not_registered": "¿No tienes una cuenta?",
+    "create_account": "Crea una cuenta",
+    "messages": {
+      "success": {},
+      "errors": {
+        "unathorized": "Credenciales inválidas",
+        "internal_server_error": "Error interno del servidor"
+      }
+    }
+  }
+}

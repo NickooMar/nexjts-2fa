@@ -1,0 +1,33 @@
+{
+  "general": {
+    "loading": "Loading..."
+  },
+  "signin": {
+    "title": "Sign in into your account",
+    "description": "Enter your account information below to access.",
+    "google_auth": "Sign in with Google",
+    "github_auth": "Sign in with Github",
+    "continue_with": "or continue with",
+    "email": {
+      "title": "Email",
+      "required": "Email is required",
+      "invalid": "Email is not valid",
+      "placeholder": "Email address"
+    },
+    "password": {
+      "title": "Password",
+      "required": "Password is required"
+    },
+    "forgot_password": "Forgot your password?",
+    "login": "Sign in",
+    "not_registered": "Don't have an account?",
+    "create_account": "Create an account",
+    "messages": {
+      "success": {},
+      "errors": {
+        "unathorized": "Invalid credentials",
+        "internal_server_error": "Internal server error"
+      }
+    }
+  }
+}
