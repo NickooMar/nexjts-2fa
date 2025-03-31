@@ -1,10 +1,10 @@
 import React from "react";
 import { auth } from "@/auth";
 import { Link } from "@/i18n/routing";
-import { ModeToggle } from "./ModeToggle";
 import { Home, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { signOutAction } from "@/app/actions/auth.actions";
+import { ThemeSwitcher } from "../Theme/ThemeSwitcher";
 
 async function handleSignOut() {
   "use server";
@@ -46,7 +46,7 @@ const Navbar = async () => {
               </Button>
             </>
           )}
-          <ModeToggle />
+          <ThemeSwitcher />
         </div>
       </div>
     </nav>
