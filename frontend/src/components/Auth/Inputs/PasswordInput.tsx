@@ -1,13 +1,13 @@
 "use client";
 
-import { forwardRef, useState } from "react";
+import { forwardRef, InputHTMLAttributes, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input, InputProps } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
-interface PasswordInputProps extends InputProps {
+interface PasswordInputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   name: string;
   label?: string;

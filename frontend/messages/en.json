@@ -2,6 +2,19 @@
   "general": {
     "loading": "Loading..."
   },
+  "actions": {
+    "create": "Create",
+    "create_model": "Create {model}"
+  },
+  "navbar": {
+    "home": "Home",
+    "singin": "Sign in",
+    "signup": "Sign up",
+    "signout": "Log out"
+  },
+  "themes": {
+    "title": "Themes"
+  },
   "signin": {
     "title": "Sign in into your account",
     "description": "Enter your account information below to access.",
@@ -29,5 +42,51 @@
         "internal_server_error": "Internal server error"
       }
     }
+  },
+  "signup": {
+    "title": "Create an account",
+    "description": "Enter your account information below to create it.",
+    "organization": {
+      "title": "Organization name",
+      "required": "Organization name is required",
+      "invalid": "Organization name is not valid",
+      "placeholder": "Organization name"
+    },
+    "first_name": {
+      "title": "First name",
+      "required": "First name is required",
+      "invalid": "First name is not valid",
+      "placeholder": "First name"
+    },
+    "last_name": {
+      "title": "Last name",
+      "required": "Last name is required",
+      "invalid": "Last name is not valid",
+      "placeholder": "Last name"
+    },
+    "email": {
+      "title": "Email",
+      "required": "Email is required",
+      "invalid": "Email is not valid",
+      "placeholder": "Email address"
+    },
+    "password": {
+      "title": "Password",
+      "required": "Password is required"
+    },
+    "confirm_password": {
+      "title": "Confirm password",
+      "required": "Confirm password is required"
+    },
+    "messages": {
+      "success": {},
+      "errors": {
+        "unathorized": "Invalid credentials",
+        "internal_server_error": "Internal server error"
+      }
+    },
+    "create": "Create account",
+    "already_have_account": "Already have an account?",
+    "signin": "Sign in"
   }
 }
