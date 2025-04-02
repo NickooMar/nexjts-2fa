@@ -13,6 +13,7 @@ import { AuthProviders } from "@/types/auth/auth.types";
 import { DotBackground } from "../Aceternity/DotBackground";
 import { PasswordInput } from "@/components/Auth/Inputs/PasswordInput";
 import { signIn, signInWithProvider } from "@/app/actions/auth.actions";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const SignInForm: React.FC = () => {
   const t = useTranslations("signin");
@@ -20,7 +21,7 @@ const SignInForm: React.FC = () => {
   const [signInState, signInFormAction, signInPending] = useActionState<
     ActionState,
     FormData
-  >(signIn, { error: "" });
+  >(signIn, { error: "", fieldErrors: {} });
 
   async function handleSigninProviders(provider: AuthProviders) {
     await signInWithProvider(provider);
@@ -29,7 +30,7 @@ const SignInForm: React.FC = () => {
   return (
     <div className="h-screen flex flex-col items-center justify-center">
       <DotBackground>
-        <section className="w-full max-w-md mx-auto p-4 sm:p-6 md:p-8 z-0 bg-background border border-border rounded-xl shadow">
+        <section className="w-full max-w-md mx-auto p-4 sm:p-6 md:p-8 z-0 bg-card border border-border rounded-xl shadow">
           <form action={signInFormAction} className="space-y-5">
             <div className="flex flex-col justify-center items-center space-y-2 gap-2">
               <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
@@ -49,6 +50,13 @@ const SignInForm: React.FC = () => {
                   aria-label="email"
                   placeholder={t("email.placeholder")}
                 />
+                {signInState?.fieldErrors?.email && (
+                  <Alert variant="destructive" className="mt-4">
+                    <AlertDescription>
+                      {signInState.fieldErrors.email}
+                    </AlertDescription>
+                  </Alert>
+                )}
               </div>
               <div>
                 <PasswordInput
@@ -59,6 +67,13 @@ const SignInForm: React.FC = () => {
                   placeholder={t("password.title")}
                   className="w-full"
                 />
+                {signInState?.fieldErrors?.password && (
+                  <Alert variant="destructive" className="mt-4">
+                    <AlertDescription>
+                      {signInState.fieldErrors.password}
+                    </AlertDescription>
+                  </Alert>
+                )}
               </div>
               {/* DISABLE RESET PASSWORD FOR NOW */}
               {/* 
@@ -73,7 +88,12 @@ const SignInForm: React.FC = () => {
           */}
 
               {signInState?.error && (
-                <p className="text-red-500">{signInState.error}</p>
+                <Alert>
+                  <AlertTitle>Heads up!</AlertTitle>
+                  <AlertDescription>
+                    You can add components to your app using the cli.
+                  </AlertDescription>
+                </Alert>
               )}
 
               <Button
@@ -106,7 +126,7 @@ const SignInForm: React.FC = () => {
                 <p className="text-sm">{t("not_registered")}</p>
                 <Link
                   href="/signup"
-                  className="text-sm text-secondary-action hover:underline"
+                  className="text-sm text-secondary-action underline"
                 >
                   {t("create_account")}
                 </Link>

@@ -1,24 +1,36 @@
 "use server";
 
-import { ActionState, validatedAction } from "@/middleware";
 import { signInSchema, signUpSchema } from "@/types/auth/auth.schemas";
-import { AuthProviders } from "@/types/auth/auth.types";
+import { AuthProviders, SignUpFormState } from "@/types/auth/auth.types";
 import { signIn as ProviderSignin, signOut } from "@/auth";
 import { signIn as nextAuthSignIn } from "@/auth";
+import { ActionState, validatedAction } from "@/middleware";
+import { z } from "zod";
+
+type SignUpData = z.infer<typeof signUpSchema>;
 
 export const signUp = validatedAction(
   signUpSchema,
-  async (data: {
-    email: string;
-    password: string;
-    confirmPassword: string;
-  }): Promise<ActionState> => {
+  async (data: SignUpData): Promise<SignUpFormState> => {
     try {
-      console.log({ data });
-      return {};
-    } catch (error) {
-      console.error(error);
-      return { error: "An unexpected error occurred" };
+      const { confirmPassword: _, ...signUpData } = data;
+
+      // Example implementation:
+      // await createUser(signUpData);
+      console.log("Processing signup for:", signUpData);
+
+      return {
+        error: "",
+        fieldErrors: {},
+      };
+    } catch (err) {
+      const error = err as Error;
+      console.error("Sign up error:", error);
+
+      return {
+        error: "Something went wrong. Please try again.",
+        fieldErrors: {},
+      };
     }
   }
 );
@@ -34,7 +46,7 @@ export const signIn = validatedAction(
       });
     } catch (error) {
       console.error("Sign in error:", error);
-      return { error: "An unexpected error occurred" };
+      return { error: "An unexpected error occurred", fieldErrors: {} };
     }
   }
 );

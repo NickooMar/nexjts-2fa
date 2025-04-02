@@ -39,6 +39,36 @@ body {
   }
 
   .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 0 0% 100%;
+    --card: 222.2 84% 6%;
+    --card-foreground: 0 0% 100%;
+    --popover: 222.2 84% 6%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 96.1%;
+    --muted: 222.2 47.4% 15%;
+    --muted-foreground: 210 40% 96.1%;
+    --accent: 222.2 47.4% 11.2%;
+    --accent-foreground: 210 40% 96.1%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 222.2 84% 4.9%;
+    --border: 222.2 47.4% 15%;
+    --input: 222.2 47.4% 15%;
+    --ring: 210 40% 98%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --secondary-action: 210 40% 96.1%;
+    --secondary-action-foreground: 222.2 47.4% 11.2%;
+  }
+
+  .dark-alt {
     --background: 220 10% 10%;
     --foreground: 210 10% 90%;
     --card: 220 10% 13%;
@@ -94,35 +124,6 @@ body {
     --chart-5: 55 70% 50%;
     --secondary-action: 35 35% 35%;
     --secondary-action-foreground: 30 15% 85%;
-  }
-
-  .dark-alt {
-    --background: 230 8% 8%;
-    --foreground: 220 8% 85%;
-    --card: 230 8% 10%;
-    --card-foreground: 220 8% 85%;
-    --popover: 230 8% 12%;
-    --popover-foreground: 220 8% 85%;
-    --primary: 230 50% 40%;
-    --primary-foreground: 220 8% 90%;
-    --secondary: 230 8% 20%;
-    --secondary-foreground: 220 8% 80%;
-    --muted: 230 8% 15%;
-    --muted-foreground: 220 8% 60%;
-    --accent: 300 50% 40%;
-    --accent-foreground: 220 8% 90%;
-    --destructive: 10 50% 35%;
-    --destructive-foreground: 220 8% 90%;
-    --border: 230 8% 15%;
-    --input: 230 8% 15%;
-    --ring: 230 50% 40%;
-    --chart-1: 210 60% 40%;
-    --chart-2: 170 50% 35%;
-    --chart-3: 40 70% 45%;
-    --chart-4: 300 50% 50%;
-    --chart-5: 350 65% 45%;
-    --secondary-action: 230 30% 30%;
-    --secondary-action-foreground: 220 8% 80%;
   }
 
   .forest {
