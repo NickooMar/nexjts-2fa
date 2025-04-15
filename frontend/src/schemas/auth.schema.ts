@@ -1,5 +1,5 @@
 import z from "zod";
-import { AuthProviders } from "./auth.types";
+import { AuthProviders } from "@/types/auth/auth.types";
 
 export const signInSchema = z.object({
   email: z

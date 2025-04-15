@@ -25,11 +25,14 @@
       "title": "Email",
       "required": "Email is required",
       "invalid": "Email is not valid",
+      "min_length": "Email should be at least 4 characters",
       "placeholder": "Email address"
     },
     "password": {
       "title": "Password",
-      "required": "Password is required"
+      "required": "Password is required",
+      "min_length": "Password must be at least 8 characters",
+      "max_length": "Password must be at most 50 characters"
     },
     "forgot_password": "Forgot your password?",
     "login": "Sign in",
@@ -39,6 +42,7 @@
       "success": {},
       "errors": {
         "unathorized": "Invalid credentials",
+        "invalid_data": "Please check your credentials and try again.",
         "internal_server_error": "Internal server error"
       }
     }
@@ -82,6 +86,7 @@
       "success": {},
       "errors": {
         "unathorized": "Invalid credentials",
+        "invalid_data": "Please check your credentials and try again.",
         "internal_server_error": "Internal server error"
       }
     },

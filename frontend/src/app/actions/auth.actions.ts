@@ -1,55 +1,40 @@
 "use server";
 
-import { signInSchema, signUpSchema } from "@/types/auth/auth.schemas";
-import { AuthProviders, SignUpFormState } from "@/types/auth/auth.types";
-import { signIn as ProviderSignin, signOut } from "@/auth";
+import {
+  AuthProviders,
+  SignInFormState,
+  SignUpFormState,
+} from "@/types/auth/auth.types";
 import { signIn as nextAuthSignIn } from "@/auth";
-import { ActionState, validatedAction } from "@/middleware";
-import { z } from "zod";
+import { signIn as ProviderSignin, signOut } from "@/auth";
+import { signInSchema, signUpSchema } from "@/schemas/auth.schema";
 
-type SignUpData = z.infer<typeof signUpSchema>;
+export const signUpAction = async (data: SignUpFormState) => {
+  const result = signUpSchema.safeParse(data);
 
-export const signUp = validatedAction(
-  signUpSchema,
-  async (data: SignUpData): Promise<SignUpFormState> => {
-    try {
-      const { confirmPassword: _, ...signUpData } = data;
-
-      // Example implementation:
-      // await createUser(signUpData);
-      console.log("Processing signup for:", signUpData);
-
-      return {
-        error: "",
-        fieldErrors: {},
-      };
-    } catch (err) {
-      const error = err as Error;
-      console.error("Sign up error:", error);
-
-      return {
-        error: "Something went wrong. Please try again.",
-        fieldErrors: {},
-      };
-    }
+  if (!result.success) {
+    console.error(result.error);
+    return { error: "Validation failed" };
   }
-);
 
-export const signIn = validatedAction(
-  signInSchema,
-  async (data: { email: string; password: string }): Promise<ActionState> => {
-    try {
-      return await nextAuthSignIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-      });
-    } catch (error) {
-      console.error("Sign in error:", error);
-      return { error: "An unexpected error occurred", fieldErrors: {} };
-    }
+  return { success: true };
+};
+
+export const signInAction = async (data: SignInFormState) => {
+  const result = signInSchema.safeParse(data);
+
+  if (!result.success) {
+    console.error(result.error);
+    return { error: "Validation failed" };
   }
-);
+
+  console.log("Processing signin for:", data);
+  // return await nextAuthSignIn("credentials", {
+  //   email: data.email,
+  //   password: data.password,
+  //   redirect: false,
+  // });
+};
 
 export const signInWithProvider = async (provider: AuthProviders) => {
   if (!provider) return;

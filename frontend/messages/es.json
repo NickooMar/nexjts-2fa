@@ -39,6 +39,7 @@
       "success": {},
       "errors": {
         "unathorized": "Credenciales inválidas",
+        "invalid_data": "Por favor, verifica tus credenciales y vuelve a intentarlo.",
         "internal_server_error": "Error interno del servidor"
       }
     }
@@ -82,6 +83,7 @@
       "success": {},
       "errors": {
         "unathorized": "Credenciales inválidas",
+        "invalid_data": "Por favor, verifica tus credenciales y vuelve a intentarlo.",
         "internal_server_error": "Error interno del servidor"
       }
     },

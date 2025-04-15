@@ -1,10 +1,9 @@
 import axios from "axios";
-import { JWT } from "next-auth/jwt";
-import Google from "next-auth/providers/google";
 import { jwtDecode } from "jwt-decode";
+import Google from "next-auth/providers/google";
+import { AuthProviders } from "./types/auth/auth.types";
 import NextAuth, { DefaultSession, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { AuthProviders } from "./types/auth/auth.types";
 
 interface AuthUser extends User {
   accessToken?: string;
@@ -46,7 +45,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           if (!data) throw new Error("Invalid credentials");
 
-          const access: any = jwtDecode(data.accessToken);
+          const access: { id: string; email: string; username: string } =
+            jwtDecode(data.accessToken);
 
           return {
             id: access.id,
@@ -96,6 +96,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return false;
     },
+  },
+  pages: {
+    signIn: "/signin",
   },
   secret: process.env.AUTH_SECRET,
   session: { strategy: "jwt" },
