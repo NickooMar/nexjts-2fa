@@ -12,4 +12,12 @@ export class AuthController {
   singin(@Body() input: signinRequestDto): Observable<AccessTokenEntity> {
     return this.authProxy.signin(input);
   }
+
+  @Post('signup')
+  signup(@Body() body: any): any {
+    console.log({ body });
+
+    return { message: 'success' };
+    // return this.authProxy.signup(input);
+  }
 }

@@ -3,7 +3,17 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "HomiQ",
-  description: "HomiQ"
+  description: "HomiQ",
+  keywords: ["HomiQ", "Real Estate", "Property", "Home", "Rent", "Buy"],
+  icons: {
+    icon: "/favicon.ico",
+  },
+  alternates: {
+    languages: {
+      "en-US": "/en-US",
+      "es-AR": "/es-AR",
+    },
+  },
 };
 
 export default function RootLayout({

@@ -24,42 +24,11 @@ const $axios = axios.create({
 });
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [
-    Google,
-    CredentialsProvider({
-      name: "credentials",
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials): Promise<AuthUser | null> {
-        try {
-          if (!credentials?.email || !credentials?.password) {
-            return null;
-          }
-
-          const { data } = await $axios.post("api/auth/signin", {
-            email: credentials.email,
-            password: credentials.password,
-          });
-
-          if (!data) throw new Error("Invalid credentials");
-
-          const access: { id: string; email: string; username: string } =
-            jwtDecode(data.accessToken);
-
-          return {
-            id: access.id,
-            email: access.email,
-            name: access.username,
-            accessToken: data.accessToken,
-          };
-        } catch (error) {
-          throw new Error(`Failed to sign in: ${error}`);
-        }
-      },
-    }),
-  ],
+  pages: {
+    signIn: "/signin",
+    error: "/auth/error",
+    verifyRequest: "/auth/verify-request",
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -96,10 +65,54 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return false;
     },
+    async authorized({ auth, request }) {
+      // Handle auth for API routes
+      if (request.nextUrl.pathname.startsWith("/api/")) {
+        return !!auth?.user;
+      }
+
+      return true; // Let middleware handle the auth for pages
+    },
   },
-  pages: {
-    signIn: "/signin",
-  },
-  secret: process.env.AUTH_SECRET,
+  providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials): Promise<AuthUser | null> {
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            return null;
+          }
+
+          const { data } = await $axios.post("/api/auth/signin", {
+            email: credentials.email,
+            password: credentials.password,
+          });
+
+          if (!data) throw new Error("Invalid credentials");
+
+          const access: { id: string; email: string; username: string } =
+            jwtDecode(data.accessToken);
+
+          return {
+            id: access.id,
+            email: access.email,
+            name: access.username,
+            accessToken: data.accessToken,
+          };
+        } catch (error) {
+          throw new Error(`Failed to sign in: ${error}`);
+        }
+      },
+    }),
+  ],
   session: { strategy: "jwt" },
+  secret: process.env.AUTH_SECRET,
 });
