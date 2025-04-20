@@ -5,29 +5,17 @@ import {
   SignInFormState,
   SignUpFormState,
 } from "@/types/auth/auth.types";
-import axios from "axios";
-import { signIn, signOut } from "@/auth";
+import { signIn, signOut, signUp } from "@/auth";
 import { signInSchema, signUpSchema } from "@/schemas/auth.schema";
 
-const $axios = axios.create({
-  baseURL: `${process.env.NEST_BACKEND_PUBLIC_API_URL}/api/v1`,
-});
-
 export const signUpAction = async (data: SignUpFormState) => {
-  console.log({ data });
   const result = signUpSchema.safeParse(data);
-
-  if (!result.success) {
-    console.error(result.error);
-    return { error: "Validation failed" };
-  }
+  if (!result.success) return { error: "Validation failed" };
 
   try {
-    const response = await $axios.post("/auth/signup", data, {
-      timeout: 10000,
-    });
+    const result = await signUp(data);
 
-    console.log({ response });
+    console.log({ result });
 
     // if (response.status !== 200) {
     //   throw new Error("Signup failed");
@@ -42,11 +30,7 @@ export const signUpAction = async (data: SignUpFormState) => {
 
 export const signInAction = async (data: SignInFormState) => {
   const result = signInSchema.safeParse(data);
-
-  if (!result.success) {
-    console.error(result.error);
-    return { error: "Validation failed" };
-  }
+  if (!result.success) return { error: "Validation failed" };
 
   try {
     const result = await signIn("credentials", {

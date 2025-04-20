@@ -1,7 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import Google from "next-auth/providers/google";
-import { AuthProviders } from "./types/auth/auth.types";
+import { AuthProviders, SignUpFormState } from "./types/auth/auth.types";
 import NextAuth, { DefaultSession, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -20,7 +20,8 @@ interface CustomSession extends DefaultSession {
 }
 
 const $axios = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: `${process.env.NEST_BACKEND_PUBLIC_API_URL}/api/v1`,
+  timeout: 10000,
 });
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -91,7 +92,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return null;
           }
 
-          const { data } = await $axios.post("/api/auth/signin", {
+          const { data } = await $axios.post("/auth/signin", {
             email: credentials.email,
             password: credentials.password,
           });
@@ -107,7 +108,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             name: access.username,
             accessToken: data.accessToken,
           };
-        } catch (error) {
+        } catch (error: unknown) {
           throw new Error(`Failed to sign in: ${error}`);
         }
       },
@@ -116,3 +117,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: { strategy: "jwt" },
   secret: process.env.AUTH_SECRET,
 });
+
+export const signUp = async (data: SignUpFormState) => {
+  const response = await $axios.post("/auth/signup", data);
+  return response;
+};
