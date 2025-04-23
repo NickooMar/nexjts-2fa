@@ -1,8 +1,11 @@
 import { z } from "zod";
-import { signInSchema, signUpSchema } from "@/schemas/auth.schema";
+import {
+  createSignInSchema,
+  createSignUpSchema,
+} from "@/schemas/auth.schema";
 
-export type SignUpFormState = z.infer<typeof signUpSchema>;
-export type SignInFormState = z.infer<typeof signInSchema>;
+export type SignUpFormState = z.infer<ReturnType<typeof createSignUpSchema>>;
+export type SignInFormState = z.infer<ReturnType<typeof createSignInSchema>>;
 
 export enum AuthProviders {
   Google = "google",

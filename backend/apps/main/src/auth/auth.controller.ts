@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Controller, Post, Body } from '@nestjs/common';
-import { signinRequestDto } from '../../../../libs/shared/dto/signin.dto';
 import { AuthProxy } from 'apps/auth/src/infrastructure/external/auth.proxy';
+import { signinRequestDto } from '../../../../libs/shared/dto/auth/signin.dto';
 import { AccessTokenEntity } from 'apps/auth/src/domain/entities/access-token.entity';
 
 @Controller({ path: 'auth', version: '1' })

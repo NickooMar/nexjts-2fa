@@ -15,6 +15,28 @@
   "themes": {
     "title": "Temas"
   },
+  "auth": {
+    "messages": {
+      "errors": {
+        "invalid_email": "Correo electrónico inválido",
+        "email_min_length": "El correo electrónico debe tener al menos 6 caracteres",
+        "password_required": "La contraseña es requerida",
+        "password_min_length": "La contraseña debe tener al menos 8 caracteres",
+        "password_max_length": "La contraseña no puede exceder 20 caracteres",
+        "password_uppercase": "La contraseña debe contener al menos una letra mayúscula",
+        "password_lowercase": "La contraseña debe contener al menos una letra minúscula",
+        "password_number": "La contraseña debe contener al menos un número",
+        "password_special_character": "La contraseña debe contener al menos un carácter especial",
+        "password_invalid_start": "La contraseña no puede comenzar con un punto o nueva línea",
+        "confirm_password_min_length": "La contraseña de confirmación debe tener al menos 8 caracteres",
+        "passwords_dont_match": "Las contraseñas no coinciden",
+        "organization_name_min_length": "El nombre de la organización debe tener al menos 3 caracteres",
+        "first_name_min_length": "El nombre debe tener al menos 3 caracteres",
+        "last_name_min_length": "El apellido debe tener al menos 3 caracteres",
+        "invalid_provider": "El proveedor es inválido"
+      }
+    }
+  },
   "signin": {
     "title": "Iniciar sesión en tu cuenta",
     "description": "Ingresa la información de tu cuenta a continuación para acceder a la plataforma.",

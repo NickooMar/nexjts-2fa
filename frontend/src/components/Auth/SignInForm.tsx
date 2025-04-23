@@ -9,10 +9,10 @@ import { useToast } from "@/hooks/useToast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import GoogleIcon from "@mui/icons-material/Google";
-import { signInSchema } from "@/schemas/auth.schema";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { createSignInSchema } from "@/schemas/auth.schema";
 import { DotBackground } from "../Aceternity/DotBackground";
 import { Form, FormField, FormItem, FormMessage } from "../ui/form";
 import { PasswordInput } from "@/components/Auth/Inputs/PasswordInput";
@@ -20,8 +20,10 @@ import { AuthProviders, SignInFormState } from "@/types/auth/auth.types";
 import { signInAction, signInWithProvider } from "@/app/actions/auth.actions";
 
 const SignInForm: React.FC = () => {
-  const t = useTranslations("signin");
+  const t = useTranslations();
   const { error: errorToast } = useToast();
+
+  const signInSchema = createSignInSchema(t);
 
   const form = useForm<SignInFormState>({
     resolver: zodResolver(signInSchema),
@@ -44,7 +46,7 @@ const SignInForm: React.FC = () => {
       console.log(result);
     } catch (error) {
       console.error(error);
-      errorToast(t("messages.errors.invalid_data"));
+      errorToast(t("signin.messages.errors.invalid_data"));
     }
   };
 
@@ -56,10 +58,10 @@ const SignInForm: React.FC = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="flex flex-col justify-center items-center space-y-2 gap-2">
                 <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                  {t("title")}
+                  {t("signin.title")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  {t("description")}
+                  {t("signin.description")}
                 </p>
               </div>
               <section className="space-y-4">
@@ -73,7 +75,7 @@ const SignInForm: React.FC = () => {
                         type="email"
                         required
                         aria-label="email"
-                        placeholder={t("email.placeholder")}
+                        placeholder={t("signin.email.placeholder")}
                       />
                       <FormMessage />
                     </FormItem>
@@ -89,7 +91,7 @@ const SignInForm: React.FC = () => {
                         id="password"
                         required
                         aria-label="password"
-                        placeholder={t("password.title")}
+                        placeholder={t("signin.password.title")}
                         className="w-full"
                       />
                       <FormMessage />
@@ -103,7 +105,7 @@ const SignInForm: React.FC = () => {
               href="/forgot"
               className="text-sm text-rose-600 hover:underline dark:text-white"
             >
-              {t("forgot_password")}
+              {t("signin.forgot_password")}
             </Link>
           </div>
           */}
@@ -113,12 +115,12 @@ const SignInForm: React.FC = () => {
                   className="w-full rounded-xl mt-4 p-4"
                   disabled={form.formState.isSubmitting}
                 >
-                  {form.formState.isSubmitting ? <Loader /> : t("login")}
+                  {form.formState.isSubmitting ? <Loader /> : t("signin.login")}
                 </Button>
                 <div className="flex justify-center items-center">
                   <Separator className="w-[35%]" />
                   <p className="text-sm text-muted-foreground mx-4 whitespace-nowrap">
-                    {t("continue_with")}
+                    {t("signin.continue_with")}
                   </p>
                   <Separator className="w-[35%]" />
                 </div>
@@ -131,16 +133,16 @@ const SignInForm: React.FC = () => {
                     }
                   >
                     <GoogleIcon className="mx-2" />
-                    {t("google_auth")}
+                    {t("signin.google_auth")}
                   </Button>
                 </div>
                 <div className="flex justify-center items-center gap-2">
-                  <p className="text-sm">{t("not_registered")}</p>
+                  <p className="text-sm">{t("signin.not_registered")}</p>
                   <Link
                     href="/signup"
                     className="text-sm text-secondary-action underline"
                   >
-                    {t("create_account")}
+                    {t("signin.create_account")}
                   </Link>
                 </div>
               </section>

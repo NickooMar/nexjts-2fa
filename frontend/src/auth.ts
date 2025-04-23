@@ -119,6 +119,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 });
 
 export const signUp = async (data: SignUpFormState) => {
-  const response = await $axios.post("/auth/signup", data);
-  return response;
+  return await $axios.post("/auth/signup", data);
 };

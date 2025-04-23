@@ -6,20 +6,12 @@ import {
   SignUpFormState,
 } from "@/types/auth/auth.types";
 import { signIn, signOut, signUp } from "@/auth";
-import { signInSchema, signUpSchema } from "@/schemas/auth.schema";
 
 export const signUpAction = async (data: SignUpFormState) => {
-  const result = signUpSchema.safeParse(data);
-  if (!result.success) return { error: "Validation failed" };
-
   try {
     const result = await signUp(data);
 
     console.log({ result });
-
-    // if (response.status !== 200) {
-    //   throw new Error("Signup failed");
-    // }
 
     return { success: true };
   } catch (error: unknown) {
@@ -29,9 +21,6 @@ export const signUpAction = async (data: SignUpFormState) => {
 };
 
 export const signInAction = async (data: SignInFormState) => {
-  const result = signInSchema.safeParse(data);
-  if (!result.success) return { error: "Validation failed" };
-
   try {
     const result = await signIn("credentials", {
       email: data.email,

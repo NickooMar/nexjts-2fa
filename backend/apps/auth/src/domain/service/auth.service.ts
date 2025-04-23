@@ -1,7 +1,7 @@
 import { map } from 'rxjs/operators';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
-import { signinRequestDto } from 'libs/shared/dto/signin.dto';
+import { signinRequestDto } from 'libs/shared/dto/auth/signin.dto';
 import { AccessTokenEntity } from '../entities/access-token.entity';
 import { AuthServiceAbstract } from '../contracts/auth.service.abstract';
 import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';

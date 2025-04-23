@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { AuthPatterns, Clients } from 'apps/constants';
-import { signinRequestDto } from 'libs/shared/dto/signin.dto';
+import { signinRequestDto } from 'libs/shared/dto/auth/signin.dto';
 import { AccessTokenEntity } from '../../domain/entities/access-token.entity';
 import { AuthServiceAbstract } from '../../domain/contracts/auth.service.abstract';
 
@@ -13,5 +13,9 @@ export class AuthProxy implements AuthServiceAbstract {
 
   signin(input: signinRequestDto): Observable<AccessTokenEntity> {
     return this.client.send({ cmd: AuthPatterns.SIGNIN }, input);
+  }
+
+  signup(input: signupRequestDto): Observable<AccessTokenEntity> {
+    return this.client.send({ cmd: AuthPatterns.SIGNUP }, input);
   }
 }

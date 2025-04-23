@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { signinRequestDto } from 'libs/shared/dto/signin.dto';
+import { signinRequestDto } from 'libs/shared/dto/auth/signin.dto';
 import { AccessTokenEntity } from '../entities/access-token.entity';
 
 export abstract class AuthServiceAbstract {
