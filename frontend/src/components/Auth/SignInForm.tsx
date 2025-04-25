@@ -12,11 +12,11 @@ import React, { useCallback, useState } from "react";
 import { Edit, Mail, MailCheck } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@/components/ui/separator";
-import { PasswordInput } from "../Inputs/PasswordInput";
+import { PasswordInput } from "./Inputs/PasswordInput";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { createSignInSchema } from "@/schemas/auth.schema";
-import { DotBackground } from "../../Aceternity/DotBackground";
-import { Form, FormField, FormItem, FormMessage } from "../../ui/form";
+import { DotBackground } from "../Aceternity/DotBackground";
+import { Form, FormField, FormItem, FormMessage } from "../ui/form";
 import { AuthProviders, SignInFormState } from "@/types/auth/auth.types";
 import { signInAction, signInWithProvider } from "@/app/actions/auth.actions";
 
@@ -53,8 +53,8 @@ const SignInForm: React.FC = () => {
     try {
       console.log({ values });
 
-      // const result = await signInAction(values);
-      // console.log(result);
+      const result = await signInAction(values);
+      console.log(result);
     } catch (error) {
       console.error(error);
       errorToast(t("signin.messages.errors.invalid_data"));
