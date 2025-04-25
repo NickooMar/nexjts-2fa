@@ -36,6 +36,7 @@
         "max_length": "Password must be at most 50 characters"
       },
       "forgot_password": "Forgot your password?",
+      "next": "Continue",
       "login": "Sign in",
       "not_registered": "Don't have an account?",
       "create_account": "Create an account",
@@ -97,7 +98,7 @@
     },
     "messages": {
       "errors": {
-        "invalid_email": "Invalid email",
+        "invalid_email": "Email is not valid",
         "email_min_length": "Email should be at least 6 characters",
         "password_required": "Password is required",
         "password_min_length": "Password must be at least 8 characters",

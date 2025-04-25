@@ -12,7 +12,7 @@ const intlMiddleware = createIntlMiddleware({
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;
-  const publicPaths = ["/signup", "/signin"];
+  const publicPaths = ["/signup", "/signin", "/api/auth/callback/google"];
   const localePattern = new RegExp(`^\\/(${locales.join("|")})(\\/|$)`);
 
   // Check if the path is public or a locale path

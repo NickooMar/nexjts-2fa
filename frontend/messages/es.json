@@ -33,6 +33,7 @@
         "required": "La contraseña es requerida"
       },
       "forgot_password": "¿Olvidaste tu contraseña?",
+      "next": "Continuar",
       "login": "Iniciar sesión",
       "not_registered": "¿No tienes una cuenta?",
       "create_account": "Crea una cuenta",
@@ -94,7 +95,7 @@
     },
     "messages": {
       "errors": {
-        "invalid_email": "Correo electrónico inválido",
+        "invalid_email": "El correo electrónico es inválido",
         "email_min_length": "El correo electrónico debe tener al menos 6 caracteres",
         "password_required": "La contraseña es requerida",
         "password_min_length": "La contraseña debe tener al menos 8 caracteres",
