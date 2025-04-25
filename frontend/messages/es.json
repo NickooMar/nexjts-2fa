@@ -33,7 +33,6 @@
         "required": "La contraseña es requerida"
       },
       "forgot_password": "¿Olvidaste tu contraseña?",
-      "next": "Continuar",
       "login": "Iniciar sesión",
       "not_registered": "¿No tienes una cuenta?",
       "create_account": "Crea una cuenta",
@@ -98,6 +97,7 @@
         "invalid_email": "El correo electrónico es inválido",
         "email_min_length": "El correo electrónico debe tener al menos 6 caracteres",
         "password_required": "La contraseña es requerida",
+        "password_invalid": "La contraseña no es válida",
         "password_min_length": "La contraseña debe tener al menos 8 caracteres",
         "password_max_length": "La contraseña no puede exceder 20 caracteres",
         "password_uppercase": "La contraseña debe contener al menos una letra mayúscula",
