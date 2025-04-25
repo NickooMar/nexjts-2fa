@@ -3,16 +3,22 @@ services:
     container_name: nestjs-main-service
     build:
       context: .
-      dockerfile: apps/main/Dockerfile
+      dockerfile: apps/main/Dockerfile.dev
     ports:
       - '3000:3000'
     env_file:
       - .env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     develop:
       watch:
         - action: sync
           path: .
           target: /usr/src/app
+          ignore:
+            - node_modules/
+            - dist/
         - action: rebuild
           path: apps/main/
     depends_on:
@@ -24,16 +30,22 @@ services:
     container_name: nestjs-auth-service
     build:
       context: .
-      dockerfile: apps/auth/Dockerfile
+      dockerfile: apps/auth/Dockerfile.dev
     ports:
       - '3001:3001'
     env_file:
       - .env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     develop:
       watch:
         - action: sync
           path: .
           target: /usr/src/app
+          ignore:
+            - node_modules/
+            - dist/
         - action: rebuild
           path: apps/auth/
     depends_on:
@@ -44,16 +56,22 @@ services:
     container_name: nestjs-user-service
     build:
       context: .
-      dockerfile: apps/user/Dockerfile
+      dockerfile: apps/user/Dockerfile.dev
     ports:
       - '3002:3002'
     env_file:
       - .env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     develop:
       watch:
         - action: sync
           path: .
           target: /usr/src/app
+          ignore:
+            - node_modules/
+            - dist/
         - action: rebuild
           path: apps/user/
     network_mode: host

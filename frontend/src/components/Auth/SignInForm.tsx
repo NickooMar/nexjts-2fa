@@ -20,7 +20,7 @@ import { AuthProviders, SignInFormState } from "@/types/auth/auth.types";
 import { signInAction, signInWithProvider } from "@/app/actions/auth.actions";
 
 const SignInForm: React.FC = () => {
-  const t = useTranslations();
+  const t = useTranslations("auth");
   const { error: errorToast } = useToast();
 
   const signInSchema = createSignInSchema(t);

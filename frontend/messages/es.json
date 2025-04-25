@@ -16,6 +16,82 @@
     "title": "Temas"
   },
   "auth": {
+    "signin": {
+      "title": "Iniciar sesión en tu cuenta",
+      "description": "Ingresa la información de tu cuenta a continuación para acceder a la plataforma.",
+      "google_auth": "Iniciar sesión con Google",
+      "github_auth": "Iniciar sesión con Github",
+      "continue_with": "o continuar con",
+      "email": {
+        "title": "Correo electrónico",
+        "required": "El correo electrónico es requerido",
+        "invalid": "El correo electrónico no es válido",
+        "placeholder": "Correo electrónico"
+      },
+      "password": {
+        "title": "Contraseña",
+        "required": "La contraseña es requerida"
+      },
+      "forgot_password": "¿Olvidaste tu contraseña?",
+      "login": "Iniciar sesión",
+      "not_registered": "¿No tienes una cuenta?",
+      "create_account": "Crea una cuenta",
+      "messages": {
+        "success": {},
+        "errors": {
+          "unathorized": "Credenciales inválidas",
+          "invalid_data": "Por favor, verifica tus credenciales y vuelve a intentarlo.",
+          "internal_server_error": "Error interno del servidor"
+        }
+      }
+    },
+    "signup": {
+      "title": "Crea una cuenta",
+      "description": "Ingresa la información de tu cuenta a continuación para crear una.",
+      "organization": {
+        "title": "Nombre de la organización",
+        "required": "El nombre de la organización es requerido",
+        "invalid": "El nombre de la organización no es válido",
+        "placeholder": "Nombre de la organización"
+      },
+      "first_name": {
+        "title": "Nombre",
+        "required": "El nombre es requerido",
+        "invalid": "El nombre no es válido",
+        "placeholder": "Nombre"
+      },
+      "last_name": {
+        "title": "Apellido",
+        "required": "El apellido es requerido",
+        "invalid": "El apellido no es válido",
+        "placeholder": "Apellido"
+      },
+      "email": {
+        "title": "Correo electrónico",
+        "required": "El correo electrónico es requerido",
+        "invalid": "El correo electrónico no es válido",
+        "placeholder": "Correo electrónico"
+      },
+      "password": {
+        "title": "Contraseña",
+        "required": "La contraseña es requerida"
+      },
+      "confirm_password": {
+        "title": "Confirmar contraseña",
+        "required": "Confirmar contraseña es requerido"
+      },
+      "messages": {
+        "success": {},
+        "errors": {
+          "unathorized": "Credenciales inválidas",
+          "invalid_data": "Por favor, verifica tus credenciales y vuelve a intentarlo.",
+          "internal_server_error": "Error interno del servidor"
+        }
+      },
+      "create": "Crear cuenta",
+      "already_have_account": "¿Ya tienes una cuenta?",
+      "signin": "Iniciar sesión"
+    },
     "messages": {
       "errors": {
         "invalid_email": "Correo electrónico inválido",
@@ -36,81 +112,5 @@
         "invalid_provider": "El proveedor es inválido"
       }
     }
-  },
-  "signin": {
-    "title": "Iniciar sesión en tu cuenta",
-    "description": "Ingresa la información de tu cuenta a continuación para acceder a la plataforma.",
-    "google_auth": "Iniciar sesión con Google",
-    "github_auth": "Iniciar sesión con Github",
-    "continue_with": "o continuar con",
-    "email": {
-      "title": "Correo electrónico",
-      "required": "El correo electrónico es requerido",
-      "invalid": "El correo electrónico no es válido",
-      "placeholder": "Correo electrónico"
-    },
-    "password": {
-      "title": "Contraseña",
-      "required": "La contraseña es requerida"
-    },
-    "forgot_password": "¿Olvidaste tu contraseña?",
-    "login": "Iniciar sesión",
-    "not_registered": "¿No tienes una cuenta?",
-    "create_account": "Crea una cuenta",
-    "messages": {
-      "success": {},
-      "errors": {
-        "unathorized": "Credenciales inválidas",
-        "invalid_data": "Por favor, verifica tus credenciales y vuelve a intentarlo.",
-        "internal_server_error": "Error interno del servidor"
-      }
-    }
-  },
-  "signup": {
-    "title": "Crea una cuenta",
-    "description": "Ingresa la información de tu cuenta a continuación para crear una.",
-    "organization": {
-      "title": "Nombre de la organización",
-      "required": "El nombre de la organización es requerido",
-      "invalid": "El nombre de la organización no es válido",
-      "placeholder": "Nombre de la organización"
-    },
-    "first_name": {
-      "title": "Nombre",
-      "required": "El nombre es requerido",
-      "invalid": "El nombre no es válido",
-      "placeholder": "Nombre"
-    },
-    "last_name": {
-      "title": "Apellido",
-      "required": "El apellido es requerido",
-      "invalid": "El apellido no es válido",
-      "placeholder": "Apellido"
-    },
-    "email": {
-      "title": "Correo electrónico",
-      "required": "El correo electrónico es requerido",
-      "invalid": "El correo electrónico no es válido",
-      "placeholder": "Correo electrónico"
-    },
-    "password": {
-      "title": "Contraseña",
-      "required": "La contraseña es requerida"
-    },
-    "confirm_password": {
-      "title": "Confirmar contraseña",
-      "required": "Confirmar contraseña es requerido"
-    },
-    "messages": {
-      "success": {},
-      "errors": {
-        "unathorized": "Credenciales inválidas",
-        "invalid_data": "Por favor, verifica tus credenciales y vuelve a intentarlo.",
-        "internal_server_error": "Error interno del servidor"
-      }
-    },
-    "create": "Crear cuenta",
-    "already_have_account": "¿Ya tienes una cuenta?",
-    "signin": "Iniciar sesión"
   }
 }

@@ -1,7 +1,7 @@
 import { map } from 'rxjs/operators';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
-import { signinRequestDto } from 'libs/shared/dto/auth/signin.dto';
+import { SigninRequestDto } from 'libs/shared/dto/auth/signin.dto';
 import { AccessTokenEntity } from '../entities/access-token.entity';
 import { AuthServiceAbstract } from '../contracts/auth.service.abstract';
 import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';
@@ -13,7 +13,7 @@ export class AuthService implements AuthServiceAbstract {
     private readonly userProxy: UserProxy,
   ) {}
 
-  signin(input: signinRequestDto) {
+  signin(input: SigninRequestDto) {
     return this.userProxy.findByEmail(input.email).pipe(
       map((user) => {
         // if (!user) throw new Error('User not found');

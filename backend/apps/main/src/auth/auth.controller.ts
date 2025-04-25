@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Controller, Post, Body } from '@nestjs/common';
 import { AuthProxy } from 'apps/auth/src/infrastructure/external/auth.proxy';
-import { signinRequestDto } from '../../../../libs/shared/dto/auth/signin.dto';
+import { SigninRequestDto } from '../../../../libs/shared/dto/auth/signin.dto';
 import { AccessTokenEntity } from 'apps/auth/src/domain/entities/access-token.entity';
 
 @Controller({ path: 'auth', version: '1' })
@@ -9,7 +9,7 @@ export class AuthController {
   constructor(private readonly authProxy: AuthProxy) {}
 
   @Post('signin')
-  singin(@Body() input: signinRequestDto): Observable<AccessTokenEntity> {
+  singin(@Body() input: SigninRequestDto): Observable<AccessTokenEntity> {
     return this.authProxy.signin(input);
   }
 

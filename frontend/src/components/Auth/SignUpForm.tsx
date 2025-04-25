@@ -23,7 +23,7 @@ import { createSignUpSchema } from "@/schemas/auth.schema";
 import { DotBackground } from "../Aceternity/DotBackground";
 
 const SignUpForm: React.FC = () => {
-  const t = useTranslations();
+  const t = useTranslations("auth");
   const { error: errorToast } = useToast();
 
   const signUpSchema = createSignUpSchema(t);

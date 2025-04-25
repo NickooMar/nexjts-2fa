@@ -16,6 +16,85 @@
     "title": "Themes"
   },
   "auth": {
+    "signin": {
+      "title": "Sign in into your account",
+      "description": "Enter your account information below to access.",
+      "google_auth": "Sign in with Google",
+      "github_auth": "Sign in with Github",
+      "continue_with": "or continue with",
+      "email": {
+        "title": "Email",
+        "required": "Email is required",
+        "invalid": "Email is not valid",
+        "min_length": "Email should be at least 4 characters",
+        "placeholder": "Email address"
+      },
+      "password": {
+        "title": "Password",
+        "required": "Password is required",
+        "min_length": "Password must be at least 8 characters",
+        "max_length": "Password must be at most 50 characters"
+      },
+      "forgot_password": "Forgot your password?",
+      "login": "Sign in",
+      "not_registered": "Don't have an account?",
+      "create_account": "Create an account",
+      "messages": {
+        "success": {},
+        "errors": {
+          "unathorized": "Invalid credentials",
+          "invalid_data": "Please check your credentials and try again.",
+          "internal_server_error": "Internal server error"
+        }
+      }
+    },
+    "signup": {
+      "title": "Create an account",
+      "description": "Enter your account information below to create it.",
+      "organization": {
+        "title": "Organization name",
+        "required": "Organization name is required",
+        "invalid": "Organization name is not valid",
+        "placeholder": "Organization name"
+      },
+      "first_name": {
+        "title": "First name",
+        "required": "First name is required",
+        "invalid": "First name is not valid",
+        "placeholder": "First name"
+      },
+      "last_name": {
+        "title": "Last name",
+        "required": "Last name is required",
+        "invalid": "Last name is not valid",
+        "placeholder": "Last name"
+      },
+      "email": {
+        "title": "Email",
+        "required": "Email is required",
+        "invalid": "Email is not valid",
+        "placeholder": "Email address"
+      },
+      "password": {
+        "title": "Password",
+        "required": "Password is required"
+      },
+      "confirm_password": {
+        "title": "Confirm password",
+        "required": "Confirm password is required"
+      },
+      "messages": {
+        "success": {},
+        "errors": {
+          "unathorized": "Invalid credentials",
+          "invalid_data": "Please check your credentials and try again.",
+          "internal_server_error": "Internal server error"
+        }
+      },
+      "create": "Create account",
+      "already_have_account": "Already have an account?",
+      "signin": "Sign in"
+    },
     "messages": {
       "errors": {
         "invalid_email": "Invalid email",
@@ -36,84 +115,5 @@
         "invalid_provider": "Provider is invalid"
       }
     }
-  },
-  "signin": {
-    "title": "Sign in into your account",
-    "description": "Enter your account information below to access.",
-    "google_auth": "Sign in with Google",
-    "github_auth": "Sign in with Github",
-    "continue_with": "or continue with",
-    "email": {
-      "title": "Email",
-      "required": "Email is required",
-      "invalid": "Email is not valid",
-      "min_length": "Email should be at least 4 characters",
-      "placeholder": "Email address"
-    },
-    "password": {
-      "title": "Password",
-      "required": "Password is required",
-      "min_length": "Password must be at least 8 characters",
-      "max_length": "Password must be at most 50 characters"
-    },
-    "forgot_password": "Forgot your password?",
-    "login": "Sign in",
-    "not_registered": "Don't have an account?",
-    "create_account": "Create an account",
-    "messages": {
-      "success": {},
-      "errors": {
-        "unathorized": "Invalid credentials",
-        "invalid_data": "Please check your credentials and try again.",
-        "internal_server_error": "Internal server error"
-      }
-    }
-  },
-  "signup": {
-    "title": "Create an account",
-    "description": "Enter your account information below to create it.",
-    "organization": {
-      "title": "Organization name",
-      "required": "Organization name is required",
-      "invalid": "Organization name is not valid",
-      "placeholder": "Organization name"
-    },
-    "first_name": {
-      "title": "First name",
-      "required": "First name is required",
-      "invalid": "First name is not valid",
-      "placeholder": "First name"
-    },
-    "last_name": {
-      "title": "Last name",
-      "required": "Last name is required",
-      "invalid": "Last name is not valid",
-      "placeholder": "Last name"
-    },
-    "email": {
-      "title": "Email",
-      "required": "Email is required",
-      "invalid": "Email is not valid",
-      "placeholder": "Email address"
-    },
-    "password": {
-      "title": "Password",
-      "required": "Password is required"
-    },
-    "confirm_password": {
-      "title": "Confirm password",
-      "required": "Confirm password is required"
-    },
-    "messages": {
-      "success": {},
-      "errors": {
-        "unathorized": "Invalid credentials",
-        "invalid_data": "Please check your credentials and try again.",
-        "internal_server_error": "Internal server error"
-      }
-    },
-    "create": "Create account",
-    "already_have_account": "Already have an account?",
-    "signin": "Sign in"
   }
 }
