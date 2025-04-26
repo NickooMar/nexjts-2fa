@@ -12,11 +12,11 @@ import React, { useCallback, useState } from "react";
 import { Edit, Mail, MailCheck } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@/components/ui/separator";
-import { PasswordInput } from "./Inputs/PasswordInput";
+import { PasswordInput } from "../Inputs/PasswordInput";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { createSignInSchema } from "@/schemas/auth.schema";
-import { DotBackground } from "../Aceternity/DotBackground";
-import { Form, FormField, FormItem, FormMessage } from "../ui/form";
+import { DotBackground } from "../../Aceternity/DotBackground";
+import { Form, FormField, FormItem, FormMessage } from "../../ui/form";
 import { AuthProviders, SignInFormState } from "@/types/auth/auth.types";
 import { signInAction, signInWithProvider } from "@/app/actions/auth.actions";
 
@@ -95,7 +95,7 @@ const SignInForm: React.FC = () => {
                 <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
                   {t("signin.title")}
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground text-center">
                   {t("signin.description")}
                 </p>
               </div>
