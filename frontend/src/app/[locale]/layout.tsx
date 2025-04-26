@@ -1,9 +1,10 @@
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
-import { redirect } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { Toaster } from "react-hot-toast";
+import { redirect } from "next/navigation";
 import { LocalesKeys } from "@/i18n/types";
+import { getMessages } from "next-intl/server";
 import Navbar from "@/components/Navbar/Navbar";
+import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "@/components/Theme/themeProvider";
 
 export default async function LocaleLayout({
@@ -26,6 +27,7 @@ export default async function LocaleLayout({
     <html lang={locale} suppressHydrationWarning={true}>
       <body>
         <NextIntlClientProvider messages={messages}>
+          <Toaster position="top-right" reverseOrder={false} />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

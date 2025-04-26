@@ -1,6 +1,12 @@
 {
   "general": {
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "messages": {
+      "success": {},
+      "errors": {
+        "unknown": "An unknown error occurred"
+      }
+    }
   },
   "actions": {
     "create": "Create",
@@ -8,7 +14,7 @@
   },
   "navbar": {
     "home": "Home",
-    "singin": "Sign in",
+    "signin": "Sign in",
     "signup": "Sign up",
     "signout": "Log out"
   },
@@ -44,7 +50,7 @@
         "errors": {
           "unathorized": "Invalid credentials",
           "invalid_data": "Please check your credentials and try again.",
-          "internal_server_error": "Internal server error"
+          "request_error": "An unexpected error occurred while processing the request"
         }
       }
     },
@@ -97,9 +103,10 @@
     },
     "messages": {
       "errors": {
-        "invalid_email": "Invalid email",
+        "invalid_email": "Email is not valid",
         "email_min_length": "Email should be at least 6 characters",
         "password_required": "Password is required",
+        "password_invalid": "Password is not valid",
         "password_min_length": "Password must be at least 8 characters",
         "password_max_length": "Password cannot exceed 20 characters",
         "password_uppercase": "Password must contain at least one uppercase letter",

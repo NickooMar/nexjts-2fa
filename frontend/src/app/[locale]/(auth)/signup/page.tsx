@@ -20,6 +20,8 @@ export const metadata: Metadata = {
 };
 
 const SignupPage = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   const session = await auth();
 
   if (session) redirect("/");

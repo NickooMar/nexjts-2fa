@@ -7,8 +7,8 @@ export const createSignInSchema = (t: (key: string) => string) =>
       .string()
       .email({ message: t("messages.errors.invalid_email") })
       .min(6, { message: t("messages.errors.email_min_length") }),
-    password: z.string().min(1, {
-      message: t("messages.errors.password_required"),
+    password: z.string().min(4, {
+      message: t("messages.errors.password_invalid"),
     }),
   });
 

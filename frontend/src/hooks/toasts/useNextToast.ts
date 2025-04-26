@@ -1,4 +1,4 @@
-import { showToast as toast} from "nextjs-toast-notify";
+import { showToast as toast } from "nextjs-toast-notify";
 
 interface ToastOptions {
   duration?: number;
@@ -25,12 +25,12 @@ const toastOptions: ToastOptions = {
   duration: 4000,
   progress: true,
   position: "top-center",
-  transition: "fadeIn",
+  transition: "popUp",
   icon: "",
   sound: false,
 };
 
-export const useToast = () => {
+export const useNextToast = () => {
   const error = (message: string, options?: ToastOptions) => {
     toast.error(message, { ...toastOptions, ...options });
   };

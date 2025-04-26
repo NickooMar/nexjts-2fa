@@ -5,21 +5,9 @@ import {
   SignInFormState,
   SignUpFormState,
 } from "@/types/auth/auth.types";
-import { signIn, signOut, signUp } from "@/auth";
+import { signIn, signOut, signUp, checkEmailExists } from "@/auth";
 
-export const signUpAction = async (data: SignUpFormState) => {
-  try {
-    const result = await signUp(data);
-
-    console.log({ result });
-
-    return { success: true };
-  } catch (error: unknown) {
-    console.error("Signup error:", error);
-    return { error: "Failed to create account" };
-  }
-};
-
+// SIGN IN RELATED ACTIONS
 export const signInAction = async (data: SignInFormState) => {
   try {
     const result = await signIn("credentials", {
@@ -39,11 +27,31 @@ export const signInAction = async (data: SignInFormState) => {
   }
 };
 
-export const signInWithProvider = async (provider: AuthProviders) => {
+export const checkEmailExistsAction = async (email: string) => {
+  const response = await checkEmailExists(email);
+  return response;
+};
+
+export const signInWithProviderAction = async (provider: AuthProviders) => {
   if (!provider) return;
   await signIn(provider);
 };
 
+// SIGN UP RELATED ACTIONS
+export const signUpAction = async (data: SignUpFormState) => {
+  try {
+    const result = await signUp(data);
+
+    console.log({ result });
+
+    return { success: true };
+  } catch (error: unknown) {
+    console.error("Signup error:", error);
+    return { error: "Failed to create account" };
+  }
+};
+
+// SIGN OUT RELATED ACTIONS
 export const signOutAction = async () => {
   await signOut();
 };
