@@ -1,19 +1,19 @@
 "use client";
 
-import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuGroup,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { Sun, Moon, Trees, Sunset, Coffee, Eclipse } from "lucide-react";
+import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { Sun, Moon, Trees, Sunset, Coffee, Eclipse } from "lucide-react";
 
 // Theme configuration
 const themeConfig = {
@@ -51,7 +51,7 @@ export function ThemeSwitcher() {
     themes: typeof themeConfig.dark | typeof themeConfig.light;
   }) => (
     <DropdownMenuGroup>
-      {themes.map(({ id, icon: Icon, label }) => (
+      {themes.map(({ id, label, icon: Icon }) => (
         <DropdownMenuItem
           key={id}
           onClick={() => setTheme(id)}

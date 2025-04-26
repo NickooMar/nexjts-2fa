@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { signOutAction } from "@/app/actions/auth.actions";
 import { ThemeSwitcher } from "../Theme/ThemeSwitcher";
 import { Session } from "next-auth";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 async function handleSignOut() {
   "use server";
@@ -63,6 +64,7 @@ const NavbarClient = ({ session }: { session: Session | null }) => {
             </>
           )}
           <ThemeSwitcher />
+          <LanguageSwitcher />
         </div>
       </div>
     </nav>

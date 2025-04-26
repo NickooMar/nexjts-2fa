@@ -1,6 +1,11 @@
 {
   "general": {
     "loading": "Loading...",
+    "languages": {
+      "title": "Languages",
+      "spanish": "Spanish",
+      "english": "English"
+    },
     "messages": {
       "success": {},
       "errors": {
