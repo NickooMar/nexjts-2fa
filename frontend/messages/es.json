@@ -1,6 +1,12 @@
 {
   "general": {
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "messages": {
+      "success": {},
+      "errors": {
+        "unknown": "Ocurrió un error desconocido"
+      }
+    }
   },
   "actions": {
     "create": "Crear",
@@ -8,7 +14,7 @@
   },
   "navbar": {
     "home": "Inicio",
-    "singin": "Iniciar sesión",
+    "signin": "Iniciar sesión",
     "signup": "Registrarse",
     "signout": "Cerrar sesión"
   },
@@ -41,7 +47,7 @@
         "errors": {
           "unathorized": "Credenciales inválidas",
           "invalid_data": "Por favor, verifica tus credenciales y vuelve a intentarlo.",
-          "internal_server_error": "Error interno del servidor"
+          "request_error": "Ocurrió un error inesperado al procesar la solicitud"
         }
       }
     },

@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import { AuthProxy } from 'apps/auth/src/infrastructure/external/auth.proxy';
 import { SigninRequestDto } from '../../../../libs/shared/dto/auth/signin.dto';
 import { AccessTokenEntity } from 'apps/auth/src/domain/entities/access-token.entity';
@@ -7,6 +7,14 @@ import { AccessTokenEntity } from 'apps/auth/src/domain/entities/access-token.en
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
   constructor(private readonly authProxy: AuthProxy) {}
+
+  @Get('check-email')
+  checkEmail(@Query('email') email: string) {
+    console.log({ email });
+    return { success: true, exists: true };
+    // throw new Error('test');
+    // return this.authProxy.findUserByProperty('email', 'test@test.com');
+  }
 
   @Post('signin')
   singin(@Body() input: SigninRequestDto): Observable<AccessTokenEntity> {

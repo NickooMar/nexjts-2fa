@@ -13,7 +13,7 @@ import { Link } from "@/i18n/routing";
 import { Button } from "../ui/button";
 import { Loader } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useToast } from "@/hooks/useToast";
+import { useNextToast } from "@/hooks/toasts/useNextToast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PasswordInput } from "./Inputs/PasswordInput";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -24,7 +24,7 @@ import { DotBackground } from "../Aceternity/DotBackground";
 
 const SignUpForm: React.FC = () => {
   const t = useTranslations("auth");
-  const { error: errorToast } = useToast();
+  const toast = useNextToast();
 
   const signUpSchema = createSignUpSchema(t);
 
@@ -49,7 +49,7 @@ const SignUpForm: React.FC = () => {
       console.log(result);
     } catch (error) {
       console.error(error);
-      errorToast(t("signup.messages.errors.invalid_data"));
+      toast.error(t("signup.messages.errors.invalid_data"));
     }
   };
 

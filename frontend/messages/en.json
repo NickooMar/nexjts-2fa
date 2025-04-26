@@ -1,6 +1,12 @@
 {
   "general": {
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "messages": {
+      "success": {},
+      "errors": {
+        "unknown": "An unknown error occurred"
+      }
+    }
   },
   "actions": {
     "create": "Create",
@@ -8,7 +14,7 @@
   },
   "navbar": {
     "home": "Home",
-    "singin": "Sign in",
+    "signin": "Sign in",
     "signup": "Sign up",
     "signout": "Log out"
   },
@@ -44,7 +50,7 @@
         "errors": {
           "unathorized": "Invalid credentials",
           "invalid_data": "Please check your credentials and try again.",
-          "internal_server_error": "Internal server error"
+          "request_error": "An unexpected error occurred while processing the request"
         }
       }
     },

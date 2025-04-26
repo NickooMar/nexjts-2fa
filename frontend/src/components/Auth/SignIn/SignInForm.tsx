@@ -1,9 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
+import {
+  signInAction,
+  checkEmailExistsAction,
+  signInWithProviderAction,
+} from "@/app/actions/auth.actions";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { useToast } from "@/hooks/useToast";
 import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
@@ -14,15 +18,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@/components/ui/separator";
 import { PasswordInput } from "../Inputs/PasswordInput";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useNextToast } from "@/hooks/toasts/useNextToast";
 import { createSignInSchema } from "@/schemas/auth.schema";
 import { DotBackground } from "../../Aceternity/DotBackground";
 import { Form, FormField, FormItem, FormMessage } from "../../ui/form";
 import { AuthProviders, SignInFormState } from "@/types/auth/auth.types";
-import { signInAction, signInWithProvider } from "@/app/actions/auth.actions";
 
 const SignInForm: React.FC = () => {
   const t = useTranslations("auth");
-  const { error: errorToast } = useToast();
+  const toast = useNextToast();
   const signInSchema = createSignInSchema(t);
 
   const [isEmailValid, setIsEmailValid] = useState(false);
@@ -44,8 +48,35 @@ const SignInForm: React.FC = () => {
   };
 
   async function handleSigninProviders(provider: AuthProviders) {
-    await signInWithProvider(provider);
+    await signInWithProviderAction(provider);
   }
+
+  const onNextStep = async () => {
+    try {
+      setIsLoading(true);
+
+      const validEmailStep = await trigger("email");
+      if (!validEmailStep) return;
+
+      const response = await checkEmailExistsAction(form.getValues("email"));
+
+      if (!response.success) {
+        return toast.error(t("signin.messages.errors.request_error"));
+      }
+
+      if (!response.exists) {
+        return toast.error(t("signin.messages.errors.unathorized"));
+      }
+
+      setStep("password");
+    } catch (error) {
+      console.error(error);
+      toast.error(t("signin.messages.errors.unathorized"));
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const onSubmit: SubmitHandler<SignInFormState> = async (
     values: SignInFormState
@@ -57,22 +88,8 @@ const SignInForm: React.FC = () => {
       console.log(result);
     } catch (error) {
       console.error(error);
-      errorToast(t("signin.messages.errors.invalid_data"));
+      toast.error(t("signin.messages.errors.invalid_data"));
     }
-  };
-
-  const onNextStep = async () => {
-    setIsLoading(true);
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    const validEmailStep = await trigger("email");
-
-    // TODO: validate the email in the database
-
-    if (validEmailStep) setStep("password");
-
-    setIsLoading(false);
   };
 
   const handleBackStep = useCallback(() => {
