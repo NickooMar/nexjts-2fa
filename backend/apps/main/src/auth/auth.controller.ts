@@ -18,7 +18,6 @@ export class AuthController {
   @Get('check-email')
   checkEmail(@Query('email') email: string) {
     console.log({ email });
-    throw new NotFoundException('test');
     return { success: true, exists: true };
     // throw new Error('test');
     // return this.authProxy.findUserByProperty('email', 'test@test.com');
@@ -33,7 +32,7 @@ export class AuthController {
   signup(@Body() body: any): any {
     console.log({ body });
 
-    throw new Error('test');
+    throw new NotFoundException('test');
     // return this.authProxy.signup(input);
   }
 }

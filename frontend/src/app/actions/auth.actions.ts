@@ -34,7 +34,7 @@ export const checkEmailExistsAction = async (email: string) => {
     return response;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
-      if (error.response?.status === 400) {
+      if ([400, 401, 404].includes(error.response?.status ?? 0)) {
         return {
           success: false,
           error: "invalid_credentials",

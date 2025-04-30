@@ -48,13 +48,13 @@ const SignUpForm: React.FC = () => {
       const response = await signUpAction(values);
 
       if (!response.success) {
-        return toast.error(t("signup.messages.errors.invalid_data"));
+        return toast.error(t("messages.errors.invalid_credentials"));
       }
 
       toast.success(t("messages.success.signup_success"));
     } catch (error) {
       console.error(error);
-      toast.error(t("signup.messages.errors.invalid_data"));
+      toast.error(t("messages.errors.request_error"));
     }
   };
 

@@ -61,17 +61,21 @@ const SignInForm: React.FC = () => {
       const response = await checkEmailExistsAction(form.getValues("email"));
 
       if (!response.success) {
-        return toast.error(t("signin.messages.errors.request_error"));
+        if (response.error === "invalid_credentials") {
+          return toast.error(t("messages.errors.invalid_credentials"));
+        } else {
+          return toast.error(t("messages.errors.request_error"));
+        }
       }
 
       if (!response.exists) {
-        return toast.error(t("signin.messages.errors.unathorized"));
+        return toast.error(t("messages.errors.invalid_credentials"));
       }
 
       setStep("password");
     } catch (error) {
       console.error(error);
-      toast.error(t("signin.messages.errors.unathorized"));
+      toast.error(t("messages.errors.request_error"));
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +91,7 @@ const SignInForm: React.FC = () => {
       console.log(result);
     } catch (error) {
       console.error(error);
-      toast.error(t("signin.messages.errors.invalid_data"));
+      toast.error(t("messages.errors.request_error"));
     }
   };
 

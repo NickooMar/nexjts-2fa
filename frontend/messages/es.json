@@ -46,15 +46,7 @@
       "forgot_password": "¿Olvidaste tu contraseña?",
       "login": "Iniciar sesión",
       "not_registered": "¿No tienes una cuenta?",
-      "create_account": "Crea una cuenta",
-      "messages": {
-        "success": {},
-        "errors": {
-          "unathorized": "Credenciales inválidas",
-          "invalid_data": "Por favor, verifica tus credenciales y vuelve a intentarlo.",
-          "request_error": "Ocurrió un error inesperado al procesar la solicitud"
-        }
-      }
+      "create_account": "Crea una cuenta"
     },
     "signup": {
       "title": "Crea una cuenta",
@@ -92,14 +84,6 @@
         "title": "Confirmar contraseña",
         "required": "Confirmar contraseña es requerido"
       },
-      "messages": {
-        "success": {},
-        "errors": {
-          "unathorized": "Credenciales inválidas",
-          "invalid_data": "Por favor, verifica tus credenciales y vuelve a intentarlo.",
-          "internal_server_error": "Error interno del servidor"
-        }
-      },
       "create": "Crear cuenta",
       "already_have_account": "¿Ya tienes una cuenta?",
       "signin": "Iniciar sesión"
@@ -125,7 +109,9 @@
         "phone_number_min_length": "El número de teléfono debe tener al menos 10 caracteres",
         "first_name_min_length": "El nombre debe tener al menos 3 caracteres",
         "last_name_min_length": "El apellido debe tener al menos 3 caracteres",
-        "invalid_provider": "El proveedor es inválido"
+        "invalid_provider": "El proveedor es inválido",
+        "invalid_credentials": "Credenciales inválidas. Por favor verifica tus credenciales y vuelve a intentarlo.",
+        "request_error": "Ocurrió un error inesperado al procesar la solicitud"
       }
     }
   }

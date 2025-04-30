@@ -49,15 +49,7 @@
       "forgot_password": "Forgot your password?",
       "login": "Sign in",
       "not_registered": "Don't have an account?",
-      "create_account": "Create an account",
-      "messages": {
-        "success": {},
-        "errors": {
-          "unathorized": "Invalid credentials",
-          "invalid_data": "Please check your credentials and try again.",
-          "request_error": "An unexpected error occurred while processing the request"
-        }
-      }
+      "create_account": "Create an account"
     },
     "signup": {
       "title": "Create an account",
@@ -94,14 +86,6 @@
         "title": "Confirm password",
         "required": "Confirm password is required"
       },
-      "messages": {
-        "success": {},
-        "errors": {
-          "unathorized": "Invalid credentials",
-          "invalid_data": "Please check your credentials and try again.",
-          "internal_server_error": "Internal server error"
-        }
-      },
       "create": "Create account",
       "already_have_account": "Already have an account?",
       "signin": "Sign in"
@@ -127,7 +111,9 @@
         "phone_number_invalid": "Phone number is not valid",
         "first_name_min_length": "First name must be at least 3 characters",
         "last_name_min_length": "Last name must be at least 3 characters",
-        "invalid_provider": "Provider is invalid"
+        "invalid_provider": "Provider is invalid",
+        "invalid_credentials": "Invalid credentials. Please check your credentials and try again.",
+        "request_error": "An unexpected error occurred while processing the request"
       }
     }
   }
