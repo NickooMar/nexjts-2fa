@@ -6,6 +6,7 @@ import {
   SignUpFormState,
 } from "@/types/auth/auth.types";
 import { signIn, signOut, signUp, checkEmailExists } from "@/auth";
+import { AxiosError } from "axios";
 
 // SIGN IN RELATED ACTIONS
 export const signInAction = async (data: SignInFormState) => {
@@ -28,8 +29,26 @@ export const signInAction = async (data: SignInFormState) => {
 };
 
 export const checkEmailExistsAction = async (email: string) => {
-  const response = await checkEmailExists(email);
-  return response;
+  try {
+    const response = await checkEmailExists(email);
+    return response;
+  } catch (error: unknown) {
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 400) {
+        return {
+          success: false,
+          error: "invalid_credentials",
+          message: "Email does not exist",
+        };
+      }
+    }
+
+    return {
+      success: false,
+      error: "server_error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
 };
 
 export const signInWithProviderAction = async (provider: AuthProviders) => {
@@ -40,14 +59,14 @@ export const signInWithProviderAction = async (provider: AuthProviders) => {
 // SIGN UP RELATED ACTIONS
 export const signUpAction = async (data: SignUpFormState) => {
   try {
-    const result = await signUp(data);
-
-    console.log({ result });
-
-    return { success: true };
-  } catch (error: unknown) {
-    console.error("Signup error:", error);
-    return { error: "Failed to create account" };
+    const response = await signUp(data);
+    return response;
+  } catch (error) {
+    return {
+      success: false,
+      error: "server_error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
   }
 };
 

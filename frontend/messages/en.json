@@ -62,12 +62,6 @@
     "signup": {
       "title": "Create an account",
       "description": "Enter your account information below to create it.",
-      "organization": {
-        "title": "Organization name",
-        "required": "Organization name is required",
-        "invalid": "Organization name is not valid",
-        "placeholder": "Organization name"
-      },
       "first_name": {
         "title": "First name",
         "required": "First name is required",
@@ -85,6 +79,12 @@
         "required": "Email is required",
         "invalid": "Email is not valid",
         "placeholder": "Email address"
+      },
+      "phone_number": {
+        "title": "Phone number",
+        "required": "Phone number is required",
+        "invalid": "Phone number is not valid",
+        "placeholder": "Phone number"
       },
       "password": {
         "title": "Password",
@@ -107,6 +107,9 @@
       "signin": "Sign in"
     },
     "messages": {
+      "success": {
+        "signup_success": "Account created successfully"
+      },
       "errors": {
         "invalid_email": "Email is not valid",
         "email_min_length": "Email should be at least 6 characters",
@@ -121,7 +124,7 @@
         "password_invalid_start": "Password cannot start with a dot or newline",
         "confirm_password_min_length": "Confirm password must be at least 8 characters",
         "passwords_dont_match": "Passwords don't match",
-        "organization_name_min_length": "Organization name must be at least 3 characters",
+        "phone_number_invalid": "Phone number is not valid",
         "first_name_min_length": "First name must be at least 3 characters",
         "last_name_min_length": "Last name must be at least 3 characters",
         "invalid_provider": "Provider is invalid"

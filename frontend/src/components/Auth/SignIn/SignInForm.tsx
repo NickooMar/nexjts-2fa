@@ -72,7 +72,6 @@ const SignInForm: React.FC = () => {
     } catch (error) {
       console.error(error);
       toast.error(t("signin.messages.errors.unathorized"));
-      throw error;
     } finally {
       setIsLoading(false);
     }

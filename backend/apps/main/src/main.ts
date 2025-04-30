@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { HttpExceptionFilter } from 'libs/shared/exceptions/http.exception.filter';
+import { NotFoundExceptionFilter } from 'libs/shared/exceptions/not-found.exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,7 +14,10 @@ async function bootstrap() {
   app.enableCors({ origin: '*' });
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.enableVersioning({ type: VersioningType.URI, prefix: 'api/v' });
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(
+    new HttpExceptionFilter(),
+    new NotFoundExceptionFilter(),
+  );
 
   await app.startAllMicroservices();
   await app.listen(port).then(() => {

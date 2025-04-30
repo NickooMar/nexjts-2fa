@@ -119,29 +119,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 });
 
 export const signUp = async (data: SignUpFormState) => {
-  try {
-    const response = await $axios.post("/auth/signup", data);
-    return response.data;
-  } catch (error) {
-    return {
-      success: false,
-      error: "Failed to sign up",
-      message: error instanceof Error ? error.message : "Unknown error",
-    };
-  }
+  const response = await $axios.post("/auth/signup", data);
+  return response.data;
 };
 
 export const checkEmailExists = async (email: string) => {
-  try {
-    const response = await $axios.get(`/auth/check-email`, {
-      params: { email },
-    });
-    return response.data;
-  } catch (error) {
-    return {
-      success: false,
-      error: "Failed to check email",
-      message: error instanceof Error ? error.message : "Unknown error",
-    };
-  }
+  const response = await $axios.get(`/auth/check-email`, {
+    params: { email },
+  });
+  return response.data;
 };

@@ -1,5 +1,6 @@
 import z from "zod";
 import { AuthProviders } from "@/types/auth/auth.types";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 export const createSignInSchema = (t: (key: string) => string) =>
   z.object({
@@ -15,9 +16,6 @@ export const createSignInSchema = (t: (key: string) => string) =>
 export const createSignUpSchema = (t: (key: string) => string) =>
   z
     .object({
-      organizationName: z.string().min(3, {
-        message: t("messages.errors.organization_name_min_length"),
-      }),
       firstName: z
         .string()
         .min(3, { message: t("messages.errors.first_name_min_length") }),
@@ -28,6 +26,9 @@ export const createSignUpSchema = (t: (key: string) => string) =>
         .string()
         .email({ message: t("messages.errors.invalid_email") })
         .min(6, { message: t("messages.errors.email_min_length") }),
+      phoneNumber: z.string().refine(isValidPhoneNumber, {
+        message: t("messages.errors.phone_number_invalid"),
+      }),
       password: z
         .string()
         .min(8, { message: t("messages.errors.password_min_length") })

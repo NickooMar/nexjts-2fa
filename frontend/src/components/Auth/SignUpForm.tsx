@@ -13,12 +13,13 @@ import { Link } from "@/i18n/routing";
 import { Button } from "../ui/button";
 import { Loader } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useNextToast } from "@/hooks/toasts/useNextToast";
+import { PhoneInput } from "../ui/phone-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PasswordInput } from "./Inputs/PasswordInput";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { signUpAction } from "@/app/actions/auth.actions";
 import { SignUpFormState } from "@/types/auth/auth.types";
+import { useNextToast } from "@/hooks/toasts/useNextToast";
 import { createSignUpSchema } from "@/schemas/auth.schema";
 import { DotBackground } from "../Aceternity/DotBackground";
 
@@ -35,8 +36,8 @@ const SignUpForm: React.FC = () => {
       lastName: "",
       password: "",
       firstName: "",
+      phoneNumber: "",
       confirmPassword: "",
-      organizationName: "",
     },
   });
 
@@ -44,9 +45,13 @@ const SignUpForm: React.FC = () => {
     values: SignUpFormState
   ) => {
     try {
-      const result = await signUpAction(values);
+      const response = await signUpAction(values);
 
-      console.log(result);
+      if (!response.success) {
+        return toast.error(t("signup.messages.errors.invalid_data"));
+      }
+
+      toast.success(t("messages.success.signup_success"));
     } catch (error) {
       console.error(error);
       toast.error(t("signup.messages.errors.invalid_data"));
@@ -68,24 +73,6 @@ const SignUpForm: React.FC = () => {
                 </p>
               </div>
               <section className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="organizationName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("signup.organization.title")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          type="text"
-                          placeholder={t("signup.organization.placeholder")}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -135,6 +122,24 @@ const SignUpForm: React.FC = () => {
                           {...field}
                           type="email"
                           placeholder={t("signup.email.placeholder")}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("signup.phone_number.title")}</FormLabel>
+                      <FormControl>
+                        <PhoneInput
+                          {...field}
+                          placeholder={t("signup.phone_number.placeholder")}
+                          defaultCountry="AR"
                         />
                       </FormControl>
                       <FormMessage />

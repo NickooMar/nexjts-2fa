@@ -31,9 +31,13 @@ const toastOptions: ToastOptions = {
 };
 
 export const useNextToast = () => {
+  const success = (message: string, options?: ToastOptions) => {
+    toast.success(message, { ...toastOptions, ...options });
+  };
+
   const error = (message: string, options?: ToastOptions) => {
     toast.error(message, { ...toastOptions, ...options });
   };
 
-  return { error };
+  return { success, error };
 };
