@@ -1,6 +1,6 @@
 import { BaseEntity } from './base.entity';
-import { FilterQuery, Model } from 'mongoose';
-import { NotFoundException } from '@nestjs/common';
+import { InternalServerErrorException } from '@nestjs/common';
+import { FilterQuery, Model, SaveOptions, Types } from 'mongoose';
 import { BaseRepositoryAbstract } from './base.repository.abstract';
 
 export class BaseRepository<T extends BaseEntity>
@@ -14,7 +14,25 @@ export class BaseRepository<T extends BaseEntity>
 
   async findOne(query: FilterQuery<T>): Promise<Model<T>> {
     const item = await this.model.findOne(query).exec();
-    if (!item) throw new NotFoundException();
+    if (!item) return null;
     return item['_doc'];
+  }
+
+  async create(
+    document: any,
+    projection?: any,
+    options?: SaveOptions,
+  ): Promise<any> {
+    const item = new this.model(
+      {
+        ...document,
+        _id: new Types.ObjectId(),
+      },
+      projection,
+      options,
+    );
+    const saved = await item?.save();
+    if (saved) return saved;
+    else throw new InternalServerErrorException();
   }
 }

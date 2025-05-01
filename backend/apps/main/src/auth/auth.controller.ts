@@ -1,12 +1,6 @@
 import { Observable } from 'rxjs';
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Query,
-  NotFoundException,
-} from '@nestjs/common';
+import { SignupRequestDto } from 'libs/shared/dto/auth/signup.dto';
+import { Get, Post, Body, Query, Controller } from '@nestjs/common';
 import { AuthProxy } from 'apps/auth/src/infrastructure/external/auth.proxy';
 import { SigninRequestDto } from '../../../../libs/shared/dto/auth/signin.dto';
 import { AccessTokenEntity } from 'apps/auth/src/domain/entities/access-token.entity';
@@ -29,10 +23,16 @@ export class AuthController {
   }
 
   @Post('signup')
-  signup(@Body() body: any): any {
-    console.log({ body });
-
-    throw new NotFoundException('test');
-    // return this.authProxy.signup(input);
+  signup(@Body() input: SignupRequestDto): any {
+    return this.authProxy.signup(input);
   }
+
+  // @Get('google/callback')
+  // @UseGuards()
+  // async googleCallback(
+  //   @CurrentUser() user: User,
+  //   @Res({ passthrough: true }) response: Response,
+  // ) {
+  //   await this.authService.login(user, response, true);
+  // }
 }

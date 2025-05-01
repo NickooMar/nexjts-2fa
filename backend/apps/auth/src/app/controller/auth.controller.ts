@@ -5,6 +5,7 @@ import { MessagePattern } from '@nestjs/microservices';
 import { AuthService } from '../../domain/service/auth.service';
 import { SigninRequestDto } from 'libs/shared/dto/auth/signin.dto';
 import { AccessTokenEntity } from '../../domain/entities/access-token.entity';
+import { SignupRequestDto } from 'libs/shared/dto/auth/signup.dto';
 
 @Controller()
 export class AuthController {
@@ -13,5 +14,10 @@ export class AuthController {
   @MessagePattern({ cmd: AuthPatterns.SIGNIN })
   signin(input: SigninRequestDto): Observable<AccessTokenEntity> {
     return this.authService.signin(input);
+  }
+
+  @MessagePattern({ cmd: AuthPatterns.SIGNUP })
+  signup(input: SignupRequestDto): Observable<any> {
+    return this.authService.signup(input);
   }
 }

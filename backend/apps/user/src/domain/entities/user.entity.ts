@@ -1,4 +1,3 @@
-import { Role } from 'apps/auth/src/domain/entities/role.entity';
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from 'libs/shared/repositories/base.entity';
 
@@ -13,8 +12,6 @@ export class User extends BaseEntity {
 
   @Exclude({ toPlainOnly: true })
   password: string;
-
-  roles: Role[];
 
   createdAt: Date;
 

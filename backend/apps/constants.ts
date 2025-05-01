@@ -20,8 +20,10 @@ export const MongoDatabases = {
 
 export const AuthPatterns = {
   SIGNIN: 'SIGNIN',
+  SIGNUP: 'SIGNUP',
 } as const;
 
 export const UserPatterns = {
   FIND_BY_EMAIL: 'FIND_BY_EMAIL',
-};
+  CREATE: 'CREATE',
+} as const;

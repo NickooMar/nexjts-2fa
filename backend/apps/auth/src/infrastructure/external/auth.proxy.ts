@@ -16,7 +16,7 @@ export class AuthProxy implements AuthServiceAbstract {
     return this.client.send({ cmd: AuthPatterns.SIGNIN }, input);
   }
 
-  signup(input: SignupRequestDto): void {
-    // return this.client.send({ cmd: AuthPatterns.SIGNUP }, input);
+  signup(input: SignupRequestDto): Observable<any> {
+    return this.client.send({ cmd: AuthPatterns.SIGNUP }, input);
   }
 }
