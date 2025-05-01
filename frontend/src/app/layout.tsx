@@ -1,4 +1,9 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
+import { Toaster } from "react-hot-toast";
+import { getLocale } from "next-intl/server";
+import Navbar from "@/components/Navbar/Navbar";
+import { NextIntlClientProvider } from "next-intl";
+import { ThemeProvider } from "@/components/Theme/themeProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,10 +21,37 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+async function getMessages(locale: string) {
+  return (await import(`../../messages/${locale ?? "en"}.json`)).default;
+}
+
+export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  return children;
+}) {
+  const locale = await getLocale();
+  const messages = await getMessages(locale);
+
+  return (
+    <html lang={locale} suppressHydrationWarning={true}>
+      <head>
+        <title>HomiQ</title>
+      </head>
+      <body>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Toaster position="top-right" reverseOrder={false} />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navbar />
+            {children}
+          </ThemeProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
 }

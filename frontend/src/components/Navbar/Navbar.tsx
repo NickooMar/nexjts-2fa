@@ -1,13 +1,14 @@
 import React from "react";
+import Link from "next/link";
 import { auth } from "@/auth";
-import { Link } from "@/i18n/routing";
+import { Session } from "next-auth";
 import { Home, LogOut } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { signOutAction } from "@/app/actions/auth.actions";
 import { ThemeSwitcher } from "../Theme/ThemeSwitcher";
-import { Session } from "next-auth";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { getTranslations } from "next-intl/server";
 
 async function handleSignOut() {
   "use server";
@@ -17,12 +18,12 @@ async function handleSignOut() {
 const Navbar = async () => {
   const session = await auth();
 
-  return <NavbarClient session={session} />;
+  const t = await getTranslations("navbar");
+
+  return <NavbarClient session={session} t={t} />;
 };
 
-const NavbarClient = ({ session }: { session: Session | null }) => {
-  const t = useTranslations("navbar");
-
+const NavbarClient = ({ session, t }: { session: Session | null; t: any }) => {
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="w-full flex h-14 px-6 items-center justify-between">

@@ -6,7 +6,6 @@ import {
   checkEmailExistsAction,
   signInWithProviderAction,
 } from "@/app/actions/auth.actions";
-import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/spinner";
@@ -23,6 +22,7 @@ import { createSignInSchema } from "@/schemas/auth.schema";
 import { DotBackground } from "../../Aceternity/DotBackground";
 import { Form, FormField, FormItem, FormMessage } from "../../ui/form";
 import { AuthProviders, SignInFormState } from "@/types/auth/auth.types";
+import Link from "next/link";
 
 const SignInForm: React.FC = () => {
   const t = useTranslations("auth");

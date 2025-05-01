@@ -9,7 +9,6 @@ import {
   FormControl,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Link } from "@/i18n/routing";
 import { Button } from "../ui/button";
 import { Loader } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -22,6 +21,7 @@ import { SignUpFormState } from "@/types/auth/auth.types";
 import { useNextToast } from "@/hooks/toasts/useNextToast";
 import { createSignUpSchema } from "@/schemas/auth.schema";
 import { DotBackground } from "../Aceternity/DotBackground";
+import Link from "next/link";
 
 const SignUpForm: React.FC = () => {
   const t = useTranslations("auth");
