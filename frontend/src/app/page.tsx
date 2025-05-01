@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
-
-export default function RootPage() {
-  redirect("/en");
+export default function HomePage() {
+  return <div>Home</div>;
 }

@@ -10,10 +10,12 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
+import { useTransition } from "react";
 import { Button } from "../ui/button";
+import { Locale } from "@/i18n/config";
 import { Languages } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { setUserLocale } from "@/services/locale";
+import { useLocale, useTranslations } from "next-intl";
 
 interface Language {
   id: string;
@@ -22,22 +24,21 @@ interface Language {
 }
 
 const LanguageSwitcher = () => {
-  const router = useRouter();
-  const params = useParams();
-  const pathname = usePathname();
   const t = useTranslations("general");
+  const [isPending, startTransition] = useTransition();
+  const locale = useLocale();
 
   const languages: Language[] = [
     { id: "es", label: t("languages.spanish"), icon: Languages },
     { id: "en", label: t("languages.english"), icon: Languages },
   ];
 
-  const handleLanguageChange = (locale: string) => {
-    const newPathname = `/${locale}${pathname.replace(
-      `/${params.locale}`,
-      ""
-    )}`;
-    router.push(newPathname);
+  const handleLanguageChange = (value: string) => {
+    const locale = value as Locale;
+
+    startTransition(() => {
+      setUserLocale(locale);
+    });
   };
 
   const LanguageGroup = ({ languages }: { languages: Language[] }) => (
@@ -46,7 +47,8 @@ const LanguageSwitcher = () => {
         <DropdownMenuItem
           key={id}
           onClick={() => handleLanguageChange(id)}
-          className={params.locale === id ? "my-2 bg-accent" : "my-2"}
+          className={locale === id ? "my-2 bg-accent" : "my-2"}
+          disabled={isPending}
         >
           <Icon className="mr-2 h-4 w-4" />
           {label}
