@@ -2,6 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { from, throwError } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { SignupRequestDto } from 'libs/shared/dto/auth/signup.dto';
 import { SigninRequestDto } from 'libs/shared/dto/auth/signin.dto';
@@ -31,7 +32,9 @@ export class AuthService implements AuthServiceAbstract {
   signup(input: SignupRequestDto) {
     return from(this.userProxy.findByEmail(input.email)).pipe(
       switchMap((user) => {
-        if (user) return throwError(() => new Error('Email already exists'));
+        if (user) {
+          return throwError(() => new RpcException('email_already_exists'));
+        }
 
         return from(bcrypt.hash(input.password, 15)).pipe(
           switchMap((hash) =>
@@ -48,7 +51,7 @@ export class AuthService implements AuthServiceAbstract {
           map((newUser) => ({ message: 'User created', userId: newUser._id })),
         );
       }),
-      catchError((err) => throwError(() => new Error(err.message))),
+      catchError((err) => throwError(() => new RpcException(err.message))),
     );
   }
 }

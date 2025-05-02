@@ -36,6 +36,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.7.0",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
@@ -76,7 +77,20 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/"
-    ]
+      "<rootDir>/apps/",
+      "<rootDir>/libs/",
+      "<rootDir>/apps/main/src",
+      "<rootDir>/apps/user/src",
+      "<rootDir>/apps/auth/src"
+    ],
+    "moduleNameMapper": {
+      "^apps/(.*)$": "<rootDir>/apps/$1",
+      "^libs/(.*)$": "<rootDir>/libs/$1",
+      "^app/main/(.*)$": "<rootDir>/apps/main/src/$1",
+      "^app/user/(.*)$": "<rootDir>/apps/user/src/$1",
+      "^app/auth/(.*)$": "<rootDir>/apps/auth/src/$1",
+      "^app/shared$": "<rootDir>/libs/shared/src",
+      "^app/shared/(.*)$": "<rootDir>/libs/shared/src/$1"
+    }
   }
 }

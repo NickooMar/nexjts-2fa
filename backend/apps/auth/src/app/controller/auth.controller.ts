@@ -4,8 +4,8 @@ import { AuthPatterns } from 'apps/constants';
 import { MessagePattern } from '@nestjs/microservices';
 import { AuthService } from '../../domain/service/auth.service';
 import { SigninRequestDto } from 'libs/shared/dto/auth/signin.dto';
-import { AccessTokenEntity } from '../../domain/entities/access-token.entity';
 import { SignupRequestDto } from 'libs/shared/dto/auth/signup.dto';
+import { AccessTokenEntity } from '../../domain/entities/access-token.entity';
 
 @Controller()
 export class AuthController {
