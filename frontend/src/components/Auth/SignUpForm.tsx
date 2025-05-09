@@ -48,9 +48,19 @@ const SignUpForm: React.FC = () => {
       const response = await signUpAction(values);
 
       if (!response.success) {
-        return toast.error(t("messages.errors.invalid_credentials"));
+        switch (response.error) {
+          case "user_already_exists": {
+            form.setError("email", {
+              message: t("messages.errors.email_already_exists"),
+            });
+            return toast.error(t("messages.errors.user_already_exists"));
+          }
+          case "network_error":
+            return toast.error(t("messages.errors.network_error"));
+          default:
+            return toast.error(t("messages.errors.invalid_credentials"));
+        }
       }
-
       toast.success(t("messages.success.signup_success"));
     } catch (error) {
       console.error(error);

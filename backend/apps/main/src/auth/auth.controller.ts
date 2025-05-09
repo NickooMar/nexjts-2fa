@@ -39,8 +39,10 @@ export class AuthController {
           const errorMessage =
             error.message || error.error?.message || 'Unknown error';
 
-          if (errorMessage.includes('email_already_exists')) {
-            throw new ConflictException('Email already exists');
+          if (errorMessage.includes('user_already_exists')) {
+            throw new ConflictException('User already exists', {
+              description: 'user_already_exists',
+            });
           }
 
           throw new InternalServerErrorException(errorMessage);

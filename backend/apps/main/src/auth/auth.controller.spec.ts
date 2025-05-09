@@ -60,10 +60,7 @@ describe('Main AuthController', () => {
 
     it('should throw ConflictException when email already exists', (done) => {
       mockAuthProxy.signup.mockReturnValue(
-        throwError(() => ({
-          error: new RpcException('email_already_exists'),
-          status: 'error',
-        })),
+        throwError(() => new RpcException('user_already_exists')),
       );
 
       controller.signup(signupInput).subscribe({

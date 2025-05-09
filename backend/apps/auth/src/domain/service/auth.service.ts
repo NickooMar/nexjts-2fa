@@ -33,7 +33,7 @@ export class AuthService implements AuthServiceAbstract {
     return from(this.userProxy.findByEmail(input.email)).pipe(
       switchMap((user) => {
         if (user) {
-          return throwError(() => new RpcException('email_already_exists'));
+          return throwError(() => new RpcException('user_already_exists'));
         }
 
         return from(bcrypt.hash(input.password, 15)).pipe(

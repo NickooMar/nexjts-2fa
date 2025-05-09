@@ -96,6 +96,7 @@
       },
       "errors": {
         "invalid_email": "Email is not valid",
+        "email_already_exists": "Email isn't available",
         "email_min_length": "Email should be at least 6 characters",
         "password_required": "Password is required",
         "password_invalid": "Password is not valid",
@@ -113,6 +114,7 @@
         "last_name_min_length": "Last name must be at least 3 characters",
         "invalid_provider": "Provider is invalid",
         "invalid_credentials": "Invalid credentials. Please check your credentials and try again.",
+        "user_already_exists": "User already exists, please sign in or use a different information",
         "request_error": "An unexpected error occurred while processing the request"
       }
     }

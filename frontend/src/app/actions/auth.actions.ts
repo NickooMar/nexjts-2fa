@@ -58,16 +58,17 @@ export const signInWithProviderAction = async (provider: AuthProviders) => {
 
 // SIGN UP RELATED ACTIONS
 export const signUpAction = async (data: SignUpFormState) => {
-  try {
-    const response = await signUp(data);
-    return response;
-  } catch (error) {
+  const result = await signUp(data);
+
+  if (!result.success) {
     return {
       success: false,
-      error: "server_error",
-      message: error instanceof Error ? error.message : "Unknown error",
+      error: result.error,
+      message: result.message,
     };
   }
+
+  return result;
 };
 
 // SIGN OUT RELATED ACTIONS

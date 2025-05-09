@@ -119,8 +119,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 });
 
 export const signUp = async (data: SignUpFormState) => {
-  const response = await $axios.post("/auth/signup", data);
-  return response.data;
+  try {
+    const response = await $axios.post("/auth/signup", data);
+    return { success: true, data: response.data };
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return {
+        success: false,
+        status: error.response.status,
+        error: error.response.data?.error || "unknown_error",
+        message: error.response.data?.message || "An error occurred.",
+      };
+    }
+
+    return {
+      success: false,
+      status: null,
+      error: "network_error",
+      message: "No response from the server or unexpected error.",
+    };
+  }
 };
 
 export const checkEmailExists = async (email: string) => {
