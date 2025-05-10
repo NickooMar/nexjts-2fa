@@ -31,7 +31,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "framer-motion": "^11.11.11",
+    "framer-motion": "^12.10.5",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.456.0",
     "next": "canary",

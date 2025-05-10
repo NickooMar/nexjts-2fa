@@ -25,4 +25,17 @@ export const validationSchema = Joi.object({
   // User Service
   USER_SERVICE_HOST: Joi.string().default('localhost').required(),
   USER_SERVICE_PORT: Joi.number().default(3002).required(),
+
+  // Email Service
+  EMAIL_SERVICE_HOST: Joi.string().default('localhost').required(),
+  EMAIL_SERVICE_PORT: Joi.number().default(3003).required(),
+
+  // Frontend
+  FRONTEND_URL: Joi.string().default('http://localhost:4000').required(),
+
+  // Mongoose
+  MONGO_URI: Joi.string().required(),
+
+  // Resend
+  RESEND_API_KEY: Joi.string().required(),
 });

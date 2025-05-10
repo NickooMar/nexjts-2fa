@@ -90,7 +90,8 @@
       "^app/user/(.*)$": "<rootDir>/apps/user/src/$1",
       "^app/auth/(.*)$": "<rootDir>/apps/auth/src/$1",
       "^app/shared$": "<rootDir>/libs/shared/src",
-      "^app/shared/(.*)$": "<rootDir>/libs/shared/src/$1"
+      "^app/shared/(.*)$": "<rootDir>/libs/shared/src/$1",
+      "^app/email/(.*)$": "<rootDir>/apps/email/src/$1"
     }
   }
 }

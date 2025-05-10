@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthController } from './app/controller/auth.controller';
 import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';
+import { EmailProxy } from 'apps/email/src/infrastructure/email.proxy';
 
 @Module({
   imports: [
@@ -39,9 +40,21 @@ import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';
         }),
         inject: [ConfigService],
       },
+      {
+        imports: [ConfigModule],
+        name: Clients.EMAIL_CLIENT,
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get<string>('EMAIL_SERVICE_HOST', 'localhost'),
+            port: configService.get<number>('EMAIL_SERVICE_PORT', 3003),
+          },
+        }),
+        inject: [ConfigService],
+      },
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserProxy],
+  providers: [AuthService, UserProxy, EmailProxy],
 })
 export class AuthModule {}

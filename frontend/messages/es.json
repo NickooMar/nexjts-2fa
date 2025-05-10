@@ -88,6 +88,12 @@
       "already_have_account": "¿Ya tienes una cuenta?",
       "signin": "Iniciar sesión"
     },
+    "email_verification": {
+      "title": "Verifica tu correo electrónico",
+      "description": "Hemos enviado un enlace de verificación a tu correo electrónico. Por favor, verifica tu correo electrónico y haz clic en el enlace para verificar tu correo electrónico.",
+      "resend_email": "Reenviar correo electrónico",
+      "resend_email_time_remaining": "Reenviar correo electrónico en {time_remaining}"
+    },
     "messages": {
       "success": {
         "signup_success": "Cuenta creada exitosamente"
@@ -107,6 +113,7 @@
         "password_invalid_start": "La contraseña no puede comenzar con un punto o nueva línea",
         "confirm_password_min_length": "La contraseña de confirmación debe tener al menos 8 caracteres",
         "passwords_dont_match": "Las contraseñas no coinciden",
+        "phone_number_invalid": "El número de teléfono no es válido",
         "phone_number_min_length": "El número de teléfono debe tener al menos 10 caracteres",
         "first_name_min_length": "El nombre debe tener al menos 3 caracteres",
         "last_name_min_length": "El apellido debe tener al menos 3 caracteres",

@@ -90,6 +90,12 @@
       "already_have_account": "Already have an account?",
       "signin": "Sign in"
     },
+    "email_verification": {
+      "title": "Check your inbox",
+      "description": "We’ve sent a verification link to your email address. Please check your mailbox and click the link to verify your email.",
+      "resend_email": "Resend email",
+      "resend_email_time_remaining": "Resend email in {time_remaining}"
+    },
     "messages": {
       "success": {
         "signup_success": "Account created successfully"
@@ -110,6 +116,7 @@
         "confirm_password_min_length": "Confirm password must be at least 8 characters",
         "passwords_dont_match": "Passwords don't match",
         "phone_number_invalid": "Phone number is not valid",
+        "phone_number_min_length": "Phone number must be at least 10 characters",
         "first_name_min_length": "First name must be at least 3 characters",
         "last_name_min_length": "Last name must be at least 3 characters",
         "invalid_provider": "Provider is invalid",

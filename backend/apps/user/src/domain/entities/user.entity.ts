@@ -13,6 +13,10 @@ export class User extends BaseEntity {
   @Exclude({ toPlainOnly: true })
   password: string;
 
+  emailVerified: boolean;
+
+  phoneNumber: string;
+
   createdAt: Date;
 
   updatedAt: Date;

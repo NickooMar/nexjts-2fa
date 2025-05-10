@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import SignInForm from "@/components/Auth/SignIn/SignInForm";
+import SignInForm from "@/components/Auth/Signin/SignInForm";
 import { redirect } from "next/navigation";
 
 const SigninPage = async () => {

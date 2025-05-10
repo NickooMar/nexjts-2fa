@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
-import SignUpForm from "@/components/Auth/SignUpForm";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
+import SignUpClient from "@/components/Auth/Signup/SignUpClient";
 
 export const metadata: Metadata = {
   title: "Sign Up",
@@ -24,7 +24,7 @@ const SignupPage = async () => {
 
   if (session) redirect("/");
 
-  return <SignUpForm />;
+  return <SignUpClient />;
 };
 
 export default SignupPage;

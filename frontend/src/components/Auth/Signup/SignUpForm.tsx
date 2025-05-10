@@ -7,25 +7,29 @@ import {
   FormLabel,
   FormMessage,
   FormControl,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+} from "../../ui/form";
+import Link from "next/link";
 import { Loader } from "lucide-react";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
 import { useTranslations } from "next-intl";
-import { PhoneInput } from "../ui/phone-input";
+import { PhoneInput } from "../../ui/phone-input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PasswordInput } from "./Inputs/PasswordInput";
+import { PasswordInput } from "../Inputs/PasswordInput";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { signUpAction } from "@/app/actions/auth.actions";
 import { SignUpFormState } from "@/types/auth/auth.types";
 import { useNextToast } from "@/hooks/toasts/useNextToast";
 import { createSignUpSchema } from "@/schemas/auth.schema";
-import { DotBackground } from "../Aceternity/DotBackground";
-import Link from "next/link";
+import { DotBackground } from "../../Aceternity/DotBackground";
 
-const SignUpForm: React.FC = () => {
-  const t = useTranslations("auth");
+interface SignUpFormProps {
+  setSignupStep: (step: "signup" | "email_verification") => void;
+}
+
+const SignUpForm: React.FC<SignUpFormProps> = ({ setSignupStep }) => {
   const toast = useNextToast();
+  const t = useTranslations("auth");
 
   const signUpSchema = createSignUpSchema(t);
 
@@ -45,23 +49,25 @@ const SignUpForm: React.FC = () => {
     values: SignUpFormState
   ) => {
     try {
-      const response = await signUpAction(values);
+      console.log({ values });
+      // const response = await signUpAction(values);
 
-      if (!response.success) {
-        switch (response.error) {
-          case "user_already_exists": {
-            form.setError("email", {
-              message: t("messages.errors.email_already_exists"),
-            });
-            return toast.error(t("messages.errors.user_already_exists"));
-          }
-          case "network_error":
-            return toast.error(t("messages.errors.network_error"));
-          default:
-            return toast.error(t("messages.errors.invalid_credentials"));
-        }
-      }
+      // if (!response.success) {
+      //   switch (response.error) {
+      //     case "user_already_exists": {
+      //       form.setError("email", {
+      //         message: t("messages.errors.email_already_exists"),
+      //       });
+      //       return toast.error(t("messages.errors.user_already_exists"));
+      //     }
+      //     case "network_error":
+      //       return toast.error(t("messages.errors.network_error"));
+      //     default:
+      //       return toast.error(t("messages.errors.invalid_credentials"));
+      //   }
+      // }
       toast.success(t("messages.success.signup_success"));
+      setSignupStep("email_verification");
     } catch (error) {
       console.error(error);
       toast.error(t("messages.errors.request_error"));
