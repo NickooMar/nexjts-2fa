@@ -1,6 +1,8 @@
 import { Resend } from 'resend';
-import { Observable, from } from 'rxjs';
+import { render } from '@react-email/render';
 import { ConfigService } from '@nestjs/config';
+import { Observable, from, switchMap } from 'rxjs';
+import VerificationEmail from '../../emails/verification-email.template';
 import { EmailServiceAbstract } from '../../../domain/contracts/email.service.abstract';
 
 export class ResendProvider implements EmailServiceAbstract {
@@ -11,16 +13,19 @@ export class ResendProvider implements EmailServiceAbstract {
   }
 
   sendVerificationEmail(input: any): Observable<any> {
-    // const sendEmailPromise = this.resend.emails.send({
-    //   from: 'Acme <onboarding@resend.dev>',
-    //   to: input.email,
-    //   subject: 'Verify Your Email',
-    //   html: '<strong>Please verify your email address.</strong>',
-    // });
-    const sendEmailPromise = Promise.reject(
-      new Error('Simulated email sending error'),
-    );
+    return from(
+      render(VerificationEmail({ validationCode: input.verificationLink })),
+    ).pipe(
+      switchMap((html) => {
+        const sendEmailPromise = this.resend.emails.send({
+          html,
+          to: input.email,
+          subject: 'Verify Your Email',
+          from: 'Acme <onboarding@resend.dev>',
+        });
 
-    return from(sendEmailPromise);
+        return from(sendEmailPromise);
+      }),
+    );
   }
 }

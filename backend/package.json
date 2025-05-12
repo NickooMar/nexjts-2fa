@@ -12,6 +12,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/backend/main",
+    "email:dev": "email dev -p 9999 -d ./apps/email/src/infrastructure/emails",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -27,11 +28,16 @@
     "@nestjs/microservices": "^10.4.15",
     "@nestjs/mongoose": "^10.1.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@react-email/components": "0.0.39",
+    "@react-email/render": "^1.1.0",
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "joi": "^17.13.3",
     "mongoose": "^8.9.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-email": "^4.0.13",
     "reflect-metadata": "^0.2.0",
     "resend": "^4.5.1",
     "rxjs": "^7.8.1"
@@ -94,5 +100,9 @@
       "^app/shared/(.*)$": "<rootDir>/libs/shared/src/$1",
       "^app/email/(.*)$": "<rootDir>/apps/email/src/$1"
     }
+  },
+  "resolutions": {
+    "wrap-ansi": "7.0.0",
+    "string-width": "4.1.0"
   }
 }

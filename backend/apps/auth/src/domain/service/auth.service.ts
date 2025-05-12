@@ -96,7 +96,10 @@ export class AuthService implements AuthServiceAbstract {
     verificationLink.pathname = '/verify-email';
     verificationLink.searchParams.set('token', verificationToken);
 
-    return this.emailProxy.sendVerificationEmail({ email });
+    return this.emailProxy.sendVerificationEmail({
+      email,
+      verificationLink: verificationLink.toString(),
+    });
   }
 
   private generateVerificationToken(userId: string): string {
