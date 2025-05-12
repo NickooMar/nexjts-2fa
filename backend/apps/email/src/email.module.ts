@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { validationSchema } from 'apps/env.validation';
 import { EmailService } from './domain/service/email.service';
 import { EmailController } from './app/controller/email.controller';
+import { EmailProviderFactory } from './infrastructure/email.strategy.factory';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { EmailController } from './app/controller/email.controller';
     }),
   ],
   controllers: [EmailController],
-  providers: [EmailService],
+  providers: [EmailService, EmailProviderFactory],
 })
 export class EmailModule {}

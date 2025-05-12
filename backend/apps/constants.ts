@@ -33,3 +33,7 @@ export const UserPatterns = {
 export const EmailPatterns = {
   SEND_VERIFICATION_EMAIL: 'SEND_VERIFICATION_EMAIL',
 } as const;
+
+export const EmailProviders = {
+  RESEND: 'RESEND',
+} as const;
