@@ -1,6 +1,7 @@
 ### Property manager application
 
 Robust authentication logic with email validations, auth providers and 2 factor authentication 
+
 [SINGUP]
 ![image](https://github.com/user-attachments/assets/09822332-0d92-4187-8706-2a0045853b99)
 
