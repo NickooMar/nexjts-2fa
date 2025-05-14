@@ -106,7 +106,7 @@ const SignInForm: React.FC = () => {
   }, [step, onNextStep]);
 
   return (
-    <section className="w-full max-w-md mx-auto p-4 sm:p-6 md:p-8 z-0 bg-card border border-border rounded-xl shadow relative">
+    <section className="w-full max-w-md mx-auto p-8 bg-card backdrop-blur-sm bg-opacity-100 border border-border rounded-xl shadow-lg">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="flex flex-col justify-center items-center space-y-2 gap-2">

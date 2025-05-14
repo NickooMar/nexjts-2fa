@@ -64,3 +64,8 @@ export const createSignInProviderSchema = (t: (key: string) => string) =>
       message: t("messages.errors.invalid_provider"),
     }),
   });
+
+export const createEmailVerificationSchema = (t: (key: string) => string) =>
+  z.object({
+    pin: z.string().min(6, { message: t("messages.errors.pin_min_length") }),
+  });

@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Clients, EmailPatterns } from 'apps/constants';
-import { EmailServiceAbstract } from '../domain/contracts/email.service.abstract';
+import { EmailServiceAbstract } from '../../domain/contracts/email.service.abstract';
 
 export class EmailProxy implements EmailServiceAbstract {
   constructor(

@@ -9,7 +9,7 @@ import { User } from 'apps/user/src/domain/entities/user.entity';
 import { SignupRequestDto } from 'libs/shared/dto/auth/signup.dto';
 import { SigninRequestDto } from 'libs/shared/dto/auth/signin.dto';
 import { AccessTokenEntity } from '../entities/access-token.entity';
-import { EmailProxy } from 'apps/email/src/infrastructure/email.proxy';
+import { EmailProxy } from 'apps/email/src/infrastructure/external/email.proxy';
 import { AuthServiceAbstract } from '../contracts/auth.service.abstract';
 import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';
 

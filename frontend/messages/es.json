@@ -15,7 +15,8 @@
   },
   "actions": {
     "create": "Crear",
-    "create_model": "Crear {model}"
+    "create_model": "Crear {model}",
+    "submit": "Enviar"
   },
   "navbar": {
     "home": "Inicio",
@@ -90,13 +91,16 @@
     },
     "email_verification": {
       "title": "Verifica tu correo electrónico",
-      "description": "Hemos enviado un enlace de verificación a tu correo electrónico. Por favor, verifica tu correo electrónico y haz clic en el enlace para verificar tu correo electrónico.",
+      "description": "Hemos enviado un código de verificación a tu correo electrónico. Por favor, verifica tu correo electrónico e ingresa el código a continuación.",
+      "verification_code": "Código de verificación",
+      "enter_code": "Por favor, ingresa el código que enviamos a tu correo electrónico",
       "resend_email": "Reenviar correo electrónico",
       "resend_email_time_remaining": "Reenviar correo electrónico en {time_remaining}"
     },
     "messages": {
       "success": {
-        "signup_success": "Cuenta creada exitosamente"
+        "signup_success": "Cuenta creada exitosamente",
+        "email_verification_success": "Correo electrónico verificado exitosamente"
       },
       "errors": {
         "invalid_email": "El correo electrónico es inválido",
@@ -120,6 +124,7 @@
         "invalid_provider": "El proveedor es inválido",
         "invalid_credentials": "Credenciales inválidas. Por favor verifica tus credenciales y vuelve a intentarlo.",
         "user_already_exists": "El usuario ya existe, por favor inicia sesión o usa una información diferente",
+        "pin_min_length": "El código de verificación debe tener 6 dígitos",
         "request_error": "Ocurrió un error inesperado al procesar la solicitud"
       }
     }

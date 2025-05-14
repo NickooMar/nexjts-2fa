@@ -6,7 +6,7 @@ const toastOptions: ToastOptions = {
   icon: "",
 };
 
-export const useNextToast = () => {
+export const useHotToast = () => {
   const error = (message: string, options?: ToastOptions) => {
     toast.error(message, { ...toastOptions, ...options });
   };

@@ -2,12 +2,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { Clients } from 'apps/constants';
 import { validationSchema } from 'apps/env.validation';
-import { AuthService } from './domain/service/auth.service';
+import { AuthService } from './domain/services/auth.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthController } from './app/controller/auth.controller';
 import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';
-import { EmailProxy } from 'apps/email/src/infrastructure/email.proxy';
+import { EmailProxy } from 'apps/email/src/infrastructure/external/email.proxy';
 
 @Module({
   imports: [

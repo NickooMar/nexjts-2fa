@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EmailProviders } from 'apps/constants';
-import { ResendProvider } from './providers/resend/resend.provider';
-import { EmailServiceAbstract } from '../domain/contracts/email.service.abstract';
+import { ResendProvider } from '../providers/resend/resend.provider';
+import { EmailServiceAbstract } from '../../domain/contracts/email.service.abstract';
 
 @Injectable()
 export class EmailProviderFactory {

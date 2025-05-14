@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { Controller } from '@nestjs/common';
 import { EmailPatterns } from 'apps/constants';
 import { MessagePattern } from '@nestjs/microservices';
-import { EmailService } from '../../domain/service/email.service';
+import { EmailService } from '../../domain/services/email.service';
 
 @Controller()
 export class EmailController {

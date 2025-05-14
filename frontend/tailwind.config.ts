@@ -1,10 +1,7 @@
 import type { Config } from "tailwindcss";
-
-const {
-  default: flattenColorPalette,
-} = require("tailwindcss/lib/util/flattenColorPalette");
-const tailwindCssAnimate = require("tailwindcss-animate");
-const gridAutoFit = require("@shrutibalasa/tailwind-grid-auto-fit");
+import tailwindCssAnimate from "tailwindcss-animate";
+import gridAutoFit from "@shrutibalasa/tailwind-grid-auto-fit";
+import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
 
 export default {
   darkMode: ["class"],
@@ -66,6 +63,15 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      keyframes: {
+        "caret-blink": {
+          "0%,70%,100%": { opacity: "1" },
+          "20%,50%": { opacity: "0" },
+        },
+      },
+      animation: {
+        "caret-blink": "caret-blink 1.25s ease-out infinite",
+      },
     },
   },
   plugins: [tailwindCssAnimate, addVariablesForColors, gridAutoFit],
@@ -77,7 +83,7 @@ function addVariablesForColors({
   theme,
 }: {
   addBase: (styles: Record<string, unknown>) => void;
-  theme: any;
+  theme: Record<string, unknown>;
 }) {
   const allColors = flattenColorPalette(theme("colors"));
   const newVars = Object.fromEntries(

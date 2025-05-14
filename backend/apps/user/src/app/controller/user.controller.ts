@@ -3,7 +3,7 @@ import { Controller } from '@nestjs/common';
 import { UserPatterns } from 'apps/constants';
 import { MessagePattern } from '@nestjs/microservices';
 import { User } from '../../domain/entities/user.entity';
-import { UserService } from '../../domain/service/user.service';
+import { UserService } from '../../domain/services/user.service';
 import { CreateUserDto } from 'libs/shared/dto/user/create-user.dto';
 
 @Controller()

@@ -1,0 +1,9 @@
+{
+  "verification_email": {
+    "title": "Verifica tu correo electrónico",
+    "body": "Ingresa el código de verificación que aparece a continuación para verificar tu correo electrónico:",
+    "warning": "El código de verificación es válido por 15 minutos. Si no lo usas, el código expirará.",
+    "button": "Verifica tu correo electrónico",
+    "footer": "Si no solicitaste esta verificación, puedes ignorar este correo electrónico."
+  }
+}
