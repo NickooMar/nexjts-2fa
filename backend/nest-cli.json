@@ -43,6 +43,13 @@
       "entryFile": "main",
       "sourceRoot": "apps/email/src",
       "compilerOptions": {
+        "assets": [
+          {
+            "include": "infrastructure/i18n/**/*",
+            "watchAssets": true,
+            "outDir": "dist/apps/email"
+          }
+        ],
         "tsConfigPath": "apps/email/tsconfig.app.json"
       }
     }

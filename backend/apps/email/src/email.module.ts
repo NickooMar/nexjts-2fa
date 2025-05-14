@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'path';
 import { Module } from '@nestjs/common';
 import { I18nModule } from 'nestjs-i18n';
 import { ConfigModule } from '@nestjs/config';
@@ -17,7 +17,7 @@ import { EmailProviderFactory } from './infrastructure/strategy/email.strategy.f
     I18nModule.forRoot({
       fallbackLanguage: 'en',
       loaderOptions: {
-        path: path.join(__dirname, '/i18n/'),
+        path: path.join(__dirname, '/infrastructure/i18n/'),
         watch: true,
       },
     }),
