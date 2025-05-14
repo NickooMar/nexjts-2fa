@@ -20,7 +20,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { SignUpFormState } from "@/types/auth/auth.types";
 import { useNextToast } from "@/hooks/toasts/useNextToast";
 import { createSignUpSchema } from "@/schemas/auth.schema";
-import { useEffect } from "react";
 
 interface SignUpFormProps {
   setSignupStep: (step: "signup" | "email_verification") => void;
@@ -72,10 +71,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ setSignupStep }) => {
       toast.error(t("messages.errors.request_error"));
     }
   };
-
-  useEffect(() => {
-    setSignupStep("email_verification");
-  }, []);
 
   return (
     <section className="w-full max-w-xl mx-auto p-8 bg-card backdrop-blur-sm bg-opacity-100 border border-border rounded-xl shadow-lg">
