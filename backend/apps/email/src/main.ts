@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { EmailModule } from './email.module';
+import { I18nValidationExceptionFilter } from 'nestjs-i18n';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
@@ -18,6 +19,12 @@ async function bootstrap() {
         port,
       },
     },
+  );
+
+  app.useGlobalFilters(
+    new I18nValidationExceptionFilter({
+      detailedErrors: false,
+    }),
   );
 
   await app.listen().then(() => {

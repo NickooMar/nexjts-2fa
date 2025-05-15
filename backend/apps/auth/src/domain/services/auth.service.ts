@@ -5,13 +5,12 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RpcException } from '@nestjs/microservices';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { User } from 'apps/user/src/domain/entities/user.entity';
 import { SignupRequestDto } from 'libs/shared/dto/auth/signup.dto';
 import { SigninRequestDto } from 'libs/shared/dto/auth/signin.dto';
 import { AccessTokenEntity } from '../entities/access-token.entity';
-import { EmailProxy } from 'apps/email/src/infrastructure/external/email.proxy';
 import { AuthServiceAbstract } from '../contracts/auth.service.abstract';
 import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';
+import { EmailProxy } from 'apps/email/src/infrastructure/external/email.proxy';
 
 @Injectable()
 export class AuthService implements AuthServiceAbstract {
@@ -88,9 +87,36 @@ export class AuthService implements AuthServiceAbstract {
     );
   }
 
+  private generateVerificationCode(): string {
+    // Generate a 6-digit verification code
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
+
+  private generateVerificationToken(
+    userId: string,
+    verificationCode: string,
+  ): string {
+    const jwtSecret = this.configService.get<string>('JWT_SECRET');
+    return this.jwtService.sign(
+      {
+        userId,
+        verificationCode,
+        type: 'email_verification',
+      },
+      {
+        secret: jwtSecret,
+        expiresIn: '15m',
+      },
+    );
+  }
+
   private sendVerificationEmail(email: string, userId: string) {
     const frontendUrl = this.configService.get<string>('FRONTEND_URL');
-    const verificationToken = this.generateVerificationToken(userId);
+    const verificationCode = this.generateVerificationCode();
+    const verificationToken = this.generateVerificationToken(
+      userId,
+      verificationCode,
+    );
 
     const verificationLink = new URL(frontendUrl);
     verificationLink.pathname = '/verify-email';
@@ -98,12 +124,8 @@ export class AuthService implements AuthServiceAbstract {
 
     return this.emailProxy.sendVerificationEmail({
       email,
+      verificationCode,
       verificationLink: verificationLink.toString(),
     });
-  }
-
-  private generateVerificationToken(userId: string): string {
-    const jwtSecret = this.configService.get<string>('JWT_SECRET');
-    return this.jwtService.sign({ userId }, { secret: jwtSecret });
   }
 }

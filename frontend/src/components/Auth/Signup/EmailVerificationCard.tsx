@@ -42,6 +42,7 @@ const EmailVerificationCard = () => {
 
   const onSubmit = useCallback(
     async (data: EmailVerificationFormState) => {
+      // TODO: Logic to verify the email via verification code
       console.log({ data });
       toast.success(t("messages.success.email_verification_success"));
     },

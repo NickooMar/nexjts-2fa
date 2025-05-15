@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { EmailProviders } from 'apps/constants';
 import { ResendProvider } from '../providers/resend/resend.provider';
 import { EmailServiceAbstract } from '../../domain/contracts/email.service.abstract';
 
 @Injectable()
 export class EmailProviderFactory {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly resendProvider: ResendProvider) {}
+
   private providers: { [key: string]: EmailServiceAbstract } = {
-    [EmailProviders.RESEND]: new ResendProvider(this.configService),
+    [EmailProviders.RESEND]: this.resendProvider,
   };
 
   getProvider(providerName: string): EmailServiceAbstract {

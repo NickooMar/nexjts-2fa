@@ -1,0 +1,9 @@
+{
+  "verification": {
+    "subject": "Validate your email",
+    "body": "Enter the verification code below to validate your email:",
+    "warning": "The verification code is valid for 15 minutes. If you don't use it, the code will expire.",
+    "button": "Validate your email",
+    "footer": "If you didn't request this verification, you can ignore this email."
+  }
+}

@@ -11,49 +11,59 @@ import {
 } from '@react-email/components';
 
 interface VerificationEmailProps {
-  validationCode?: string;
-  validationUrl?: string;
+  translations: {
+    body: string;
+    subject: string;
+    warning: string;
+    button: string;
+    footer: string;
+  };
+  verificationCode: string;
+  verificationLink?: string;
 }
 
 export const VerificationEmail = ({
-  validationCode,
-  validationUrl,
+  translations,
+  verificationCode,
+  verificationLink,
 }: VerificationEmailProps) => (
   <Html>
     <Head />
     <Body style={main}>
       <Container style={container}>
-        <Heading style={heading}>Verify your email address</Heading>
-        <Text style={paragraph}>
-          Enter your verification code below to verify your email address:
-        </Text>
+        <Heading style={heading}>{translations.subject}</Heading>
+        <Text style={paragraph}>{translations.body}</Text>
 
         <Section style={codeContainer}>
-          <code style={code}>{validationCode}</code>
+          <code style={code}>{verificationCode}</code>
         </Section>
 
-        <Text style={paragraph}>
-          Or click the button below to verify your email address:
-        </Text>
+        <Text style={paragraph}>{translations.warning}</Text>
 
         <Section style={buttonContainer}>
-          <Button style={button} href={validationUrl}>
-            Verify Email Address
+          <Button style={button} href={verificationLink}>
+            {translations.button}
           </Button>
         </Section>
 
-        <Text style={footerText}>
-          If you didn't request this verification, you can safely ignore this
-          email.
-        </Text>
+        <Text style={footerText}>{translations.footer}</Text>
       </Container>
     </Body>
   </Html>
 );
 
 VerificationEmail.PreviewProps = {
-  validationCode: 'VERIFY123',
-  validationUrl: 'https://example.com/verify',
+  verificationCode: 'VERIFY123',
+  verificationLink: 'https://example.com/verify',
+  translations: {
+    body: 'Enter your verification code below to verify your email address:',
+    subject: 'Verify your email address',
+    warning:
+      "If you didn't request this verification, you can safely ignore this email.",
+    button: 'Verify Email Address',
+    footer:
+      "If you didn't request this verification, you can safely ignore this email.",
+  },
 } as VerificationEmailProps;
 
 export default VerificationEmail;
