@@ -9,4 +9,4 @@ Robust authentication logic with email validations, auth providers and 2 factor 
 ![image](https://github.com/user-attachments/assets/64b08f2b-dcf3-41c3-aeae-5e977de970ed)
 
 [VERIFY-EMAIL]
-![image](https://github.com/user-attachments/assets/8ef13cf6-ebda-4cb6-af94-be0802cd14d1)
+![image](https://github.com/user-attachments/assets/5b8631c7-8f19-4b41-beb5-baf70d7fcf25)
