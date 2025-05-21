@@ -1,10 +1,11 @@
 import {
   IsEmail,
   IsString,
+  IsObject,
   MaxLength,
   MinLength,
-  IsNotEmpty,
   IsBoolean,
+  IsNotEmpty,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -40,4 +41,11 @@ export class CreateUserDto {
   @IsBoolean()
   @IsNotEmpty()
   emailVerified: boolean;
+
+  @IsObject()
+  @IsNotEmpty()
+  emailVerification: {
+    expiresAt: string;
+    code: string;
+  };
 }

@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
-import { from, of, throwError } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
+import { from, of, throwError, firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 import { RpcException } from '@nestjs/microservices';
 import { TokensEntity } from '../entities/tokens.entity';
@@ -55,33 +55,24 @@ export class AuthService implements AuthServiceAbstract {
         }
 
         const verificationCode = this.generateVerificationCode();
-        const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+        const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
 
         return from(bcrypt.hash(input.password, 15)).pipe(
           switchMap((hash) =>
-            // from(
-            //   this.userProxy.create({
-            //     password: hash,
-            //     email: input.email,
-            //     emailVerified: false,
-            //     lastName: input.lastName,
-            //     firstName: input.firstName,
-            //     phoneNumber: input.phoneNumber,
-            //   }),
-            // ),
-            of({
-              password: hash,
-              _id: 'mockedUserId',
-              emailVerified: false,
-              lastName: input.lastName,
-              firstName: input.firstName,
-              phoneNumber: input.phoneNumber,
-              email: 'nicoo.marsili@gmail.com',
-              emailVerification: {
-                expiresAt,
-                code: verificationCode,
-              },
-            }),
+            from(
+              this.userProxy.create({
+                password: hash,
+                email: input.email,
+                emailVerified: false,
+                lastName: input.lastName,
+                firstName: input.firstName,
+                phoneNumber: input.phoneNumber,
+                emailVerification: {
+                  expiresAt,
+                  code: verificationCode,
+                },
+              }),
+            ),
           ),
           switchMap((newUser: User) => {
             const frontendUrl = this.configService.get<string>('FRONTEND_URL');
@@ -93,32 +84,25 @@ export class AuthService implements AuthServiceAbstract {
             verificationLink.pathname = '/verify-email';
             verificationLink.searchParams.set('token', verificationToken);
 
-            console.log({ verificationCode, verificationToken, newUser });
-
-            return (
-              of({})
-                // return this.sendVerificationEmail(
-                //   newUser.email,
-                //   verificationCode,
-                //   verificationLink.toString(),
-                // )
-                .pipe(
-                  map(() => ({
-                    success: true,
-                    verificationToken,
-                    userId: newUser._id,
-                    message: 'User created and verification email sent',
-                  })),
-                  catchError(() =>
-                    of({
-                      success: true,
-                      verificationToken,
-                      userId: newUser._id,
-                      message:
-                        'User created but verification email failed to send',
-                    }),
-                  ),
-                )
+            return this.sendVerificationEmail(
+              newUser.email,
+              verificationCode,
+              verificationLink.toString(),
+            ).pipe(
+              map(() => ({
+                success: true,
+                verificationToken,
+                userId: newUser._id,
+                message: 'User created and verification email sent',
+              })),
+              catchError(() =>
+                of({
+                  success: true,
+                  verificationToken,
+                  userId: newUser._id,
+                  message: 'User created but verification email failed to send',
+                }),
+              ),
             );
           }),
         );
@@ -136,9 +120,16 @@ export class AuthService implements AuthServiceAbstract {
       if (payload.type !== 'email_verification')
         throw new RpcException('invalid_token_type');
 
-      // const user = await this.userProxy.findById(payload.userId).toPromise();
+      const user = await firstValueFrom(
+        this.userProxy.findById(payload.userId),
+      );
 
-      // if (!user) throw new RpcException('user_not_found');
+      if (!user) throw new RpcException('user_not_found');
+
+      if (user.emailVerified) throw new RpcException('email_already_verified');
+
+      if (user.emailVerification.expiresAt < new Date().toISOString())
+        throw new RpcException('verification_code_expired');
 
       return { success: true, message: 'valid_token' };
     } catch (error) {
@@ -155,29 +146,42 @@ export class AuthService implements AuthServiceAbstract {
         secret: this.configService.get<string>('JWT_SECRET'),
       });
 
-      if (payload.type !== 'email_verification')
+      const { type, userId } = payload;
+
+      if (type !== 'email_verification')
         throw new RpcException('invalid_token_type');
 
-      // const user = await this.userProxy
-      //   .findById(payload.userId)
-      //   .pipe(
-      //     catchError(() =>
-      //       throwError(() => new RpcException('user_not_found')),
-      //     ),
-      //   )
-      //   .toPromise();
+      const user = await firstValueFrom(
+        this.userProxy
+          .findById(userId)
+          .pipe(
+            catchError(() =>
+              throwError(() => new RpcException('user_not_found')),
+            ),
+          ),
+      );
 
-      // if (!user) throw new RpcException('user_not_found');
+      if (user.emailVerified) throw new RpcException('email_already_verified');
 
-      // await this.userProxy
-      //   .update(user._id, { emailVerified: true })
-      //   .pipe(
-      //     catchError((err) => throwError(() => new RpcException(err.message))),
-      //   )
-      //   .toPromise();
+      if (user.emailVerification.expiresAt < new Date().toISOString())
+        throw new RpcException('verification_code_expired');
+
+      if (input.code !== user.emailVerification.code)
+        throw new RpcException('invalid_verification_code');
+
+      await firstValueFrom(
+        this.userProxy
+          .update(user._id, { emailVerified: true })
+          .pipe(
+            catchError((err) =>
+              throwError(() => new RpcException(err.message)),
+            ),
+          ),
+      );
 
       return { success: true, message: 'email_verified' };
     } catch (error) {
+      console.error(error);
       if (error.name === 'TokenExpiredError') {
         throw new RpcException('verification_code_expired');
       }
@@ -232,7 +236,7 @@ export class AuthService implements AuthServiceAbstract {
       },
       {
         secret: jwtSecret,
-        expiresIn: '15h',
+        expiresIn: '15m',
       },
     );
   }

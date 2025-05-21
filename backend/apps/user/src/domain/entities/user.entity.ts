@@ -17,7 +17,7 @@ export class User extends BaseEntity {
 
   emailVerification: {
     code: string;
-    expiresAt: Date;
+    expiresAt: string;
   };
 
   phoneNumber: string;

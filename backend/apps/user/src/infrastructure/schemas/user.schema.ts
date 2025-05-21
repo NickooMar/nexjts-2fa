@@ -19,6 +19,22 @@ export class UserDocument {
 
   @Prop({ required: true, trim: true })
   password: string;
+
+  @Prop({ required: true, default: false })
+  emailVerified: boolean;
+
+  @Prop({
+    type: {
+      expiresAt: { type: String, required: false },
+      code: { type: String, required: false },
+    },
+    default: () => ({}),
+    _id: false,
+  })
+  emailVerification: {
+    expiresAt?: string;
+    code?: string;
+  };
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserDocument);

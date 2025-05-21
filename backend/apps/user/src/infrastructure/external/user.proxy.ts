@@ -6,6 +6,7 @@ import { RpcException } from '@nestjs/microservices';
 import { Clients, UserPatterns } from 'apps/constants';
 import { User } from '../../domain/entities/user.entity';
 import { CreateUserDto } from 'libs/shared/dto/user/create-user.dto';
+import { UpdateUserDto } from 'libs/shared/dto/user/update-user.dto';
 import { UserServiceAbstract } from '../../domain/contracts/user.service.abstract';
 
 @Injectable()
@@ -28,8 +29,8 @@ export class UserProxy implements UserServiceAbstract {
       );
   }
 
-  findById(id: string) {
-    return this.userClient.send({ cmd: 'user.findById' }, { id });
+  findById(id: string): Observable<User> {
+    return this.userClient.send<User>({ cmd: UserPatterns.FIND_BY_ID }, { id });
   }
 
   create(user: CreateUserDto): Observable<User> {
@@ -43,10 +44,10 @@ export class UserProxy implements UserServiceAbstract {
     );
   }
 
-  update(id: string, updateUserDto: any) {
+  update(id: string, updateUserDto: UpdateUserDto) {
     return this.userClient.send(
-      { cmd: 'user.update' },
-      { id, ...updateUserDto },
+      { cmd: UserPatterns.UPDATE },
+      { id, updateUserDto },
     );
   }
 }

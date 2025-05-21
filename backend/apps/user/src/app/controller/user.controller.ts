@@ -5,6 +5,7 @@ import { MessagePattern } from '@nestjs/microservices';
 import { User } from '../../domain/entities/user.entity';
 import { UserService } from '../../domain/services/user.service';
 import { CreateUserDto } from 'libs/shared/dto/user/create-user.dto';
+import { UpdateUserDto } from 'libs/shared/dto/user/update-user.dto';
 
 @Controller()
 export class UserController {
@@ -15,8 +16,18 @@ export class UserController {
     return this.userService.findByEmail(email);
   }
 
+  @MessagePattern({ cmd: UserPatterns.FIND_BY_ID })
+  findById(id: string): Observable<User | null> {
+    return this.userService.findById(id);
+  }
+
   @MessagePattern({ cmd: UserPatterns.CREATE })
   create(user: CreateUserDto): Observable<User> {
     return this.userService.create(user);
+  }
+
+  @MessagePattern({ cmd: UserPatterns.UPDATE })
+  update(input: { id: string; updateUserDto: UpdateUserDto }) {
+    return this.userService.update(input.id, input.updateUserDto);
   }
 }
