@@ -23,6 +23,9 @@ export const MongoDatabases = {
 export const AuthPatterns = {
   SIGNIN: 'SIGNIN',
   SIGNUP: 'SIGNUP',
+  VERIFY_EMAIL: 'VERIFY_EMAIL',
+  FIND_USER_BY_EMAIL: 'FIND_USER_BY_EMAIL',
+  VERIFY_EMAIL_VERIFICATION_TOKEN: 'VERIFY_EMAIL_VERIFICATION_TOKEN',
 } as const;
 
 export const UserPatterns = {

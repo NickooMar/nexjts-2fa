@@ -1,7 +1,12 @@
+import {
+  AuthProviders,
+  SignUpResponse,
+  SignUpFormState,
+} from "./types/auth/auth.types";
+
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import Google from "next-auth/providers/google";
-import { AuthProviders, SignUpFormState } from "./types/auth/auth.types";
 import NextAuth, { DefaultSession, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -24,6 +29,9 @@ const $axios = axios.create({
   timeout: 10000,
 });
 
+/**
+ * NextAuth configuration
+ */
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: "/signin",
@@ -118,7 +126,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET,
 });
 
-export const signUp = async (data: SignUpFormState) => {
+/**
+ * Sign up the user
+ * @param data - The data to sign up
+ * @returns The response from the server
+ */
+export const signUp = async (
+  data: SignUpFormState
+): Promise<SignUpResponse> => {
   try {
     const response = await $axios.post("/auth/signup", data);
     return { success: true, data: response.data };
@@ -134,16 +149,50 @@ export const signUp = async (data: SignUpFormState) => {
 
     return {
       success: false,
-      status: null,
+      status: undefined,
       error: "network_error",
       message: "No response from the server or unexpected error.",
     };
   }
 };
 
+/**
+ * Check if the email exists
+ * @param email - The email to check
+ * @returns The response from the server
+ */
 export const checkEmailExists = async (email: string) => {
   const response = await $axios.get(`/auth/check-email`, {
     params: { email },
+  });
+  return response.data;
+};
+
+/**
+ * Verify the email verification token
+ * @param token - The token to verify
+ * @returns The response from the server
+ */
+export const verifyEmailVerificationToken = async (token: string) => {
+  const response = await $axios.get(`/auth/verify-email-verification-token`, {
+    params: { token },
+  });
+  return response.data;
+};
+
+/**
+ * Verify the email verification code
+ * @param code - The code to verify
+ * @param token - The token to verify
+ * @returns The response from the server
+ */
+export const verifyEmailVerificationCode = async (
+  code: string,
+  token: string
+) => {
+  const response = await $axios.post(`/auth/verify-email`, {
+    code,
+    token,
   });
   return response.data;
 };

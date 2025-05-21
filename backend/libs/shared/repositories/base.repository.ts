@@ -12,8 +12,8 @@ export class BaseRepository<T extends BaseEntity>
     return this.model.findById(id);
   }
 
-  async findOne(query: FilterQuery<T>): Promise<Model<T>> {
-    const item = await this.model.findOne(query).exec();
+  async findOne(query: FilterQuery<T>, projection?: any): Promise<Model<T>> {
+    const item = await this.model.findOne(query, projection).exec();
     if (!item) return null;
     return item['_doc'];
   }

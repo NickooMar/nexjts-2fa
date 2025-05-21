@@ -8,6 +8,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthController } from './app/controller/auth.controller';
 import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';
 import { EmailProxy } from 'apps/email/src/infrastructure/external/email.proxy';
+import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
+import { JwtRefreshStrategy } from './infrastructure/strategies/jwt-refresh.strategy';
 
 @Module({
   imports: [
@@ -55,6 +57,12 @@ import { EmailProxy } from 'apps/email/src/infrastructure/external/email.proxy';
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserProxy, EmailProxy],
+  providers: [
+    AuthService,
+    UserProxy,
+    EmailProxy,
+    JwtStrategy,
+    JwtRefreshStrategy,
+  ],
 })
 export class AuthModule {}

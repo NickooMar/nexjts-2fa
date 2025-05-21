@@ -97,7 +97,10 @@
       "verification_code": "Verification code",
       "enter_code": "Please, enter the code we sent to your email",
       "resend_email": "Resend email",
-      "resend_email_time_remaining": "Resend email in {time_remaining}"
+      "resend_email_time_remaining": "Resend email in {time_remaining}",
+      "error": "Verification Error",
+      "error_description": "Oops! An unexpected error occurred. Please try again.",
+      "error_caption": "Remember to use the link from the email. If the problem persists, please contact the support team."
     },
     "messages": {
       "success": {
@@ -127,6 +130,8 @@
         "invalid_credentials": "Invalid credentials. Please check your credentials and try again.",
         "user_already_exists": "User already exists, please sign in or use a different information",
         "pin_min_length": "Your verification code must be 6 digits",
+        "token_verification": "An error occurred while verifying the identity",
+        "code_verification": "An error occurred while verifying the code",
         "request_error": "An unexpected error occurred while processing the request"
       }
     }

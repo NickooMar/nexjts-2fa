@@ -95,7 +95,10 @@
       "verification_code": "Código de verificación",
       "enter_code": "Por favor, ingresa el código que enviamos a tu correo electrónico",
       "resend_email": "Reenviar correo electrónico",
-      "resend_email_time_remaining": "Reenviar correo electrónico en {time_remaining}"
+      "resend_email_time_remaining": "Reenviar correo electrónico en {time_remaining}",
+      "error": "Error de verificación",
+      "error_description": "¡Ups! Ocurrió un error inesperado. Por favor, intenta nuevamente.",
+      "error_caption": "Recorda utilizar el enlace del correo electrónico. Si el problema persiste, por favor contacta al equipo de soporte."
     },
     "messages": {
       "success": {
@@ -125,6 +128,8 @@
         "invalid_credentials": "Credenciales inválidas. Por favor verifica tus credenciales y vuelve a intentarlo.",
         "user_already_exists": "El usuario ya existe, por favor inicia sesión o usa una información diferente",
         "pin_min_length": "El código de verificación debe tener 6 dígitos",
+        "token_verification": "Ocurrió un error al validar la identidad",
+        "code_verification": "Ocurrió un error al validar el código de verificación",
         "request_error": "Ocurrió un error inesperado al procesar la solicitud"
       }
     }

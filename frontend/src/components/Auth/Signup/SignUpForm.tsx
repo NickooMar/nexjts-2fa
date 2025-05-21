@@ -13,19 +13,18 @@ import { Loader } from "lucide-react";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { PhoneInput } from "../../ui/phone-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PasswordInput } from "../Inputs/PasswordInput";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { SignUpFormState } from "@/types/auth/auth.types";
+import { signUpAction } from "@/app/actions/auth.actions";
 import { useNextToast } from "@/hooks/toasts/useNextToast";
 import { createSignUpSchema } from "@/schemas/auth.schema";
 
-interface SignUpFormProps {
-  setSignupStep: (step: "signup" | "email_verification") => void;
-}
-
-const SignUpForm: React.FC<SignUpFormProps> = ({ setSignupStep }) => {
+const SignUpForm = () => {
+  const router = useRouter();
   const toast = useNextToast();
   const t = useTranslations("auth");
 
@@ -47,25 +46,29 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ setSignupStep }) => {
     values: SignUpFormState
   ) => {
     try {
-      console.log({ values });
-      // const response = await signUpAction(values);
+      const response = await signUpAction(values);
 
-      // if (!response.success) {
-      //   switch (response.error) {
-      //     case "user_already_exists": {
-      //       form.setError("email", {
-      //         message: t("messages.errors.email_already_exists"),
-      //       });
-      //       return toast.error(t("messages.errors.user_already_exists"));
-      //     }
-      //     case "network_error":
-      //       return toast.error(t("messages.errors.network_error"));
-      //     default:
-      //       return toast.error(t("messages.errors.invalid_credentials"));
-      //   }
-      // }
-      toast.success(t("messages.success.signup_success"));
-      setSignupStep("email_verification");
+      if (!response.success) {
+        switch (response.error) {
+          case "user_already_exists": {
+            form.setError("email", {
+              message: t("messages.errors.email_already_exists"),
+            });
+            return toast.error(t("messages.errors.user_already_exists"));
+          }
+          case "network_error":
+            return toast.error(t("messages.errors.network_error"));
+          default:
+            return toast.error(t("messages.errors.invalid_credentials"));
+        }
+      }
+
+      if (response.data?.success) {
+        toast.success(t("messages.success.signup_success"));
+        router.push(`/verify-email?token=${response.data?.verificationToken}`);
+      } else {
+        toast.error(t("messages.errors.request_error"));
+      }
     } catch (error) {
       console.error(error);
       toast.error(t("messages.errors.request_error"));

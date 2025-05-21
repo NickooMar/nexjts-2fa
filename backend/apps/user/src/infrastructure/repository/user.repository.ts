@@ -17,7 +17,7 @@ export class UserRepository<T extends UserDocument>
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const user = await super.findOne({ email });
+    const user = await super.findOne({ email }, { password: 0 });
     if (!user) return null;
     return new User(user);
   }

@@ -14,3 +14,23 @@ export type EmailVerificationFormState = z.infer<
 export enum AuthProviders {
   Google = "google",
 }
+
+
+export type SignUpResponse = {
+  success: boolean;
+  data?: {
+    success: boolean;
+    verificationToken: string;
+    userId: string;
+    message: string;
+  };
+  error?: string;
+  message?: string;
+  status?: number;
+};
+
+export type VerifyEmailVerificationTokenResponse = {
+  success: boolean;
+  error?: string;
+  message?: string;
+};
