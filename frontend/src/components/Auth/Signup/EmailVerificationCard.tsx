@@ -64,6 +64,7 @@ const EmailVerificationCard = () => {
 
     const validateToken = async () => {
       const response = await verifyEmailVerificationTokenAction(token);
+      console.log({ response });
       if (response.success) {
         setStatus("success");
       } else {
@@ -105,7 +106,13 @@ const EmailVerificationCard = () => {
         if (response.success) {
           toast.success(t("messages.success.email_verification_success"));
         } else {
-          toast.error(t("messages.errors.code_verification"));
+          switch (response.message) {
+            case "invalid_verification_token":
+              toast.error(t("messages.errors.invalid_verification_token"));
+              break;
+            default:
+              toast.error(t("messages.errors.code_verification"));
+          }
         }
       } catch (error) {
         console.error(error);

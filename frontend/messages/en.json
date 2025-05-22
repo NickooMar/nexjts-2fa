@@ -132,7 +132,8 @@
         "pin_min_length": "Your verification code must be 6 digits",
         "token_verification": "An error occurred while verifying the identity",
         "code_verification": "An error occurred while verifying the code",
-        "request_error": "An unexpected error occurred while processing the request"
+        "request_error": "An unexpected error occurred while processing the request",
+        "invalid_verification_token": "The verification token is invalid"
       }
     }
   }

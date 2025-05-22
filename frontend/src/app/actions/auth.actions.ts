@@ -13,6 +13,7 @@ import {
   checkEmailExists,
   verifyEmailVerificationToken,
   verifyEmailVerificationCode,
+  resendEmailVerificationCode,
 } from "@/auth";
 
 import { AxiosError } from "axios";
@@ -155,6 +156,25 @@ export const verifyEmailVerificationCodeAction = async (
       };
     }
 
+    return {
+      success: false,
+      error: "server_error",
+      message: "Unknown error",
+    };
+  }
+};
+
+/**
+ * Resend the email verification code
+ * @param email - The email to resend the code
+ * @returns The response from the server
+ */
+export const resendEmailVerificationCodeAction = async (token: string) => {
+  try {
+    const response = await resendEmailVerificationCode(token);
+    return response;
+  } catch (error: unknown) {
+    console.error(error);
     return {
       success: false,
       error: "server_error",

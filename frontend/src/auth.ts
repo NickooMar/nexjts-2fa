@@ -196,3 +196,15 @@ export const verifyEmailVerificationCode = async (
   });
   return response.data;
 };
+
+/**
+ * Resend the email verification code
+ * @param token - The token to resend the code
+ * @returns The response from the server
+ */
+export const resendEmailVerificationCode = async (token: string) => {
+  const response = await $axios.post(`/auth/resend-email-verification-code`, {
+    token,
+  });
+  return response.data;
+};

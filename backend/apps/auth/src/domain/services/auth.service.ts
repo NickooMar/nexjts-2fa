@@ -49,62 +49,50 @@ export class AuthService implements AuthServiceAbstract {
 
   signup(input: SignupRequestDto) {
     return from(this.userProxy.findByEmail(input.email)).pipe(
-      switchMap((user) => {
-        if (user) {
+      switchMap((existingUser) => {
+        if (existingUser?.emailVerified) {
           return throwError(() => new RpcException('user_already_exists'));
         }
 
         const verificationCode = this.generateVerificationCode();
         const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
 
-        return from(bcrypt.hash(input.password, 15)).pipe(
-          switchMap((hash) =>
-            from(
-              this.userProxy.create({
-                password: hash,
-                email: input.email,
-                emailVerified: false,
-                lastName: input.lastName,
-                firstName: input.firstName,
-                phoneNumber: input.phoneNumber,
-                emailVerification: {
-                  expiresAt,
-                  code: verificationCode,
-                },
-              }),
-            ),
-          ),
-          switchMap((newUser: User) => {
-            const frontendUrl = this.configService.get<string>('FRONTEND_URL');
-            const verificationToken = this.generateVerificationToken(
-              newUser._id,
-            );
-
-            const verificationLink = new URL(frontendUrl);
-            verificationLink.pathname = '/verify-email';
-            verificationLink.searchParams.set('token', verificationToken);
-
-            return this.sendVerificationEmail(
-              newUser.email,
-              verificationCode,
-              verificationLink.toString(),
-            ).pipe(
-              map(() => ({
-                success: true,
-                verificationToken,
-                userId: newUser._id,
-                message: 'User created and verification email sent',
-              })),
-              catchError(() =>
-                of({
-                  success: true,
-                  verificationToken,
-                  userId: newUser._id,
-                  message: 'User created but verification email failed to send',
+        if (!existingUser) {
+          return from(bcrypt.hash(input.password, 15)).pipe(
+            switchMap((hash) =>
+              from(
+                this.userProxy.create({
+                  password: hash,
+                  email: input.email,
+                  emailVerified: false,
+                  lastName: input.lastName,
+                  firstName: input.firstName,
+                  phoneNumber: input.phoneNumber,
+                  emailVerification: {
+                    expiresAt,
+                    code: verificationCode,
+                  },
                 }),
               ),
-            );
+            ),
+            switchMap((newUser) =>
+              this.handleVerificationEmail(newUser, verificationCode),
+            ),
+          );
+        }
+
+        return from(
+          this.userProxy.update(existingUser._id, {
+            emailVerified: false,
+            emailVerification: {
+              expiresAt,
+              code: verificationCode,
+            },
           }),
+        ).pipe(
+          switchMap((updatedUser) =>
+            this.handleVerificationEmail(updatedUser, verificationCode),
+          ),
         );
       }),
       catchError((err) => throwError(() => new RpcException(err.message))),
@@ -136,7 +124,7 @@ export class AuthService implements AuthServiceAbstract {
       if (error.name === 'TokenExpiredError')
         throw new RpcException('verification_code_expired');
 
-      throw new RpcException('invalid_verification_token');
+      throw new RpcException(error.message);
     }
   }
 
@@ -238,6 +226,36 @@ export class AuthService implements AuthServiceAbstract {
         secret: jwtSecret,
         expiresIn: '15m',
       },
+    );
+  }
+
+  private handleVerificationEmail(user: User, verificationCode: string) {
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL');
+    const verificationToken = this.generateVerificationToken(user._id);
+
+    const verificationLink = new URL(frontendUrl);
+    verificationLink.pathname = '/verify-email';
+    verificationLink.searchParams.set('token', verificationToken);
+
+    return this.sendVerificationEmail(
+      user.email,
+      verificationCode,
+      verificationLink.toString(),
+    ).pipe(
+      map(() => ({
+        success: true,
+        verificationToken,
+        userId: user._id,
+        message: 'Verification email sent successfully',
+      })),
+      catchError(() =>
+        of({
+          success: true,
+          verificationToken,
+          userId: user._id,
+          message: 'Failed to send verification email',
+        }),
+      ),
     );
   }
 

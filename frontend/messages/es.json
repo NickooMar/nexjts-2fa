@@ -130,7 +130,8 @@
         "pin_min_length": "El código de verificación debe tener 6 dígitos",
         "token_verification": "Ocurrió un error al validar la identidad",
         "code_verification": "Ocurrió un error al validar el código de verificación",
-        "request_error": "Ocurrió un error inesperado al procesar la solicitud"
+        "request_error": "Ocurrió un error inesperado al procesar la solicitud",
+        "invalid_verification_token": "El token de verificación es inválido"
       }
     }
   }
