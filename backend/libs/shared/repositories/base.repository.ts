@@ -56,7 +56,6 @@ export class BaseRepository<T extends BaseEntity>
     }
     const item = await this.model.findById(id);
     if (!item) throw new NotFoundException();
-    console.log({ update });
     return await this.model.findByIdAndUpdate(id, update, {
       new: true,
       ...options,

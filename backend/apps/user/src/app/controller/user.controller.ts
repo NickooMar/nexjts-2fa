@@ -4,6 +4,7 @@ import { UserPatterns } from 'apps/constants';
 import { MessagePattern } from '@nestjs/microservices';
 import { User } from '../../domain/entities/user.entity';
 import { UserService } from '../../domain/services/user.service';
+import { SigninRequestDto } from 'libs/shared/dto/auth/signin.dto';
 import { CreateUserDto } from 'libs/shared/dto/user/create-user.dto';
 import { UpdateUserDto } from 'libs/shared/dto/user/update-user.dto';
 
@@ -14,6 +15,11 @@ export class UserController {
   @MessagePattern({ cmd: UserPatterns.FIND_BY_EMAIL })
   findByEmail(email: string): Observable<User | null> {
     return this.userService.findByEmail(email);
+  }
+
+  @MessagePattern({ cmd: UserPatterns.FIND_BY_EMAIL_AND_PASSWORD })
+  findByEmailAndPassword(input: SigninRequestDto): Observable<User | null> {
+    return this.userService.findByEmailAndPassword(input);
   }
 
   @MessagePattern({ cmd: UserPatterns.FIND_BY_ID })

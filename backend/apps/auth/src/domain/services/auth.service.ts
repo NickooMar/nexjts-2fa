@@ -1,11 +1,20 @@
+import {
+  of,
+  map,
+  from,
+  switchMap,
+  catchError,
+  throwError,
+  Observable,
+  firstValueFrom,
+} from 'rxjs';
+
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
-import { from, of, throwError, firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
 import { RpcException } from '@nestjs/microservices';
 import { TokensEntity } from '../entities/tokens.entity';
-import { catchError, map, switchMap } from 'rxjs/operators';
 import { User } from 'apps/user/src/domain/entities/user.entity';
 import { SignupRequestDto } from 'libs/shared/dto/auth/signup.dto';
 import { SigninRequestDto } from 'libs/shared/dto/auth/signin.dto';
@@ -15,35 +24,24 @@ import { VerifyEmailRequestDto } from 'libs/shared/dto/auth/verify-email.dto';
 import { EmailProxy } from 'apps/email/src/infrastructure/external/email.proxy';
 
 @Injectable()
-export class AuthService implements AuthServiceAbstract {
+export class AuthService extends AuthServiceAbstract {
   constructor(
     private readonly userProxy: UserProxy,
     private readonly emailProxy: EmailProxy,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    super();
+  }
 
   signin(input: SigninRequestDto) {
-    return from(this.userProxy.findByEmail(input.email)).pipe(
-      switchMap((user) => {
-        if (!user) {
-          return throwError(() => new RpcException('user_not_found'));
-        }
-
-        return from(bcrypt.compare(input.password, user.password)).pipe(
-          switchMap((isMatch) => {
-            if (!isMatch) {
-              return throwError(() => new RpcException('invalid_credentials'));
-            }
-
-            if (!user.emailVerified) {
-              return throwError(() => new RpcException('email_not_verified'));
-            }
-
-            return from(this.generateTokens(user));
-          }),
-        );
-      }),
+    return from(this.userProxy.findByEmailAndPassword(input)).pipe(
+      switchMap((user) =>
+        from(this.generateTokens(user)).pipe(
+          map((tokens) => new TokensEntity(tokens)),
+        ),
+      ),
+      catchError((err) => throwError(() => new RpcException(err.message))),
     );
   }
 
@@ -99,99 +97,111 @@ export class AuthService implements AuthServiceAbstract {
     );
   }
 
-  async verifyEmailVerificationToken(token: string) {
-    try {
-      const payload = await this.jwtService.verifyAsync(token, {
+  verifyEmailVerificationToken(token: string): Observable<any> {
+    return from(
+      this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>('JWT_SECRET'),
-      });
+      }),
+    ).pipe(
+      map(async (payload) => {
+        if (payload.type !== 'email_verification')
+          throw new RpcException('invalid_token_type');
 
-      if (payload.type !== 'email_verification')
-        throw new RpcException('invalid_token_type');
+        const user = await firstValueFrom(
+          this.userProxy.findById(payload.userId),
+        );
 
-      const user = await firstValueFrom(
-        this.userProxy.findById(payload.userId),
-      );
+        if (!user) throw new RpcException('user_not_found');
 
-      if (!user) throw new RpcException('user_not_found');
+        if (user.emailVerified)
+          throw new RpcException('email_already_verified');
 
-      if (user.emailVerified) throw new RpcException('email_already_verified');
+        if (user.emailVerification.expiresAt < new Date().toISOString())
+          throw new RpcException('verification_code_expired');
 
-      if (user.emailVerification.expiresAt < new Date().toISOString())
-        throw new RpcException('verification_code_expired');
-
-      return { success: true, message: 'valid_token' };
-    } catch (error) {
-      if (error.name === 'TokenExpiredError')
-        throw new RpcException('verification_code_expired');
-
-      throw new RpcException(error.message);
-    }
+        return { success: true, message: 'valid_token' };
+      }),
+      catchError((error) => throwError(() => new RpcException(error.message))),
+    );
   }
 
-  async verifyEmail(input: VerifyEmailRequestDto) {
-    try {
-      const payload = await this.jwtService.verifyAsync(input.token, {
+  verifyEmail(input: VerifyEmailRequestDto): Observable<any> {
+    return from(
+      this.jwtService.verifyAsync(input.token, {
         secret: this.configService.get<string>('JWT_SECRET'),
-      });
+      }),
+    ).pipe(
+      switchMap(async (payload) => {
+        const { type, userId } = payload;
 
-      const { type, userId } = payload;
+        if (type !== 'email_verification')
+          throw new RpcException('invalid_token_type');
 
-      if (type !== 'email_verification')
-        throw new RpcException('invalid_token_type');
-
-      const user = await firstValueFrom(
-        this.userProxy
-          .findById(userId)
-          .pipe(
-            catchError(() =>
-              throwError(() => new RpcException('user_not_found')),
+        const user = await firstValueFrom(
+          this.userProxy
+            .findById(userId)
+            .pipe(
+              catchError(() =>
+                throwError(() => new RpcException('user_not_found')),
+              ),
             ),
-          ),
-      );
+        );
 
-      if (user.emailVerified) throw new RpcException('email_already_verified');
+        if (user.emailVerified)
+          throw new RpcException('email_already_verified');
 
-      if (user.emailVerification.expiresAt < new Date().toISOString())
-        throw new RpcException('verification_code_expired');
+        if (user.emailVerification.expiresAt < new Date().toISOString())
+          throw new RpcException('verification_code_expired');
 
-      if (input.code !== user.emailVerification.code)
-        throw new RpcException('invalid_verification_code');
+        if (input.code !== user.emailVerification.code)
+          throw new RpcException('invalid_verification_code');
 
-      await firstValueFrom(
-        this.userProxy
-          .update(user._id, { emailVerified: true })
-          .pipe(
-            catchError((err) =>
-              throwError(() => new RpcException(err.message)),
+        await firstValueFrom(
+          this.userProxy
+            .update(user._id, { emailVerified: true })
+            .pipe(
+              catchError((err) =>
+                throwError(() => new RpcException(err.message)),
+              ),
             ),
-          ),
-      );
+        );
 
-      return { success: true, message: 'email_verified' };
-    } catch (error) {
-      console.error(error);
-      if (error.name === 'TokenExpiredError') {
-        throw new RpcException('verification_code_expired');
-      }
-      throw new RpcException('invalid_verification_token');
-    }
+        return { success: true, message: 'email_verified' };
+      }),
+      catchError((error) => throwError(() => new RpcException(error.message))),
+    );
   }
 
-  async refreshToken(refreshToken: string) {
-    try {
-      const payload = await this.jwtService.verifyAsync(refreshToken, {
+  refreshToken(refreshToken: string): Observable<any> {
+    return from(
+      this.jwtService.verifyAsync(refreshToken, {
         secret: this.configService.get<string>('JWT_SECRET'),
-      });
+      }),
+    ).pipe(
+      switchMap((payload) =>
+        from(this.userProxy.findById(payload.sub)).pipe(
+          switchMap((user) => {
+            if (!user) {
+              throw new RpcException('user_not_found');
+            }
 
-      const user = await this.userProxy.findById(payload.sub).toPromise();
-      if (!user) {
-        throw new RpcException('user_not_found');
-      }
+            return from(this.generateTokens(user)).pipe(
+              map((tokens) => {
+                console.log(
+                  `Refresh token successfully processed for user: ${user.email}`,
+                );
 
-      return this.generateTokens(user);
-    } catch (error) {
-      throw new RpcException('invalid_refresh_token');
-    }
+                return {
+                  success: true,
+                  tokens,
+                };
+              }),
+            );
+          }),
+        ),
+      ),
+      catchError((error) => throwError(() => new RpcException(error.message))),
+    );
   }
 
   private async generateTokens(user: User): Promise<TokensEntity> {
@@ -237,37 +247,27 @@ export class AuthService implements AuthServiceAbstract {
     verificationLink.pathname = '/verify-email';
     verificationLink.searchParams.set('token', verificationToken);
 
-    return this.sendVerificationEmail(
-      user.email,
-      verificationCode,
-      verificationLink.toString(),
-    ).pipe(
-      map(() => ({
-        success: true,
-        verificationToken,
-        userId: user._id,
-        message: 'Verification email sent successfully',
-      })),
-      catchError(() =>
-        of({
+    return this.emailProxy
+      .sendVerificationEmail({
+        email: user.email,
+        verificationCode,
+        verificationLink: verificationLink.toString(),
+      })
+      .pipe(
+        map(() => ({
           success: true,
           verificationToken,
           userId: user._id,
-          message: 'Failed to send verification email',
-        }),
-      ),
-    );
-  }
-
-  private sendVerificationEmail(
-    email: string,
-    verificationCode: string,
-    verificationLink: string,
-  ) {
-    return this.emailProxy.sendVerificationEmail({
-      email,
-      verificationCode,
-      verificationLink: verificationLink.toString(),
-    });
+          message: 'Verification email sent successfully',
+        })),
+        catchError(() =>
+          of({
+            success: true,
+            verificationToken,
+            userId: user._id,
+            message: 'Failed to send verification email',
+          }),
+        ),
+      );
   }
 }

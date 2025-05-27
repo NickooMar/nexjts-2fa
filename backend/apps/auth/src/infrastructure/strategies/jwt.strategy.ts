@@ -9,8 +9,8 @@ import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
-    private configService: ConfigService,
-    private userProxy: UserProxy,
+    private readonly configService: ConfigService,
+    private readonly userProxy: UserProxy,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

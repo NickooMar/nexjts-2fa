@@ -5,16 +5,18 @@ import { AuthPatterns, Clients } from 'apps/constants';
 import { User } from 'apps/user/src/domain/entities/user.entity';
 import { SigninRequestDto } from 'libs/shared/dto/auth/signin.dto';
 import { SignupRequestDto } from 'libs/shared/dto/auth/signup.dto';
-import { AccessTokenEntity } from '../../domain/entities/access-token.entity';
+import { TokensEntity } from '../../domain/entities/tokens.entity';
 import { VerifyEmailRequestDto } from 'libs/shared/dto/auth/verify-email.dto';
 import { AuthServiceAbstract } from '../../domain/contracts/auth.service.abstract';
 
-export class AuthProxy implements AuthServiceAbstract {
+export class AuthProxy extends AuthServiceAbstract {
   constructor(
     @Inject(Clients.AUTH_CLIENT) private readonly client: ClientProxy,
-  ) {}
+  ) {
+    super();
+  }
 
-  signin(input: SigninRequestDto): Observable<AccessTokenEntity> {
+  signin(input: SigninRequestDto): Observable<TokensEntity> {
     return this.client.send({ cmd: AuthPatterns.SIGNIN }, input);
   }
 

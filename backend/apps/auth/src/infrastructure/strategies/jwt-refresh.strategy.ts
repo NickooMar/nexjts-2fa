@@ -1,21 +1,15 @@
 import { Request } from 'express';
-import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserProxy } from 'apps/user/src/infrastructure/external/user.proxy';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
   Strategy,
   'jwt-refresh',
 ) {
-  constructor(
-    private configService: ConfigService,
-    private userProxy: UserProxy,
-  ) {
+  constructor(private configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,

@@ -33,6 +33,7 @@ export const UserPatterns = {
   UPDATE: 'USER_UPDATE',
   FIND_BY_ID: 'USER_FIND_BY_ID',
   FIND_BY_EMAIL: 'USER_FIND_BY_EMAIL',
+  FIND_BY_EMAIL_AND_PASSWORD: 'USER_FIND_BY_EMAIL_AND_PASSWORD',
 } as const;
 
 export const EmailPatterns = {

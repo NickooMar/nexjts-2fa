@@ -3,24 +3,28 @@ import {
   Post,
   Body,
   Query,
+  UseGuards,
   Controller,
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { Observable, catchError, map } from 'rxjs';
 import { RpcException } from '@nestjs/microservices';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { SignupRequestDto } from 'libs/shared/dto/auth/signup.dto';
 import { SigninRequestDto } from 'libs/shared/dto/auth/signin.dto';
+import { TokensEntity } from 'apps/auth/src/domain/entities/tokens.entity';
 import { AuthProxy } from 'apps/auth/src/infrastructure/external/auth.proxy';
 import { VerifyEmailRequestDto } from 'libs/shared/dto/auth/verify-email.dto';
-import { AccessTokenEntity } from 'apps/auth/src/domain/entities/access-token.entity';
 
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
   constructor(private readonly authProxy: AuthProxy) {}
 
   @Get('check-email')
-  checkEmail(@Query('email') email: string) {
+  checkEmail(
+    @Query('email') email: string,
+  ): Observable<{ success: boolean; exists: boolean }> {
     return this.authProxy.findUserByEmail(email).pipe(
       map((user) => ({
         success: true,
@@ -34,8 +38,14 @@ export class AuthController {
   }
 
   @Post('signin')
-  singin(@Body() input: SigninRequestDto): Observable<AccessTokenEntity> {
+  singin(
+    @Body() input: SigninRequestDto,
+  ): Observable<{ success: boolean; tokens: TokensEntity }> {
     return this.authProxy.signin(input).pipe(
+      map((tokens) => ({
+        success: true,
+        tokens: new TokensEntity(tokens),
+      })),
       catchError((error) => {
         if (error?.error instanceof RpcException || error?.status === 'error') {
           throw new InternalServerErrorException(error.message);
