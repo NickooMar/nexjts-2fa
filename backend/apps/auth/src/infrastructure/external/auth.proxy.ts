@@ -24,6 +24,10 @@ export class AuthProxy extends AuthServiceAbstract {
     return this.client.send({ cmd: AuthPatterns.SIGNUP }, input);
   }
 
+  refreshToken(refreshToken: string): Observable<any> {
+    return this.client.send({ cmd: AuthPatterns.REFRESH_TOKEN }, refreshToken);
+  }
+
   findUserByEmail(email: string): Observable<User> {
     return this.client.send({ cmd: AuthPatterns.FIND_USER_BY_EMAIL }, email);
   }

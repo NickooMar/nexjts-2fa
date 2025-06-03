@@ -104,6 +104,7 @@
     },
     "messages": {
       "success": {
+        "signin_success": "Signed in successfully",
         "signup_success": "Account created successfully",
         "email_verification_success": "Email verified successfully"
       },
@@ -133,7 +134,8 @@
         "token_verification": "An error occurred while verifying the identity",
         "code_verification": "An error occurred while verifying the code",
         "request_error": "An unexpected error occurred while processing the request",
-        "invalid_verification_token": "The verification token is invalid"
+        "invalid_verification_token": "The verification token is invalid",
+        "server_error": "An unexpected error occurred"
       }
     }
   }

@@ -25,20 +25,17 @@ import { AxiosError } from "axios";
  */
 export const signInAction = async (data: SignInFormState) => {
   try {
-    const result = await signIn("credentials", {
+    await signIn("credentials", {
       email: data.email,
       password: data.password,
       redirect: false,
     });
-
-    if (result?.error) {
-      return { error: "Invalid credentials" };
-    }
-
     return { success: true };
-  } catch (error: unknown) {
-    console.error("Sign in error:", error);
-    return { error: "Failed to sign in" };
+  } catch {
+    return {
+      success: false,
+      error: "invalid_credentials",
+    };
   }
 };
 
@@ -189,4 +186,13 @@ export const resendEmailVerificationCodeAction = async (token: string) => {
  */
 export const signOutAction = async () => {
   await signOut();
+};
+
+/**
+ * Refresh the access token by sending a POST request to the backend using the supplied refresh token.
+ * @param token The current refresh token
+ * @returns A BackendAccessJWT response from the backend.
+ */
+export const refreshTokenAction = async () => {
+  // await refreshToken();
 };

@@ -64,7 +64,6 @@ const EmailVerificationCard = () => {
 
     const validateToken = async () => {
       const response = await verifyEmailVerificationTokenAction(token);
-      console.log({ response });
       if (response.success) {
         setStatus("success");
       } else {

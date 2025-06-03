@@ -2,11 +2,11 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-const page = async () => {
+const page = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <Button>
-        <Link href="/test">Go to Test Page</Link>
+        <Link href="/home">Go to Home Page</Link>
       </Button>
     </div>
   );

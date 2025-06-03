@@ -1,28 +1,21 @@
+import NextAuth, {
+  User,
+  DecodedJWT,
+  UserObject,
+  AuthValidity,
+} from "next-auth";
 import {
-  AuthProviders,
   SignUpResponse,
+  SignInResponse,
   SignUpFormState,
+  RefreshTokenResponse,
 } from "./types/auth/auth.types";
 
 import axios from "axios";
+import { JWT } from "next-auth/jwt";
 import { jwtDecode } from "jwt-decode";
 import Google from "next-auth/providers/google";
-import NextAuth, { DefaultSession, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
-interface AuthUser extends User {
-  accessToken?: string;
-  username?: string;
-}
-
-interface CustomSession extends DefaultSession {
-  accessToken?: string;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-  } & DefaultSession["user"];
-}
 
 const $axios = axios.create({
   baseURL: `${process.env.NEST_BACKEND_PUBLIC_API_URL}/api/v1`,
@@ -33,56 +26,8 @@ const $axios = axios.create({
  * NextAuth configuration
  */
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  pages: {
-    signIn: "/signin",
-    error: "/auth/error",
-    verifyRequest: "/auth/verify-request",
-  },
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email;
-        token.name = user.name;
-        token.accessToken = (user as AuthUser).accessToken;
-      }
-      return token;
-    },
-    async session({ session, token }): Promise<CustomSession> {
-      if (token) {
-        (session as CustomSession).accessToken = token.accessToken as string;
-        session.user = {
-          ...session.user,
-          id: token.id as string,
-          email: token.email as string,
-          name: token.name as string,
-        };
-      }
-      return session as CustomSession;
-    },
-    async signIn({ account }) {
-      // Simplified signIn callback
-      if (!account) return false;
-
-      if (account.type === "credentials") {
-        return true;
-      }
-
-      if (account.provider === AuthProviders.Google) {
-        return true;
-      }
-
-      return false;
-    },
-    async authorized({ auth, request }) {
-      // Handle auth for API routes
-      if (request.nextUrl.pathname.startsWith("/api/")) {
-        return !!auth?.user;
-      }
-
-      return true; // Let middleware handle the auth for pages
-    },
-  },
+  session: { strategy: "jwt" },
+  secret: process.env.AUTH_SECRET,
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -94,36 +39,103 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials): Promise<AuthUser | null> {
+      async authorize(credentials) {
         try {
-          if (!credentials?.email || !credentials?.password) {
-            return null;
-          }
+          if (!credentials?.email || !credentials?.password)
+            throw new Error("missing_credentials");
 
-          const { data } = await $axios.post("/auth/signin", {
-            email: credentials.email,
-            password: credentials.password,
-          });
+          const { data: response } = await $axios.post<SignInResponse>(
+            "/auth/signin",
+            {
+              email: credentials.email,
+              password: credentials.password,
+            }
+          );
 
-          if (!data) throw new Error("Invalid credentials");
+          if (!response.success || Object.keys(response.tokens).length === 0)
+            throw new Error("request_error");
 
-          const access: { id: string; email: string; username: string } =
-            jwtDecode(data.accessToken);
+          const access: DecodedJWT = jwtDecode(response.tokens.accessToken);
+          const refresh: DecodedJWT = jwtDecode(response.tokens.refreshToken);
+
+          const user: UserObject = {
+            _id: access._id,
+            email: access.email,
+            username: access.username,
+            lastName: access.lastName,
+            firstName: access.firstName,
+          };
+
+          const validity: AuthValidity = {
+            valid_until: access.exp,
+            refresh_until: refresh.exp,
+          };
 
           return {
-            id: access.id,
-            email: access.email,
-            name: access.username,
-            accessToken: data.accessToken,
-          };
-        } catch (error: unknown) {
-          throw new Error(`Failed to sign in: ${error}`);
+            user,
+            validity,
+            id: access._id,
+            tokens: {
+              accessToken: response.tokens.accessToken,
+              refreshToken: response.tokens.refreshToken,
+            },
+          } as User;
+        } catch (error) {
+          console.error(error);
+          return null;
         }
       },
     }),
   ],
-  session: { strategy: "jwt" },
-  secret: process.env.AUTH_SECRET,
+  callbacks: {
+    async jwt({ token, user, account }) {
+      // Initial signin contains a 'User' object from authorize method
+      if (user && account) {
+        console.debug("Initial signin");
+        return { ...token, data: user };
+      }
+
+      // The current access token is still valid
+      if (Date.now() < token.data.validity?.valid_until * 1000) {
+        console.debug("Access token is still valid");
+        return token;
+      }
+
+      // The current access token has expired, but the refresh token is still valid
+      if (Date.now() < token.data.validity.refresh_until * 1000) {
+        console.debug("Access token is being refreshed");
+        const refreshedToken = await refreshAccessToken(token);
+
+        // If refresh failed, return the error state
+        if (refreshedToken.error) {
+          console.debug("Token refresh failed");
+          return refreshedToken;
+        }
+
+        return refreshedToken;
+      }
+
+      console.debug("Both tokens have expired");
+      return {
+        ...token,
+        data: {} as User,
+        error: "RefreshTokenExpired",
+      } as JWT;
+    },
+    async session({ session, token }) {
+      if (token.error === "RefreshTokenExpired") {
+        return session;
+      }
+      session.user = token.data?.user;
+      session.validity = token.data?.validity;
+      session.error = token.error;
+      return session;
+    },
+    authorized({ auth }) {
+      // Logged in users are authenticated, otherwise redirect to login page
+      return !!auth;
+    },
+  },
 });
 
 /**
@@ -208,3 +220,64 @@ export const resendEmailVerificationCode = async (token: string) => {
   });
   return response.data;
 };
+
+/**
+ * Refresh the access token
+ * @param nextAuthJWT - The next-auth JWT
+ * @returns The refreshed JWT
+ */
+async function refreshAccessToken(nextAuthJWT: JWT): Promise<JWT> {
+  try {
+    if (!nextAuthJWT.data?.tokens?.refreshToken) {
+      throw new Error("No refresh token available");
+    }
+
+    // Get a new access token from backend using the refresh token
+    const { data: response } = await $axios.post<RefreshTokenResponse>(
+      `/auth/refresh-token`,
+      {
+        refreshToken: nextAuthJWT.data.tokens.refreshToken,
+      }
+    );
+
+    if (!response.success || !response.tokens) {
+      throw new Error("Failed to refresh token");
+    }
+
+    // Validate the new access token
+    const decodedToken: DecodedJWT = jwtDecode(response.tokens.accessToken);
+
+    if (!decodedToken.exp || Date.now() >= decodedToken.exp * 1000) {
+      throw new Error("New access token is already expired");
+    }
+
+    // Create a new JWT object with updated values
+    return {
+      ...nextAuthJWT,
+      data: {
+        ...nextAuthJWT.data,
+        validity: {
+          ...nextAuthJWT.data.validity,
+          valid_until: decodedToken.exp,
+        },
+        tokens: {
+          ...nextAuthJWT.data.tokens,
+          accessToken: response.tokens.accessToken,
+        },
+      },
+    };
+  } catch (error) {
+    console.error(
+      "Token refresh failed:",
+      error instanceof Error ? error.message : "Unknown error"
+    );
+
+    // Return a standardized error state that will trigger a redirect
+    return {
+      ...nextAuthJWT,
+      data: {} as User,
+      error: "RefreshTokenExpired",
+      errorDetails: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}

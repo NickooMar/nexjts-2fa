@@ -16,6 +16,7 @@ import { SigninRequestDto } from 'libs/shared/dto/auth/signin.dto';
 import { TokensEntity } from 'apps/auth/src/domain/entities/tokens.entity';
 import { AuthProxy } from 'apps/auth/src/infrastructure/external/auth.proxy';
 import { VerifyEmailRequestDto } from 'libs/shared/dto/auth/verify-email.dto';
+import { RefreshTokenRequestDto } from 'libs/shared/dto/auth/refresh-token.dto';
 
 @Controller({ path: 'auth', version: '1' })
 export class AuthController {
@@ -73,6 +74,15 @@ export class AuthController {
         }
 
         throw new InternalServerErrorException('Something went wrong');
+      }),
+    );
+  }
+
+  @Post('refresh')
+  refreshToken(@Body() input: RefreshTokenRequestDto) {
+    return this.authProxy.refreshToken(input.refreshToken).pipe(
+      catchError((error) => {
+        throw new InternalServerErrorException(error.message);
       }),
     );
   }

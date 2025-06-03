@@ -102,6 +102,7 @@
     },
     "messages": {
       "success": {
+        "signin_success": "Inicio de sesión exitoso",
         "signup_success": "Cuenta creada exitosamente",
         "email_verification_success": "Correo electrónico verificado exitosamente"
       },
@@ -131,7 +132,8 @@
         "token_verification": "Ocurrió un error al validar la identidad",
         "code_verification": "Ocurrió un error al validar el código de verificación",
         "request_error": "Ocurrió un error inesperado al procesar la solicitud",
-        "invalid_verification_token": "El token de verificación es inválido"
+        "invalid_verification_token": "El token de verificación es inválido",
+        "server_error": "Ocurrió un error inesperado"
       }
     }
   }

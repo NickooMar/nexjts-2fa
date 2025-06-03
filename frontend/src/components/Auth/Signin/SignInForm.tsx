@@ -23,10 +23,12 @@ import { useNextToast } from "@/hooks/toasts/useNextToast";
 import { createSignInSchema } from "@/schemas/auth.schema";
 import { Form, FormField, FormItem, FormMessage } from "../../ui/form";
 import { AuthProviders, SignInFormState } from "@/types/auth/auth.types";
+import { useRouter } from "next/navigation";
 
 const SignInForm: React.FC = () => {
-  const t = useTranslations("auth");
+  const router = useRouter();
   const toast = useNextToast();
+  const t = useTranslations("auth");
   const signInSchema = createSignInSchema(t);
 
   const [isEmailValid, setIsEmailValid] = useState(false);
@@ -60,7 +62,7 @@ const SignInForm: React.FC = () => {
 
       const response = await checkEmailExistsAction(form.getValues("email"));
 
-      if (!response.success) {
+      if (!response?.success) {
         if (response.error === "invalid_credentials") {
           return toast.error(t("messages.errors.invalid_credentials"));
         } else {
@@ -68,7 +70,7 @@ const SignInForm: React.FC = () => {
         }
       }
 
-      if (!response.exists) {
+      if (!response?.exists) {
         return toast.error(t("messages.errors.invalid_credentials"));
       }
 
@@ -85,13 +87,23 @@ const SignInForm: React.FC = () => {
     values: SignInFormState
   ) => {
     try {
-      console.log({ values });
-
+      setIsLoading(true);
       const result = await signInAction(values);
-      console.log(result);
+
+      if (result?.error) {
+        toast.error(t("messages.errors.invalid_credentials"));
+        return;
+      }
+
+      toast.success(t("messages.success.signin_success"));
+      router.refresh(); // Refresh the server components
+      router.push("/home");
     } catch (error) {
       console.error(error);
-      toast.error(t("messages.errors.request_error"));
+      toast.error(t("messages.errors.invalid_credentials"));
+      // toast.error(t("messages.errors.request_error"));
+    } finally {
+      setIsLoading(false);
     }
   };
 

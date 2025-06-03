@@ -3,12 +3,11 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { Home, LogOut } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { signOutAction } from "@/app/actions/auth.actions";
-import { ThemeSwitcher } from "../Theme/ThemeSwitcher";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { getTranslations } from "next-intl/server";
+import { ThemeSwitcher } from "../Theme/ThemeSwitcher";
+import { signOutAction } from "@/app/actions/auth.actions";
 
 async function handleSignOut() {
   "use server";

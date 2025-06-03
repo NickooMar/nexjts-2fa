@@ -34,7 +34,7 @@ export class AuthService extends AuthServiceAbstract {
     super();
   }
 
-  signin(input: SigninRequestDto) {
+  signin(input: SigninRequestDto): Observable<TokensEntity> {
     return from(this.userProxy.findByEmailAndPassword(input)).pipe(
       switchMap((user) =>
         from(this.generateTokens(user)).pipe(
@@ -205,15 +205,22 @@ export class AuthService extends AuthServiceAbstract {
   }
 
   private async generateTokens(user: User): Promise<TokensEntity> {
-    const payload = { email: user.email, sub: user._id };
+    const payload = {
+      _id: user._id,
+      sub: user._id,
+      email: user.email,
+      lastName: user?.lastName || '',
+      firstName: user?.firstName || '',
+      username: `${user?.firstName || ''} ${user?.lastName || ''}`,
+    };
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>('JWT_SECRET'),
-        expiresIn: '15m',
+        expiresIn: '15s',
       }),
       this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>('JWT_SECRET'),
-        expiresIn: '7d',
+        expiresIn: '1m',
       }),
     ]);
 
