@@ -9,6 +9,7 @@ import {
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,6 @@ import { useNextToast } from "@/hooks/toasts/useNextToast";
 import { createSignInSchema } from "@/schemas/auth.schema";
 import { Form, FormField, FormItem, FormMessage } from "../../ui/form";
 import { AuthProviders, SignInFormState } from "@/types/auth/auth.types";
-import { useRouter } from "next/navigation";
 
 const SignInForm: React.FC = () => {
   const router = useRouter();
@@ -96,7 +96,6 @@ const SignInForm: React.FC = () => {
       }
 
       toast.success(t("messages.success.signin_success"));
-      router.refresh(); // Refresh the server components
       router.push("/home");
     } catch (error) {
       console.error(error);

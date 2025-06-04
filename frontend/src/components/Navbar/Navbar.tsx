@@ -1,28 +1,26 @@
-import React from "react";
+"use client";
+
 import Link from "next/link";
-import { auth } from "@/auth";
-import { Session } from "next-auth";
+import React, { useEffect } from "react";
 import { Home, LogOut } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "./LanguageSwitcher";
-import { getTranslations } from "next-intl/server";
+import { useSession, signOut } from "next-auth/react";
 import { ThemeSwitcher } from "../Theme/ThemeSwitcher";
-import { signOutAction } from "@/app/actions/auth.actions";
 
-async function handleSignOut() {
-  "use server";
-  await signOutAction();
-}
+export const Navbar = () => {
+  const t = useTranslations("navbar");
+  const { data: session, status } = useSession();
 
-const Navbar = async () => {
-  const session = await auth();
+  const handleSignOut = async () => {
+    await signOut({ redirect: true, callbackUrl: "/auth/signin" });
+  };
 
-  const t = await getTranslations("navbar");
+  useEffect(() => {
+    console.log({ session, status });
+  }, [session, status]);
 
-  return <NavbarClient session={session} t={t} />;
-};
-
-const NavbarClient = ({ session, t }: { session: Session | null; t: any }) => {
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="w-full flex h-14 px-6 items-center justify-between">
@@ -38,25 +36,28 @@ const NavbarClient = ({ session, t }: { session: Session | null; t: any }) => {
           </Link>
         </div>
         <div className="flex items-center gap-4">
-          {session?.user ? (
-            <form action={handleSignOut}>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="flex items-center gap-2"
-              >
-                <LogOut className="h-6 w-6" />
-                <span>{t("signout")}</span>
-              </Button>
-            </form>
+          {status === "loading" ? (
+            <Button variant="ghost" size="sm" disabled>
+              Loading...
+            </Button>
+          ) : status === "authenticated" && session?.user ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="flex items-center gap-2"
+              onClick={handleSignOut}
+            >
+              <LogOut className="h-6 w-6" />
+              <span>{t("signout")}</span>
+            </Button>
           ) : (
             <>
-              <Link href="/signin">
+              <Link href="/auth/signin">
                 <Button variant="outline" size="sm">
                   {t("signin")}
                 </Button>
               </Link>
-              <Link href="/signup">
+              <Link href="/auth/signup">
                 <Button variant="outline" size="sm">
                   {t("signup")}
                 </Button>
@@ -70,5 +71,3 @@ const NavbarClient = ({ session, t }: { session: Session | null; t: any }) => {
     </nav>
   );
 };
-
-export default Navbar;

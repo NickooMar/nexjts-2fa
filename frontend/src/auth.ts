@@ -28,6 +28,11 @@ const $axios = axios.create({
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: { strategy: "jwt" },
   secret: process.env.AUTH_SECRET,
+  pages: {
+    error: "/auth/error",
+    signIn: "/auth/signin",
+    verifyRequest: "/auth/verify-email",
+  },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -92,7 +97,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // Initial signin contains a 'User' object from authorize method
       if (user && account) {
         console.debug("Initial signin");
-        return { ...token, data: user };
+        return { ...token, data: user as User };
       }
 
       // The current access token is still valid
@@ -102,38 +107,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       // The current access token has expired, but the refresh token is still valid
-      if (Date.now() < token.data.validity.refresh_until * 1000) {
+      if (Date.now() < token.data?.validity?.refresh_until * 1000) {
         console.debug("Access token is being refreshed");
-        const refreshedToken = await refreshAccessToken(token);
-
-        // If refresh failed, return the error state
-        if (refreshedToken.error) {
-          console.debug("Token refresh failed");
-          return refreshedToken;
-        }
-
-        return refreshedToken;
+        return await refreshAccessToken(token);
       }
 
       console.debug("Both tokens have expired");
       return {
         ...token,
-        data: {} as User,
         error: "RefreshTokenExpired",
       } as JWT;
     },
     async session({ session, token }) {
-      if (token.error === "RefreshTokenExpired") {
-        return session;
-      }
-      session.user = token.data?.user;
-      session.validity = token.data?.validity;
-      session.error = token.error;
-      return session;
+      return {
+        ...session,
+        error: token.error,
+        user: token.data?.user,
+        validity: token.data?.validity,
+      };
     },
     authorized({ auth }) {
-      // Logged in users are authenticated, otherwise redirect to login page
-      return !!auth;
+      return !!auth?.user;
     },
   },
 });
