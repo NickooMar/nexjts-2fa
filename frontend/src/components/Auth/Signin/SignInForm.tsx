@@ -24,11 +24,14 @@ import { useNextToast } from "@/hooks/toasts/useNextToast";
 import { createSignInSchema } from "@/schemas/auth.schema";
 import { Form, FormField, FormItem, FormMessage } from "../../ui/form";
 import { AuthProviders, SignInFormState } from "@/types/auth/auth.types";
+import { AuthError } from "next-auth";
+import { useSession } from "next-auth/react";
 
 const SignInForm: React.FC = () => {
   const router = useRouter();
   const toast = useNextToast();
   const t = useTranslations("auth");
+  const session = useSession();
   const signInSchema = createSignInSchema(t);
 
   const [isEmailValid, setIsEmailValid] = useState(false);
@@ -88,19 +91,30 @@ const SignInForm: React.FC = () => {
   ) => {
     try {
       setIsLoading(true);
-      const result = await signInAction(values);
 
-      if (result?.error) {
-        toast.error(t("messages.errors.invalid_credentials"));
+      const response = await signInAction(values);
+
+      if (response?.success) {
+        toast.success(t("messages.success.signin_success"));
+        router.push("/home");
+        session.update(); // update session to get the new user data
         return;
       }
 
-      toast.success(t("messages.success.signin_success"));
-      router.push("/home");
+      if (response?.error === "invalid_credentials") {
+        return toast.error(t("messages.errors.invalid_credentials"));
+      }
+
+      return toast.error(t("messages.errors.request_error"));
     } catch (error) {
-      console.error(error);
-      toast.error(t("messages.errors.invalid_credentials"));
-      // toast.error(t("messages.errors.request_error"));
+      if (error instanceof AuthError) {
+        switch (error.message) {
+          case "CredentialsSignin":
+            return toast.error(t("messages.errors.invalid_credentials"));
+          default:
+            return toast.error(t("messages.errors.request_error"));
+        }
+      }
     } finally {
       setIsLoading(false);
     }

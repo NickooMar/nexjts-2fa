@@ -1,7 +1,7 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
-import React, { useEffect } from "react";
 import { Home, LogOut } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
@@ -16,10 +16,6 @@ export const Navbar = () => {
   const handleSignOut = async () => {
     await signOut({ redirect: true, callbackUrl: "/auth/signin" });
   };
-
-  useEffect(() => {
-    console.log({ session, status });
-  }, [session, status]);
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

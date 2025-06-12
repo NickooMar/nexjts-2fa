@@ -11,30 +11,26 @@ export default auth(async (req) => {
   const isPrivateRoute = privateRoutes.includes(nextUrl.pathname);
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
 
-  if (isPrivateRoute && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/auth/signin", req.nextUrl.origin));
-  }
-  if (isAuthPage && isLoggedIn) {
-    return NextResponse.redirect(new URL("/home", req.nextUrl.origin));
-  }
+  const isTokenExpired =
+    token &&
+    (Date.now() >= token.data.validity?.refresh_until * 1000 ||
+      token.error === "RefreshTokenExpired");
+
   if (isApiRoute) {
     return NextResponse.next();
   }
-  if (
-    token &&
-    (Date.now() >= token.data.validity?.refresh_until * 1000 ||
-      token.error === "RefreshTokenExpired")
-  ) {
+  if (isAuthPage && isLoggedIn && !isTokenExpired) {
+    return NextResponse.redirect(new URL("/home", req.nextUrl.origin));
+  }
+  if (isPrivateRoute && (isTokenExpired || !isLoggedIn)) {
     const response = NextResponse.redirect(
       new URL("/auth/signin", req.nextUrl.origin)
     );
     response.cookies.set("next-auth.session-token", "", { maxAge: 0 });
     response.cookies.set("next-auth.csrf-token", "", { maxAge: 0 });
-
     return response;
   }
 
-  // If authenticated, continue with the request
   return NextResponse.next();
 });
 

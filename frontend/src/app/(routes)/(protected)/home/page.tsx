@@ -14,7 +14,11 @@ const HomePage = () => {
       <Button>
         <Link href="/test">Go to Test Page</Link>
       </Button>
-      <Button onClick={() => signOut()}>Logout</Button>
+      <Button
+        onClick={() => signOut({ redirect: true, callbackUrl: "/auth/signin" })}
+      >
+        Logout
+      </Button>
     </div>
   );
 };

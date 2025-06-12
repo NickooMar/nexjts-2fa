@@ -2,6 +2,7 @@ import NextAuth, {
   User,
   DecodedJWT,
   UserObject,
+  BackendJWT,
   AuthValidity,
 } from "next-auth";
 import {
@@ -76,16 +77,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             refresh_until: refresh.exp,
           };
 
+          const tokens: BackendJWT = {
+            accessToken: response.tokens.accessToken,
+            refreshToken: response.tokens.refreshToken,
+          };
+
           return {
             user,
+            tokens,
             validity,
             id: access._id,
-            tokens: {
-              accessToken: response.tokens.accessToken,
-              refreshToken: response.tokens.refreshToken,
-            },
           } as User;
-        } catch (error) {
+        } catch (error: unknown) {
           console.error(error);
           return null;
         }
@@ -228,7 +231,7 @@ async function refreshAccessToken(nextAuthJWT: JWT): Promise<JWT> {
 
     // Get a new access token from backend using the refresh token
     const { data: response } = await $axios.post<RefreshTokenResponse>(
-      `/auth/refresh-token`,
+      `/auth/refresh`,
       {
         refreshToken: nextAuthJWT.data.tokens.refreshToken,
       }

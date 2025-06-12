@@ -17,6 +17,7 @@ import {
 } from "@/auth";
 
 import { AxiosError } from "axios";
+import { AuthError } from "next-auth";
 
 /**
  * Sign in the user
@@ -30,13 +31,27 @@ export const signInAction = async (data: SignInFormState) => {
       password: data.password,
       redirect: false,
     });
+
     return { success: true };
-  } catch {
-    return {
-      success: false,
-      error: "invalid_credentials",
-    };
+  } catch (error: unknown) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return {
+            success: false,
+            error: "invalid_credentials",
+            message: "Invalid credentials",
+          };
+        default:
+          return {
+            success: false,
+            error: error.type,
+            message: error.message,
+          };
+      }
+    }
   }
+  return { success: true };
 };
 
 /**
