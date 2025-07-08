@@ -36,6 +36,14 @@ body {
     --radius: 0.5rem;
     --secondary-action: 346.84 77.17% 49.8%;
     --secondary-action-foreground: 210 40% 98%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
@@ -66,6 +74,14 @@ body {
     --radius: 0.5rem;
     --secondary-action: 210 40% 96.1%;
     --secondary-action-foreground: 222.2 47.4% 11.2%;
+    --sidebar-background: 222.2 84% 4.9%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 217.2 91.2% 59.8%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 210 40% 96.1%;
+    --sidebar-accent-foreground: 222.2 47.4% 11.2%;
+    --sidebar-border: 217.2 32.6% 17.5%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark-alt {
@@ -95,6 +111,14 @@ body {
     --chart-5: 340 70% 50%;
     --secondary-action: 220 35% 35%;
     --secondary-action-foreground: 210 10% 85%;
+    --sidebar-background: 220 10% 13%;
+    --sidebar-foreground: 210 10% 90%;
+    --sidebar-primary: 220 60% 45%;
+    --sidebar-primary-foreground: 210 10% 95%;
+    --sidebar-accent: 220 10% 25%;
+    --sidebar-accent-foreground: 210 10% 90%;
+    --sidebar-border: 220 10% 20%;
+    --sidebar-ring: 220 60% 45%;
   }
 
   .dark-warm {
@@ -124,6 +148,14 @@ body {
     --chart-5: 55 70% 50%;
     --secondary-action: 35 35% 35%;
     --secondary-action-foreground: 30 15% 85%;
+    --sidebar-background: 30 15% 13%;
+    --sidebar-foreground: 30 15% 90%;
+    --sidebar-primary: 35 50% 45%;
+    --sidebar-primary-foreground: 30 15% 95%;
+    --sidebar-accent: 30 15% 25%;
+    --sidebar-accent-foreground: 30 15% 90%;
+    --sidebar-border: 30 15% 20%;
+    --sidebar-ring: 35 50% 45%;
   }
 
   .forest {
@@ -154,6 +186,14 @@ body {
     --radius: 0.5rem;
     --secondary-action: 150 77.17% 49.8%;
     --secondary-action-foreground: 150 45% 98%;
+    --sidebar-background: 150 45% 98%;
+    --sidebar-foreground: 150 45% 10%;
+    --sidebar-primary: 150 45% 30%;
+    --sidebar-primary-foreground: 150 45% 98%;
+    --sidebar-accent: 150 40% 90%;
+    --sidebar-accent-foreground: 150 45% 30%;
+    --sidebar-border: 150 40% 85%;
+    --sidebar-ring: 150 45% 30%;
   }
 
   .sunset {
@@ -184,6 +224,14 @@ body {
     --radius: 0.5rem;
     --secondary-action: 35 77.17% 49.8%;
     --secondary-action-foreground: 35 95% 98%;
+    --sidebar-background: 35 95% 98%;
+    --sidebar-foreground: 35 95% 10%;
+    --sidebar-primary: 35 95% 40%;
+    --sidebar-primary-foreground: 35 95% 98%;
+    --sidebar-accent: 35 90% 90%;
+    --sidebar-accent-foreground: 35 95% 40%;
+    --sidebar-border: 35 90% 85%;
+    --sidebar-ring: 35 95% 40%;
   }
 }
 

@@ -116,18 +116,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       console.debug("Both tokens have expired");
-      return {
-        ...token,
-        error: "RefreshTokenExpired",
-      } as JWT;
+      return { ...token, error: "RefreshTokenExpired" } as JWT;
     },
     async session({ session, token }) {
-      return {
-        ...session,
-        error: token.error,
-        user: token.data?.user,
-        validity: token.data?.validity,
-      };
+      session.user = token.data.user;
+      session.validity = token.data.validity;
+      session.error = token.error;
+      return session;
     },
     authorized({ auth }) {
       return !!auth?.user;

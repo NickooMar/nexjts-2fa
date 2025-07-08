@@ -11,7 +11,7 @@ import { ThemeSwitcher } from "../Theme/ThemeSwitcher";
 
 export const Navbar = () => {
   const t = useTranslations("navbar");
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession({ required: false });
 
   const handleSignOut = async () => {
     await signOut({ redirect: true, callbackUrl: "/auth/signin" });

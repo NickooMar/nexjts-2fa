@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import { NextIntlClientProvider } from "next-intl";
 import { Navbar } from "@/components/Navbar/Navbar";
 import { ThemeProvider } from "@/components/Theme/themeProvider";
+import { SessionChecker } from "@/components/SessionChecker";
 
 export const metadata: Metadata = {
   title: "HomiQ",
@@ -41,6 +42,7 @@ export default async function RootLayout({
       </head>
       <body>
         <SessionProvider>
+          <SessionChecker />
           <NextIntlClientProvider locale={locale} messages={messages}>
             <Toaster position="top-right" reverseOrder={false} />
             <ThemeProvider
