@@ -1,5 +1,5 @@
-import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/Sidebar/AppSidebar";
 
 export default function ProtectedLayout({
   children,
@@ -8,9 +8,9 @@ export default function ProtectedLayout({
 }) {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen w-full">
         <AppSidebar />
-        <main className="flex-1 p-8">{children}</main>
+        <main className="flex-1 min-w-0 overflow-auto w-full">{children}</main>
       </div>
     </SidebarProvider>
   );

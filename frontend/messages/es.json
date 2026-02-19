@@ -136,5 +136,30 @@
         "server_error": "Ocurrió un error inesperado"
       }
     }
+  },
+  "sidebar": {
+    "organization": {
+      "name": "Acme Inc",
+      "plan": "Empresa"
+    },
+    "sections": {
+      "platform": "Plataforma"
+    },
+    "items": {
+      "playground": "Playground",
+      "history": "Historial",
+      "starred": "Destacados",
+      "settings": "Configuración",
+      "models": "Modelos",
+      "documentation": "Documentación"
+    },
+    "user_menu": {
+      "account": "Cuenta",
+      "billing": "Facturación",
+      "notifications": "Notificaciones",
+      "theme": "Tema",
+      "language": "Idioma",
+      "logout": "Cerrar sesión"
+    }
   }
 }

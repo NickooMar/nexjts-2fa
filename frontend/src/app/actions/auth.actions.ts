@@ -93,6 +93,49 @@ export const signInWithProviderAction = async (provider: AuthProviders) => {
 };
 
 /**
+ * Sign in using already-issued backend tokens
+ * @param accessToken - The backend access token
+ * @param refreshToken - The backend refresh token
+ * @returns The response from next-auth
+ */
+export const signInWithVerifiedTokensAction = async (
+  accessToken: string,
+  refreshToken: string
+) => {
+  try {
+    if (!accessToken || !refreshToken) {
+      return {
+        success: false,
+        error: "invalid_tokens",
+        message: "Missing verification tokens",
+      };
+    }
+
+    await signIn("verified-email", {
+      accessToken,
+      refreshToken,
+      redirect: false,
+    });
+
+    return { success: true };
+  } catch (error: unknown) {
+    if (error instanceof AuthError) {
+      return {
+        success: false,
+        error: error.type || "auth_error",
+        message: error.message || "Authentication failed",
+      };
+    }
+
+    return {
+      success: false,
+      error: "server_error",
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
+
+/**
  * Sign up the user
  * @param data - The data to sign up
  * @returns The response from the server
@@ -121,8 +164,10 @@ export const signUpAction = async (
 export const verifyEmailVerificationTokenAction = async (token: string) => {
   try {
     const response = await verifyEmailVerificationToken(token);
+    console.log({ response });
     return response;
   } catch (error: unknown) {
+    console.error(error);
     if (error instanceof AxiosError) {
       if ([400, 401, 404].includes(error.response?.status ?? 0)) {
         return {

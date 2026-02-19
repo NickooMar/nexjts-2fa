@@ -23,6 +23,36 @@ const $axios = axios.create({
   timeout: 10000,
 });
 
+const createUserFromTokens = (accessToken: string, refreshToken: string): User => {
+  const access: DecodedJWT = jwtDecode(accessToken);
+  const refresh: DecodedJWT = jwtDecode(refreshToken);
+
+  const user: UserObject = {
+    _id: access._id,
+    email: access.email,
+    username: access.username,
+    lastName: access.lastName,
+    firstName: access.firstName,
+  };
+
+  const validity: AuthValidity = {
+    valid_until: access.exp,
+    refresh_until: refresh.exp,
+  };
+
+  const tokens: BackendJWT = {
+    accessToken,
+    refreshToken,
+  };
+
+  return {
+    user,
+    tokens,
+    validity,
+    id: access._id,
+  } as User;
+};
+
 /**
  * NextAuth configuration
  */
@@ -61,33 +91,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (!response.success || Object.keys(response.tokens).length === 0)
             throw new Error("request_error");
 
-          const access: DecodedJWT = jwtDecode(response.tokens.accessToken);
-          const refresh: DecodedJWT = jwtDecode(response.tokens.refreshToken);
+          return createUserFromTokens(
+            response.tokens.accessToken,
+            response.tokens.refreshToken
+          );
+        } catch (error: unknown) {
+          console.error(error);
+          return null;
+        }
+      },
+    }),
+    CredentialsProvider({
+      id: "verified-email",
+      name: "verified-email",
+      credentials: {
+        accessToken: { label: "Access Token", type: "text" },
+        refreshToken: { label: "Refresh Token", type: "text" },
+      },
+      async authorize(credentials) {
+        try {
+          if (!credentials?.accessToken || !credentials?.refreshToken) {
+            throw new Error("missing_credentials");
+          }
 
-          const user: UserObject = {
-            _id: access._id,
-            email: access.email,
-            username: access.username,
-            lastName: access.lastName,
-            firstName: access.firstName,
-          };
-
-          const validity: AuthValidity = {
-            valid_until: access.exp,
-            refresh_until: refresh.exp,
-          };
-
-          const tokens: BackendJWT = {
-            accessToken: response.tokens.accessToken,
-            refreshToken: response.tokens.refreshToken,
-          };
-
-          return {
-            user,
-            tokens,
-            validity,
-            id: access._id,
-          } as User;
+          return createUserFromTokens(
+            credentials.accessToken as string,
+            credentials.refreshToken as string
+          );
         } catch (error: unknown) {
           console.error(error);
           return null;
@@ -96,21 +126,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
-      // Initial signin contains a 'User' object from authorize method
-      if (user && account) {
+    async jwt({ token, user }) {
+      // Initial sign-in and credentials-based token handoff.
+      if (user) {
         console.debug("Initial signin");
-        return { ...token, data: user as User };
+        const nextToken = { ...token, data: user as User } as JWT;
+        delete (nextToken as Partial<JWT>).error;
+        return nextToken;
       }
 
+      // Anonymous requests can reach this callback before any auth data exists.
+      if (!token.data?.validity) {
+        return token;
+      }
+
+      const accessTokenValidityInMs = token.data.validity.valid_until * 1000;
+      const refreshTokenValidityInMs = token.data.validity.refresh_until * 1000;
+
       // The current access token is still valid
-      if (Date.now() < token.data.validity?.valid_until * 1000) {
+      if (Date.now() < accessTokenValidityInMs) {
         console.debug("Access token is still valid");
         return token;
       }
 
       // The current access token has expired, but the refresh token is still valid
-      if (Date.now() < token.data?.validity?.refresh_until * 1000) {
+      if (Date.now() < refreshTokenValidityInMs && token.data.tokens?.refreshToken) {
         console.debug("Access token is being refreshed");
         return await refreshAccessToken(token);
       }
@@ -119,8 +159,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return { ...token, error: "RefreshTokenExpired" } as JWT;
     },
     async session({ session, token }) {
-      session.user = token.data.user;
-      session.validity = token.data.validity;
+      if (token.data?.user) {
+        session.user = token.data.user;
+      }
+
+      if (token.data?.validity) {
+        session.validity = token.data.validity;
+      }
+
       session.error = token.error;
       return session;
     },
@@ -181,6 +227,7 @@ export const verifyEmailVerificationToken = async (token: string) => {
   const response = await $axios.get(`/auth/verify-email-verification-token`, {
     params: { token },
   });
+  console.log({ response });
   return response.data;
 };
 

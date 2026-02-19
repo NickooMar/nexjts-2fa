@@ -24,7 +24,7 @@ interface ToastOptions {
 const toastOptions: ToastOptions = {
   duration: 4000,
   progress: true,
-  position: "top-center",
+  position: "top-right",
   transition: "popUp",
   icon: "",
   sound: false,

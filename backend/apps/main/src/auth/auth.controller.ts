@@ -3,14 +3,12 @@ import {
   Post,
   Body,
   Query,
-  UseGuards,
   Controller,
   ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { Observable, catchError, map } from 'rxjs';
 import { RpcException } from '@nestjs/microservices';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { SignupRequestDto } from 'libs/shared/dto/auth/signup.dto';
 import { SigninRequestDto } from 'libs/shared/dto/auth/signin.dto';
 import { TokensEntity } from 'apps/auth/src/domain/entities/tokens.entity';

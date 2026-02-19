@@ -65,7 +65,7 @@ const SignUpForm = () => {
 
       if (response.data?.success) {
         toast.success(t("messages.success.signup_success"));
-        router.push(`/verify-email?token=${response.data?.verificationToken}`);
+        router.push(`/auth/verify-email?token=${response.data?.verificationToken}`);
       } else {
         toast.error(t("messages.errors.request_error"));
       }

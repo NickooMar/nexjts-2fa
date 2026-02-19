@@ -12,10 +12,10 @@ import {
 
 import { useTransition } from "react";
 import { Button } from "../ui/button";
-import { Locale } from "@/i18n/config";
 import { Languages } from "lucide-react";
-import { setUserLocale } from "@/services/locale";
 import { useLocale, useTranslations } from "next-intl";
+import { routing } from "@/i18n/routing";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 interface Language {
   id: string;
@@ -26,6 +26,8 @@ interface Language {
 const LanguageSwitcher = () => {
   const t = useTranslations("general");
   const [isPending, startTransition] = useTransition();
+  const pathname = usePathname();
+  const router = useRouter();
   const locale = useLocale();
 
   const languages: Language[] = [
@@ -34,10 +36,10 @@ const LanguageSwitcher = () => {
   ];
 
   const handleLanguageChange = (value: string) => {
-    const locale = value as Locale;
+    const nextLocale = value as (typeof routing.locales)[number];
 
     startTransition(() => {
-      setUserLocale(locale);
+      router.replace(pathname, { locale: nextLocale });
     });
   };
 

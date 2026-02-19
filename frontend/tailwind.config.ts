@@ -6,9 +6,7 @@ import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
 export default {
   darkMode: ["class"],
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
   	extend: {
@@ -97,7 +95,7 @@ function addVariablesForColors({
   theme,
 }: {
   addBase: (styles: Record<string, unknown>) => void;
-  theme: Record<string, unknown>;
+  theme: (path: string) => Record<string, unknown>;
 }) {
   const allColors = flattenColorPalette(theme("colors"));
   const newVars = Object.fromEntries(

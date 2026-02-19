@@ -1,23 +1,37 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
-import { useEffect } from "react";
-import { useNextToast } from "@/hooks/toasts/useNextToast";
+import { useEffect, useRef } from "react";
 
 export function SessionChecker() {
-  const toast = useNextToast();
   const { data: session, status } = useSession();
+  const hasBeenAuthenticatedRef = useRef(false);
+  const hasTriggeredSignOutRef = useRef(false);
 
   useEffect(() => {
-    // If we have a session but it has an error, or if status is unauthenticated
-    // but we previously had a session, force a sign out
-    if (
-      session?.error === "RefreshTokenExpired" ||
-      (status === "unauthenticated" && session === null)
-    ) {
+    if (status === "authenticated") {
+      hasBeenAuthenticatedRef.current = true;
+      hasTriggeredSignOutRef.current = false;
+    }
+  }, [status]);
+
+  useEffect(() => {
+    if (hasTriggeredSignOutRef.current) {
+      return;
+    }
+
+    if (session?.error === "RefreshTokenExpired") {
+      hasTriggeredSignOutRef.current = true;
+      signOut({ redirect: false });
+      return;
+    }
+
+    // Handle only real auth regressions (authenticated -> unauthenticated).
+    if (status === "unauthenticated" && hasBeenAuthenticatedRef.current) {
+      hasTriggeredSignOutRef.current = true;
       signOut({ redirect: false });
     }
-  }, [session?.error, status, session, toast]);
+  }, [session?.error, status]);
 
   return null;
 }

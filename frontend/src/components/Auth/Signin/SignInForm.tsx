@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import Spinner from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import GoogleIcon from "@mui/icons-material/Google";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Edit, Mail, MailCheck } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Separator } from "@/components/ui/separator";
@@ -45,7 +45,7 @@ const SignInForm: React.FC = () => {
       password: "",
     },
   });
-  const { trigger, clearErrors, resetField } = form;
+  const { trigger, clearErrors, resetField, setFocus } = form;
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -96,7 +96,7 @@ const SignInForm: React.FC = () => {
 
       if (response?.success) {
         toast.success(t("messages.success.signin_success"));
-        router.push("/home");
+        router.push("/dashboard");
         session.update(); // update session to get the new user data
         return;
       }
@@ -126,14 +126,37 @@ const SignInForm: React.FC = () => {
     resetField("password");
   }, [clearErrors, resetField]);
 
-  const handleAction = useCallback(async () => {
-    if (step === "email") await onNextStep();
-  }, [step, onNextStep]);
+  useEffect(() => {
+    if (step === "password") {
+      setFocus("password");
+      return;
+    }
+
+    setFocus("email");
+  }, [step, setFocus]);
+
+  const handleFormSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+
+      if (isLoading) {
+        return;
+      }
+
+      if (step === "email") {
+        await onNextStep();
+        return;
+      }
+
+      await form.handleSubmit(onSubmit)(event);
+    },
+    [isLoading, step, onNextStep, form, onSubmit]
+  );
 
   return (
     <section className="w-full max-w-md mx-auto p-8 bg-card backdrop-blur-sm bg-opacity-100 border border-border rounded-xl shadow-lg">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={handleFormSubmit} className="space-y-8">
           <div className="flex flex-col justify-center items-center space-y-2 gap-2">
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
               {t("signin.title")}
@@ -197,10 +220,9 @@ const SignInForm: React.FC = () => {
               />
             )}
             <Button
-              type={step === "password" ? "submit" : "button"}
+              type="submit"
               className="w-full rounded-xl mt-4 p-4"
               disabled={isLoading}
-              onClick={handleAction}
             >
               {isLoading ? <Spinner /> : t("signin.login")}
             </Button>
@@ -215,7 +237,7 @@ const SignInForm: React.FC = () => {
               <Button
                 type="button"
                 className="rounded-xl p-4"
-                disabled={isLoading}
+                disabled={isLoading || true}
                 onClick={async () =>
                   await handleSigninProviders(AuthProviders.Google)
                 }
@@ -227,7 +249,7 @@ const SignInForm: React.FC = () => {
             <div className="flex justify-center items-center gap-2">
               <p className="text-sm">{t("signin.not_registered")}</p>
               <Link
-                href="/signup"
+                href="/auth/signup"
                 className="text-sm text-secondary-action underline"
               >
                 {t("signin.create_account")}

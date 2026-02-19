@@ -1,62 +1,45 @@
-import "./globals.css";
-import { Metadata } from "next";
-import { Toaster } from "react-hot-toast";
-import { getLocale } from "next-intl/server";
-import { SessionProvider } from "next-auth/react";
-import { NextIntlClientProvider } from "next-intl";
-import { Navbar } from "@/components/Navbar/Navbar";
-import { ThemeProvider } from "@/components/Theme/themeProvider";
-import { SessionChecker } from "@/components/SessionChecker";
+import './globals.css'
+import { Metadata } from 'next'
+import { Toaster } from 'react-hot-toast'
+import { SessionProvider } from 'next-auth/react'
+import { NextIntlClientProvider } from 'next-intl'
+import { defaultLocale } from '@/i18n/config'
+import { SessionChecker } from '@/components/SessionChecker'
+import { ThemeProvider } from '@/components/Theme/themeProvider'
+import defaultMessages from '../../messages/en.json'
 
 export const metadata: Metadata = {
-  title: "HomiQ",
-  description: "HomiQ",
-  keywords: ["HomiQ", "Real Estate", "Property", "Home", "Rent", "Buy"],
+  title: 'HomiQ',
+  description: 'HomiQ',
+  keywords: ['HomiQ', 'Real Estate', 'Property', 'Home', 'Rent', 'Buy'],
   icons: {
-    icon: "/favicon.ico",
+    icon: '/favicon.ico',
   },
-  alternates: {
-    languages: {
-      "en-US": "/en-US",
-      "es-AR": "/es-AR",
-    },
-  },
-};
-
-async function getMessages(locale: string) {
-  return (await import(`../../messages/${locale ?? "en"}.json`)).default;
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  const locale = await getLocale();
-  const messages = await getMessages(locale);
-
   return (
-    <html lang={locale} suppressHydrationWarning={true}>
-      <head>
-        <title>HomiQ</title>
-      </head>
+    <html lang={defaultLocale} suppressHydrationWarning>
       <body>
         <SessionProvider>
           <SessionChecker />
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            <Toaster position="top-right" reverseOrder={false} />
+          <NextIntlClientProvider locale={defaultLocale} messages={defaultMessages}>
+            <Toaster position='top-right' reverseOrder={false} />
             <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
+              attribute='class'
+              defaultTheme='system'
               enableSystem
               disableTransitionOnChange
             >
-              <Navbar />
               {children}
             </ThemeProvider>
           </NextIntlClientProvider>
         </SessionProvider>
       </body>
     </html>
-  );
+  )
 }

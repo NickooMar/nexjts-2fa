@@ -103,23 +103,24 @@ export class AuthService extends AuthServiceAbstract {
         secret: this.configService.get<string>('JWT_SECRET'),
       }),
     ).pipe(
-      map(async (payload) => {
-        if (payload.type !== 'email_verification')
-          throw new RpcException('invalid_token_type');
+      switchMap((payload) => {
+        if (payload.type !== 'email_verification') {
+          return throwError(() => new RpcException('invalid_token_type'));
+        }
 
-        const user = await firstValueFrom(
-          this.userProxy.findById(payload.userId),
+        return this.userProxy.findById(payload.userId).pipe(
+          map((user) => {
+            if (!user) throw new RpcException('user_not_found');
+
+            if (user.emailVerified)
+              throw new RpcException('email_already_verified');
+
+            if (user.emailVerification.expiresAt < new Date().toISOString())
+              throw new RpcException('verification_code_expired');
+
+            return { success: true, message: 'valid_token' };
+          }),
         );
-
-        if (!user) throw new RpcException('user_not_found');
-
-        if (user.emailVerified)
-          throw new RpcException('email_already_verified');
-
-        if (user.emailVerification.expiresAt < new Date().toISOString())
-          throw new RpcException('verification_code_expired');
-
-        return { success: true, message: 'valid_token' };
       }),
       catchError((error) => throwError(() => new RpcException(error.message))),
     );
@@ -166,7 +167,9 @@ export class AuthService extends AuthServiceAbstract {
             ),
         );
 
-        return { success: true, message: 'email_verified' };
+        const tokens = await this.generateTokens(user);
+
+        return { success: true, message: 'email_verified', tokens };
       }),
       catchError((error) => throwError(() => new RpcException(error.message))),
     );
@@ -251,7 +254,7 @@ export class AuthService extends AuthServiceAbstract {
     const verificationToken = this.generateVerificationToken(user._id);
 
     const verificationLink = new URL(frontendUrl);
-    verificationLink.pathname = '/verify-email';
+    verificationLink.pathname = '/auth/verify-email';
     verificationLink.searchParams.set('token', verificationToken);
 
     return this.emailProxy

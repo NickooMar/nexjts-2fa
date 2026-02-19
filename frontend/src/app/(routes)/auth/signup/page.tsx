@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 const SignupPage = async () => {
   const session = await auth();
 
-  if (session) redirect("/");
+  if (session) redirect("/dashboard");
 
   return <SignUpForm />;
 };

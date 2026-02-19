@@ -5,7 +5,7 @@ import EmailVerificationCard from "@/components/Auth/Signup/EmailVerificationCar
 const VerifyEmailPage = async () => {
   const session = await auth();
 
-  if (session) redirect("/");
+  if (session) redirect("/dashboard");
 
   return <EmailVerificationCard />;
 };

@@ -20,7 +20,8 @@ import { useForm } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNextToast } from "@/hooks/toasts/useNextToast";
 import { CheckCircle, Loader, XCircle, Send } from "lucide-react";
@@ -28,13 +29,16 @@ import React, { useState, useEffect, useCallback } from "react";
 import { EmailVerificationFormState } from "@/types/auth/auth.types";
 import { createEmailVerificationSchema } from "@/schemas/auth.schema";
 import {
+  signInWithVerifiedTokensAction,
   verifyEmailVerificationCodeAction,
   verifyEmailVerificationTokenAction,
 } from "@/app/actions/auth.actions";
 
 const EmailVerificationCard = () => {
+  const router = useRouter();
   const toast = useNextToast();
   const t = useTranslations("auth");
+  const { update } = useSession();
   const searchParams = useSearchParams();
 
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
@@ -103,7 +107,39 @@ const EmailVerificationCard = () => {
         const response = await verifyEmailVerificationCodeAction(pin, token);
 
         if (response.success) {
+          const accessToken = response.tokens?.accessToken;
+          const refreshToken = response.tokens?.refreshToken;
+
+          if (!accessToken || !refreshToken) {
+            toast.error(t("messages.errors.request_error"));
+            router.replace("/auth/signin");
+            return;
+          }
+
+          const signInResponse = await signInWithVerifiedTokensAction(
+            accessToken,
+            refreshToken
+          );
+
+          if (!signInResponse.success) {
+            toast.error(t("messages.errors.request_error"));
+            router.replace("/auth/signin");
+            return;
+          }
+
+          // Give next-auth a chance to hydrate the session before navigation.
+          try {
+            await Promise.race([
+              update(),
+              new Promise((resolve) => setTimeout(resolve, 1200)),
+            ]);
+          } catch (error) {
+            console.error("Failed to update session after email verification", error);
+          }
+
           toast.success(t("messages.success.email_verification_success"));
+          router.replace("/dashboard");
+          return;
         } else {
           switch (response.message) {
             case "invalid_verification_token":
@@ -118,7 +154,7 @@ const EmailVerificationCard = () => {
         toast.error(t("messages.errors.code_verification"));
       }
     },
-    [toast, t, token]
+    [toast, t, token, router, update]
   );
 
   const handleResendEmail = () => {
