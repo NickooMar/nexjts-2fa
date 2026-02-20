@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Home,
-  Star,
-  Layers,
-  History,
-  FileText,
-  Settings,
-  ChevronDown,
-  LayoutDashboard,
-} from "lucide-react";
+import { Home, Layers, ChevronRight, Building } from "lucide-react";
 import {
   Sidebar,
   SidebarMenu,
@@ -21,42 +12,52 @@ import {
   SidebarContent,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
   SidebarGroupLabel,
   SidebarGroupContent,
   useSidebar,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { NavUser } from "./NavUser";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
-const navigationItems = [
+interface NavigationItem {
+  titleKey: string;
+  icon?: React.ElementType;
+  items?: NavigationItem[];
+  redirect?: string;
+}
+
+const navigationItems: NavigationItem[] = [
   {
     titleKey: "sections.platform",
     items: [
-      {
-        titleKey: "items.playground",
-        icon: Layers,
-        items: [
-          { titleKey: "items.history", icon: History },
-          { titleKey: "items.starred", icon: Star },
-          { titleKey: "items.settings", icon: Settings },
-        ],
-      },
-      { titleKey: "items.models", icon: LayoutDashboard },
-      { titleKey: "items.documentation", icon: FileText },
+      { titleKey: "items.dashboard", icon: Layers, redirect: "/dashboard" },
+      { titleKey: "items.properties", icon: Building, redirect: "/properties" },
     ],
   },
 ];
 
 export function AppSidebar() {
-  const { data: session } = useSession({ required: false });
+  const router = useRouter();
   const t = useTranslations("sidebar");
   const { state, setOpen } = useSidebar();
+  const { data: session } = useSession({ required: false });
 
   const handleMajorItemClick = () => {
-    if (state === "collapsed") {
-      setOpen(true);
-    }
+    if (state === "collapsed") setOpen(true);
+  };
+
+  const handleItemClick = (item: NavigationItem) => {
+    if (item?.redirect) router.push(item.redirect);
   };
 
   return (
@@ -82,42 +83,63 @@ export function AppSidebar() {
             <SidebarGroupLabel>{t(section.titleKey)}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {section.items.map((item) => (
-                  <SidebarMenuItem key={item.titleKey}>
-                    <SidebarMenuButton
+                {section?.items?.map((item) =>
+                  item?.items ? (
+                    <Collapsible
+                      key={item.titleKey}
                       asChild
-                      className="group-data-[collapsible=icon]:ml-2"
+                      defaultOpen
+                      className="group/collapsible"
                     >
-                      <button
-                        className="w-full"
-                        type="button"
-                        onClick={handleMajorItemClick}
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton
+                            tooltip={t(item.titleKey)}
+                            className="group-data-[collapsible=icon]:ml-2"
+                            onClick={handleMajorItemClick}
+                          >
+                            {item.icon && <item.icon className="h-4 w-4" />}
+                            <span>{t(item.titleKey)}</span>
+                            <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {item?.items?.map((subItem) => (
+                              <SidebarMenuSubItem key={subItem.titleKey}>
+                                <SidebarMenuSubButton asChild>
+                                  <button
+                                    className="w-full"
+                                    type="button"
+                                    onClick={() =>
+                                      subItem.redirect &&
+                                      router.push(subItem.redirect)
+                                    }
+                                  >
+                                    {subItem.icon && (
+                                      <subItem.icon className="h-4 w-4" />
+                                    )}
+                                    <span>{t(subItem.titleKey)}</span>
+                                  </button>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  ) : (
+                    <SidebarMenuItem key={item.titleKey}>
+                      <SidebarMenuButton
+                        className="group-data-[collapsible=icon]:ml-2"
+                        onClick={() => handleItemClick(item)}
                       >
-                        <item.icon className="h-4 w-4" />
+                        {item.icon && <item.icon className="h-4 w-4" />}
                         <span>{t(item.titleKey)}</span>
-                        {item.items && (
-                          <span className="ml-auto group-data-[collapsible=icon]:hidden">
-                            <ChevronDown className="h-4 w-4" />
-                          </span>
-                        )}
-                      </button>
-                    </SidebarMenuButton>
-                    {item.items && (
-                      <SidebarMenu className="pl-4 group-data-[collapsible=icon]:hidden">
-                        {item.items.map((subItem) => (
-                          <SidebarMenuItem key={subItem.titleKey}>
-                            <SidebarMenuButton asChild>
-                              <button className="w-full">
-                                <subItem.icon className="h-4 w-4" />
-                                <span>{t(subItem.titleKey)}</span>
-                              </button>
-                            </SidebarMenuButton>
-                          </SidebarMenuItem>
-                        ))}
-                      </SidebarMenu>
-                    )}
-                  </SidebarMenuItem>
-                ))}
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  )
+                )}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

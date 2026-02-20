@@ -9,7 +9,10 @@ import { ThemeProvider } from '@/components/Theme/themeProvider'
 import defaultMessages from '../../messages/en.json'
 
 export const metadata: Metadata = {
-  title: 'HomiQ',
+  title: {
+    default: 'HomiQ',
+    template: '%s | HomiQ',
+  },
   description: 'HomiQ',
   keywords: ['HomiQ', 'Real Estate', 'Property', 'Home', 'Rent', 'Buy'],
   icons: {

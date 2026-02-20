@@ -158,7 +158,7 @@ export function NavUser({
                 {t("user_menu.theme")}
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
-                <DropdownMenuSubContent>
+                <DropdownMenuSubContent sideOffset={6}>
                   <DropdownMenuLabel>{t("user_menu.theme")}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuRadioGroup
@@ -191,7 +191,7 @@ export function NavUser({
                 {t("user_menu.language")}
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
-                <DropdownMenuSubContent>
+                <DropdownMenuSubContent sideOffset={6}>
                   <DropdownMenuLabel>{t("user_menu.language")}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuRadioGroup

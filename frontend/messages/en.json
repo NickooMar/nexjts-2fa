@@ -148,12 +148,8 @@
       "platform": "Platform"
     },
     "items": {
-      "playground": "Playground",
-      "history": "History",
-      "starred": "Starred",
-      "settings": "Settings",
-      "models": "Models",
-      "documentation": "Documentation"
+      "dashboard": "Dashboard",
+      "properties": "Properties"
     },
     "user_menu": {
       "account": "Account",
