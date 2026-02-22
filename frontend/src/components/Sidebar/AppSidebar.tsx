@@ -1,6 +1,14 @@
 "use client";
 
-import { Home, Layers, ChevronRight, Building } from "lucide-react";
+import {
+  Home,
+  Layers,
+  ChevronRight,
+  Building,
+  Users,
+  FileText,
+  FileSignature,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarMenu,
@@ -40,8 +48,15 @@ const navigationItems: NavigationItem[] = [
   {
     titleKey: "sections.platform",
     items: [
+      { titleKey: "items.tenants", icon: Users, redirect: "/tenants" },
+      { titleKey: "items.reports", icon: FileText, redirect: "/reports" },
       { titleKey: "items.dashboard", icon: Layers, redirect: "/dashboard" },
       { titleKey: "items.properties", icon: Building, redirect: "/properties" },
+      {
+        titleKey: "items.contracts",
+        icon: FileSignature,
+        redirect: "/contracts",
+      },
     ],
   },
 ];
@@ -138,7 +153,7 @@ export function AppSidebar() {
                         <span>{t(item.titleKey)}</span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
-                  )
+                  ),
                 )}
               </SidebarMenu>
             </SidebarGroupContent>

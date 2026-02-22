@@ -137,6 +137,74 @@
       }
     }
   },
+  "landing": {
+    "hero": {
+      "badge": "Diseñado para gestores inmobiliarios modernos",
+      "title_line1": "Simplificando las Operaciones",
+      "title_line2": "Inmobiliarias para",
+      "title_highlight1": "Portafolios",
+      "title_highlight2": "en Crecimiento",
+      "description": "HomiQ centraliza arrendamientos, cobro de alquileres, mantenimiento y reportes para que los equipos inmobiliarios escalen más rápido ofreciendo mejores experiencias a los inquilinos.",
+      "cta_primary": "Comenzar",
+      "cta_secondary": "Contactar Ventas"
+    },
+    "mockup": {
+      "search": "Buscar propiedades...",
+      "menu": "Menú",
+      "dashboard": "Dashboard",
+      "rent_roll": "Registro de Alquileres",
+      "maintenance": "Mantenimiento",
+      "lease_renewals": "Renovaciones de Contratos",
+      "reports": "Reportes",
+      "financials": "Finanzas",
+      "occupancy_label": "Ocupación",
+      "last_updated": "Última actualización: 20 Feb, 2026",
+      "live": "En vivo",
+      "from_last_period": "↑ 8.2% respecto al período anterior",
+      "units": "Unidades",
+      "overdue": "Vencidos",
+      "revenue_title": "Ingresos · Todos los Productos",
+      "this_period": "Este período",
+      "last_period": "Período anterior"
+    },
+    "trusted": {
+      "title": "Confiado por operadores inmobiliarios, gestores de activos y grupos propietarios"
+    },
+    "features": {
+      "label": "Funcionalidades",
+      "title_line1": "Todo lo que Necesitas para Gestionar y",
+      "title_line2": "Hacer Crecer tu Negocio Inmobiliario",
+      "description": "Administra propiedades, residentes, propietarios y finanzas desde un solo lugar con flujos de trabajo diseñados para equipos que operan a escala.",
+      "rent_collection": {
+        "title": "Cobro Automatizado de Alquileres",
+        "description": "Cobra alquileres a tiempo con recordatorios, pago automático y seguimiento de pagos en tiempo real para cada unidad.",
+        "tag": "Finanzas"
+      },
+      "maintenance": {
+        "title": "Flujos de Mantenimiento",
+        "description": "Dirige solicitudes de inquilinos a proveedores rápidamente, monitorea el estado y mantén informados a los propietarios sin administración adicional.",
+        "tag": "Operaciones"
+      },
+      "analytics": {
+        "title": "Analíticas del Portafolio",
+        "description": "Rastrea ocupación, morosidad e ingreso neto operativo con dashboards claros diseñados para operaciones inmobiliarias.",
+        "tag": "Informes"
+      },
+      "portals": {
+        "title": "Portales para Propietarios e Inquilinos",
+        "description": "Brinda a las partes interesadas acceso seguro a estados de cuenta, contratos y actualizaciones desde una plataforma compartida.",
+        "tag": "Acceso"
+      }
+    },
+    "cta": {
+      "label": "Comienza hoy",
+      "title_line1": "¿Listo para transformar",
+      "title_line2": "tu portafolio inmobiliario?",
+      "description": "Únete a cientos de administradores de propiedades que optimizaron sus operaciones con HomiQ. Comienza gratis, escala a medida que crezcas.",
+      "primary": "Prueba Gratuita",
+      "secondary": "Agendar una Demo"
+    }
+  },
   "sidebar": {
     "organization": {
       "name": "Acme Inc",
@@ -147,7 +215,10 @@
     },
     "items": {
       "dashboard": "Dashboard",
-      "properties": "Propiedades"
+      "properties": "Propiedades",
+      "tenants": "Inquilinos",
+      "contracts": "Contratos",
+      "reports": "Reportes"
     },
     "user_menu": {
       "account": "Cuenta",

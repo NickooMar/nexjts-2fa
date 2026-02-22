@@ -139,6 +139,74 @@
       }
     }
   },
+  "landing": {
+    "hero": {
+      "badge": "Built for modern real estate managers",
+      "title_line1": "Simplifying Property",
+      "title_line2": "Operations for",
+      "title_highlight1": "Growing",
+      "title_highlight2": "Portfolios",
+      "description": "HomiQ centralizes leasing, rent collection, maintenance, and reporting so property teams can scale faster while delivering better tenant experiences.",
+      "cta_primary": "Get Started",
+      "cta_secondary": "Contact Sales"
+    },
+    "mockup": {
+      "search": "Search properties...",
+      "menu": "Menu",
+      "dashboard": "Dashboard",
+      "rent_roll": "Rent Roll",
+      "maintenance": "Maintenance",
+      "lease_renewals": "Lease Renewals",
+      "reports": "Reports",
+      "financials": "Financials",
+      "occupancy_label": "Occupancy",
+      "last_updated": "Last updated: Feb 20, 2026",
+      "live": "Live",
+      "from_last_period": "↑ 8.2% from last period",
+      "units": "Units",
+      "overdue": "Overdue",
+      "revenue_title": "Revenue · All Products",
+      "this_period": "This period",
+      "last_period": "Last period"
+    },
+    "trusted": {
+      "title": "Trusted by property operators, asset managers & owner groups"
+    },
+    "features": {
+      "label": "Features",
+      "title_line1": "Everything You Need to Run &",
+      "title_line2": "Grow Your Real Estate Business",
+      "description": "Manage properties, residents, owners, and finances from one place with workflows designed for teams that operate at scale.",
+      "rent_collection": {
+        "title": "Automated Rent Collection",
+        "description": "Collect rent on time with reminders, autopay, and real-time payment tracking for every unit.",
+        "tag": "Finance"
+      },
+      "maintenance": {
+        "title": "Maintenance Workflows",
+        "description": "Route tenant requests to vendors fast, monitor status, and keep owners informed without extra admin.",
+        "tag": "Operations"
+      },
+      "analytics": {
+        "title": "Portfolio Analytics",
+        "description": "Track occupancy, delinquency, and NOI with clean dashboards built for real estate operations.",
+        "tag": "Insights"
+      },
+      "portals": {
+        "title": "Owner & Tenant Portals",
+        "description": "Give stakeholders secure access to statements, leases, and updates from one shared platform.",
+        "tag": "Access"
+      }
+    },
+    "cta": {
+      "label": "Get started today",
+      "title_line1": "Ready to transform",
+      "title_line2": "your property portfolio?",
+      "description": "Join hundreds of property managers who streamlined their operations with HomiQ. Start free, scale as you grow.",
+      "primary": "Start Free Trial",
+      "secondary": "Book a Demo"
+    }
+  },
   "sidebar": {
     "organization": {
       "name": "Acme Inc",
@@ -149,7 +217,10 @@
     },
     "items": {
       "dashboard": "Dashboard",
-      "properties": "Properties"
+      "properties": "Properties",
+      "tenants": "Tenants",
+      "contracts": "Contracts",
+      "reports": "Reports"
     },
     "user_menu": {
       "account": "Account",
