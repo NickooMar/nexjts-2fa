@@ -1,0 +1,178 @@
+services:
+  mongodb:
+    container_name: app-mongodb
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  user-service:
+    container_name: app-user-service
+    build:
+      context: ./backend
+      dockerfile: apps/user/Dockerfile.dev
+    env_file:
+      - ./backend/.env
+    environment:
+      USER_SERVICE_HOST: 0.0.0.0
+      USER_SERVICE_PORT: 3002
+      MONGO_URI: mongodb://mongodb:27017/TEST_2FA
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+            - dist/
+        - action: rebuild
+          path: ./backend/apps/user/
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  auth-service:
+    container_name: app-auth-service
+    build:
+      context: ./backend
+      dockerfile: apps/auth/Dockerfile.dev
+    env_file:
+      - ./backend/.env
+    environment:
+      AUTH_SERVICE_HOST: 0.0.0.0
+      AUTH_SERVICE_PORT: 3001
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+            - dist/
+        - action: rebuild
+          path: ./backend/apps/auth/
+    depends_on:
+      - user-service
+    networks:
+      - app-network
+
+  email-service:
+    container_name: app-email-service
+    build:
+      context: ./backend
+      dockerfile: apps/email/Dockerfile.dev
+    env_file:
+      - ./backend/.env
+    environment:
+      EMAIL_SERVICE_HOST: 0.0.0.0
+      EMAIL_SERVICE_PORT: 3003
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+            - dist/
+        - action: rebuild
+          path: ./backend/apps/email/
+    networks:
+      - app-network
+
+  main-service:
+    container_name: app-main-service
+    build:
+      context: ./backend
+      dockerfile: apps/main/Dockerfile.dev
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./backend/.env
+    environment:
+      PORT: 3000
+      AUTH_SERVICE_HOST: auth-service
+      AUTH_SERVICE_PORT: 3001
+      USER_SERVICE_HOST: user-service
+      USER_SERVICE_PORT: 3002
+      EMAIL_SERVICE_HOST: email-service
+      EMAIL_SERVICE_PORT: 3003
+      MONGO_URI: mongodb://mongodb:27017/TEST_2FA
+      FRONTEND_URL: http://localhost:4000
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+            - dist/
+        - action: rebuild
+          path: ./backend/apps/main/
+    depends_on:
+      - auth-service
+      - user-service
+      - email-service
+    networks:
+      - app-network
+
+  frontend:
+    container_name: app-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - '4000:4000'
+    env_file:
+      - ./frontend/.env
+    environment:
+      # Server-side API calls use container DNS name
+      NEST_BACKEND_PUBLIC_API_URL: http://main-service:3000
+      # Enable polling for hot reload with Docker bind mounts
+      WATCHPACK_POLLING: "true"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules/
+            - .next/
+        - action: rebuild
+          path: ./frontend/package.json
+    depends_on:
+      - main-service
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:

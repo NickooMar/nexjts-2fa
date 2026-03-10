@@ -24,6 +24,7 @@ services:
     depends_on:
       - auth-service
       - user-service
+      - email-service
     network_mode: host
 
   auth-service:
@@ -74,4 +75,42 @@ services:
             - dist/
         - action: rebuild
           path: apps/user/
+    depends_on:
+      - mongodb
     network_mode: host
+
+  email-service:
+    container_name: nestjs-email-service
+    build:
+      context: .
+      dockerfile: apps/email/Dockerfile.dev
+    ports:
+      - '3003:3003'
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+            - dist/
+        - action: rebuild
+          path: apps/email/
+    network_mode: host
+
+  mongodb:
+    container_name: nestjs-mongodb
+    image: mongo:7
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+    network_mode: host
+
+volumes:
+  mongodb_data:

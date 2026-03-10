@@ -4,6 +4,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   turbopack: {
     resolveAlias: {
       // next-intl's plugin detects its own bundled Next.js 15.0.3 instead of
