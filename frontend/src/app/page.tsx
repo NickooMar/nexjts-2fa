@@ -194,7 +194,7 @@ export default function HomePage() {
                   <div className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
                   <div className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
                 </div>
-                <div className="mx-auto flex items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1 text-xs text-muted-foreground shadow-sm">
+                <div className="ml-auto hidden max-w-[70%] items-center gap-1.5 rounded-md border border-border bg-background px-3 py-1 text-xs text-muted-foreground shadow-sm sm:flex">
                   <svg
                     className="h-2.5 w-2.5 text-muted-foreground/60"
                     fill="none"
@@ -208,7 +208,7 @@ export default function HomePage() {
                       d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"
                     />
                   </svg>
-                  app.homiq.com/dashboard
+                  <span className="truncate">app.homiq.com/dashboard</span>
                 </div>
               </div>
 
@@ -273,8 +273,8 @@ export default function HomePage() {
                   </nav>
                 </aside>
 
-                <div className="p-5 md:p-6">
-                  <div className="mb-5 flex items-start justify-between gap-4">
+                <div className="p-4 md:p-6">
+                  <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <span>{t("mockup.last_updated")}</span>
@@ -290,8 +290,8 @@ export default function HomePage() {
                         {t("mockup.from_last_period")}
                       </p>
                     </div>
-                    <div className="flex gap-2">
-                      <div className="rounded-lg border border-border bg-muted px-3 py-2 text-center">
+                    <div className="grid w-full grid-cols-3 gap-2 sm:w-auto sm:flex">
+                      <div className="rounded-lg border border-border bg-muted px-2 py-2 text-center sm:px-3">
                         <p className="text-[10px] font-medium text-muted-foreground">
                           {t("mockup.units")}
                         </p>
@@ -299,7 +299,7 @@ export default function HomePage() {
                           128
                         </p>
                       </div>
-                      <div className="rounded-lg border border-border bg-muted px-3 py-2 text-center">
+                      <div className="rounded-lg border border-border bg-muted px-2 py-2 text-center sm:px-3">
                         <p className="text-[10px] font-medium text-muted-foreground">
                           {t("mockup.occupancy_label")}
                         </p>
@@ -307,7 +307,7 @@ export default function HomePage() {
                           94%
                         </p>
                       </div>
-                      <div className="rounded-lg border border-border bg-muted px-3 py-2 text-center">
+                      <div className="rounded-lg border border-border bg-muted px-2 py-2 text-center sm:px-3">
                         <p className="text-[10px] font-medium text-muted-foreground">
                           {t("mockup.overdue")}
                         </p>
@@ -317,11 +317,11 @@ export default function HomePage() {
                   </div>
 
                   <div className="relative rounded-xl border border-border bg-muted/50 p-4">
-                    <div className="mb-3 flex items-center justify-between">
+                    <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                       <p className="text-xs font-medium text-foreground">
                         {t("mockup.revenue_title")}
                       </p>
-                      <div className="flex items-center gap-4 text-[10px] text-muted-foreground">
+                      <div className="flex flex-wrap items-center gap-3 text-[10px] text-muted-foreground sm:gap-4">
                         <span className="flex items-center gap-1.5">
                           <span className="h-1.5 w-5 rounded-full bg-foreground/80" />
                           {t("mockup.this_period")}
@@ -407,7 +407,7 @@ export default function HomePage() {
                         </defs>
                       </svg>
 
-                      <div className="absolute left-[55%] top-0 -translate-x-1/2 -translate-y-1 rounded-md border border-border bg-card px-2 py-1 text-[10px] shadow-sm">
+                      <div className="absolute left-[55%] top-0 hidden -translate-x-1/2 -translate-y-1 rounded-md border border-border bg-card px-2 py-1 text-[10px] shadow-sm sm:block">
                         <p className="font-semibold text-foreground">
                           $218,400
                         </p>

@@ -142,10 +142,10 @@
   "landing": {
     "hero": {
       "badge": "Built for modern real estate managers",
-      "title_line1": "Simplifying Property",
-      "title_line2": "Operations for",
-      "title_highlight1": "Growing",
-      "title_highlight2": "Portfolios",
+      "title_line1": "Simplifying property",
+      "title_line2": "operations for",
+      "title_highlight1": "growing",
+      "title_highlight2": "portfolios",
       "description": "HomiQ centralizes leasing, rent collection, maintenance, and reporting so property teams can scale faster while delivering better tenant experiences.",
       "cta_primary": "Get Started",
       "cta_secondary": "Contact Sales"
