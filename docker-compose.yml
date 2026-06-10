@@ -17,27 +17,27 @@ services:
   user-service:
     container_name: app-user-service
     build:
-      context: ./backend
+      context: ./apps/backend
       dockerfile: apps/user/Dockerfile.dev
     env_file:
-      - ./backend/.env
+      - ./apps/backend/.env
     environment:
       USER_SERVICE_HOST: 0.0.0.0
       USER_SERVICE_PORT: 3002
       MONGO_URI: mongodb://mongodb:27017/homiq
     volumes:
-      - ./backend:/usr/src/app
+      - ./apps/backend:/usr/src/app
       - /usr/src/app/node_modules
     develop:
       watch:
         - action: sync
-          path: ./backend
+          path: ./apps/backend
           target: /usr/src/app
           ignore:
             - node_modules/
             - dist/
         - action: rebuild
-          path: ./backend/apps/user/
+          path: ./apps/backend/apps/user/
     depends_on:
       mongodb:
         condition: service_healthy
@@ -47,26 +47,26 @@ services:
   auth-service:
     container_name: app-auth-service
     build:
-      context: ./backend
+      context: ./apps/backend
       dockerfile: apps/auth/Dockerfile.dev
     env_file:
-      - ./backend/.env
+      - ./apps/backend/.env
     environment:
       AUTH_SERVICE_HOST: 0.0.0.0
       AUTH_SERVICE_PORT: 3001
     volumes:
-      - ./backend:/usr/src/app
+      - ./apps/backend:/usr/src/app
       - /usr/src/app/node_modules
     develop:
       watch:
         - action: sync
-          path: ./backend
+          path: ./apps/backend
           target: /usr/src/app
           ignore:
             - node_modules/
             - dist/
         - action: rebuild
-          path: ./backend/apps/auth/
+          path: ./apps/backend/apps/auth/
     depends_on:
       - user-service
     networks:
@@ -75,38 +75,38 @@ services:
   email-service:
     container_name: app-email-service
     build:
-      context: ./backend
+      context: ./apps/backend
       dockerfile: apps/email/Dockerfile.dev
     env_file:
-      - ./backend/.env
+      - ./apps/backend/.env
     environment:
       EMAIL_SERVICE_HOST: 0.0.0.0
       EMAIL_SERVICE_PORT: 3003
     volumes:
-      - ./backend:/usr/src/app
+      - ./apps/backend:/usr/src/app
       - /usr/src/app/node_modules
     develop:
       watch:
         - action: sync
-          path: ./backend
+          path: ./apps/backend
           target: /usr/src/app
           ignore:
             - node_modules/
             - dist/
         - action: rebuild
-          path: ./backend/apps/email/
+          path: ./apps/backend/apps/email/
     networks:
       - app-network
 
   main-service:
     container_name: app-main-service
     build:
-      context: ./backend
+      context: ./apps/backend
       dockerfile: apps/main/Dockerfile.dev
     ports:
       - "3000:3000"
     env_file:
-      - ./backend/.env
+      - ./apps/backend/.env
     environment:
       PORT: 3000
       AUTH_SERVICE_HOST: auth-service
@@ -118,18 +118,18 @@ services:
       MONGO_URI: mongodb://mongodb:27017/homiq
       FRONTEND_URL: http://localhost:4000
     volumes:
-      - ./backend:/usr/src/app
+      - ./apps/backend:/usr/src/app
       - /usr/src/app/node_modules
     develop:
       watch:
         - action: sync
-          path: ./backend
+          path: ./apps/backend
           target: /usr/src/app
           ignore:
             - node_modules/
             - dist/
         - action: rebuild
-          path: ./backend/apps/main/
+          path: ./apps/backend/apps/main/
     depends_on:
       - auth-service
       - user-service
@@ -140,31 +140,31 @@ services:
   frontend:
     container_name: app-frontend
     build:
-      context: ./frontend
+      context: ./apps/frontend
       dockerfile: Dockerfile.dev
     ports:
       - "4000:4000"
     env_file:
-      - ./frontend/.env
+      - ./apps/frontend/.env
     environment:
       # Server-side API calls use container DNS name
       NEST_BACKEND_PUBLIC_API_URL: http://main-service:3000
       # Enable polling for hot reload with Docker bind mounts
       WATCHPACK_POLLING: "true"
     volumes:
-      - ./frontend:/app
+      - ./apps/frontend:/app
       - /app/node_modules
       - /app/.next
     develop:
       watch:
         - action: sync
-          path: ./frontend
+          path: ./apps/frontend
           target: /app
           ignore:
             - node_modules/
             - .next/
         - action: rebuild
-          path: ./frontend/package.json
+          path: ./apps/frontend/package.json
     depends_on:
       - main-service
     networks:
