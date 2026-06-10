@@ -1,0 +1,128 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/lib/react-query/query-keys";
+import {
+  joinOrganization,
+  createInvitation,
+  updateMemberRole,
+  createOrganization,
+  switchOrganization,
+} from "@/services/api/organizations.api";
+
+interface MutationMessages {
+  successMessage?: string;
+  errorMessage?: string;
+  errorMessages?: Record<string, string>;
+}
+
+/**
+ * Create / join / switch all re-issue tenant-scoped tokens server-side, so on
+ * success we must (1) refresh the NextAuth client session, (2) clear the query
+ * cache — every tenant-scoped entry (properties, members, ...) belongs to the
+ * previous organization — and (3) refresh server components.
+ */
+function useTenantChangedEffect() {
+  const router = useRouter();
+  const { update } = useSession();
+  const queryClient = useQueryClient();
+
+  return async () => {
+    await update();
+    queryClient.clear();
+    router.refresh();
+  };
+}
+
+export function useCreateOrganization(
+  options?: MutationMessages & { onSuccess?: () => void }
+) {
+  const onTenantChanged = useTenantChangedEffect();
+
+  return useMutation({
+    mutationFn: createOrganization,
+    meta: {
+      successMessage: options?.successMessage,
+      errorMessage: options?.errorMessage,
+      errorMessages: options?.errorMessages,
+    },
+    onSuccess: async () => {
+      await onTenantChanged();
+      options?.onSuccess?.();
+    },
+  });
+}
+
+export function useJoinOrganization(
+  options?: MutationMessages & {
+    onSuccess?: (result: { tenantName?: string }) => void;
+  }
+) {
+  const onTenantChanged = useTenantChangedEffect();
+
+  return useMutation({
+    mutationFn: joinOrganization,
+    meta: {
+      successMessage: options?.successMessage,
+      errorMessage: options?.errorMessage,
+      errorMessages: options?.errorMessages,
+    },
+    onSuccess: async (result) => {
+      await onTenantChanged();
+      options?.onSuccess?.(result);
+    },
+  });
+}
+
+export function useSwitchOrganization(
+  options?: MutationMessages & { onSuccess?: () => void }
+) {
+  const onTenantChanged = useTenantChangedEffect();
+
+  return useMutation({
+    mutationFn: switchOrganization,
+    meta: {
+      successMessage: options?.successMessage,
+      errorMessage: options?.errorMessage,
+      errorMessages: options?.errorMessages,
+    },
+    onSuccess: async () => {
+      await onTenantChanged();
+      options?.onSuccess?.();
+    },
+  });
+}
+
+export function useCreateInvitation(options?: MutationMessages) {
+  return useMutation({
+    mutationFn: createInvitation,
+    meta: {
+      successMessage: options?.successMessage,
+      errorMessage: options?.errorMessage,
+      errorMessages: options?.errorMessages,
+    },
+  });
+}
+
+export function useUpdateMemberRole(
+  options?: MutationMessages & { onSuccess?: () => void }
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateMemberRole,
+    meta: {
+      successMessage: options?.successMessage,
+      errorMessage: options?.errorMessage,
+      errorMessages: options?.errorMessages,
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.memberships.all(),
+      });
+      options?.onSuccess?.();
+    },
+  });
+}

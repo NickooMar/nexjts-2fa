@@ -24,7 +24,7 @@ services:
     environment:
       USER_SERVICE_HOST: 0.0.0.0
       USER_SERVICE_PORT: 3002
-      MONGO_URI: mongodb://mongodb:27017/TEST_2FA
+      MONGO_URI: mongodb://mongodb:27017/homiq
     volumes:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules
@@ -104,7 +104,7 @@ services:
       context: ./backend
       dockerfile: apps/main/Dockerfile.dev
     ports:
-      - '3000:3000'
+      - "3000:3000"
     env_file:
       - ./backend/.env
     environment:
@@ -115,7 +115,7 @@ services:
       USER_SERVICE_PORT: 3002
       EMAIL_SERVICE_HOST: email-service
       EMAIL_SERVICE_PORT: 3003
-      MONGO_URI: mongodb://mongodb:27017/TEST_2FA
+      MONGO_URI: mongodb://mongodb:27017/homiq
       FRONTEND_URL: http://localhost:4000
     volumes:
       - ./backend:/usr/src/app
@@ -143,7 +143,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.dev
     ports:
-      - '4000:4000'
+      - "4000:4000"
     env_file:
       - ./frontend/.env
     environment:

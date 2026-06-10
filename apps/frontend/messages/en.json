@@ -1,0 +1,397 @@
+{
+  "general": {
+    "loading": "Loading...",
+    "languages": {
+      "title": "Languages",
+      "spanish": "Spanish",
+      "english": "English"
+    },
+    "messages": {
+      "success": {},
+      "errors": {
+        "unknown": "An unknown error occurred"
+      }
+    }
+  },
+  "actions": {
+    "create": "Create",
+    "create_model": "Create {model}",
+    "submit": "Submit"
+  },
+  "navbar": {
+    "home": "Home",
+    "signin": "Sign in",
+    "signup": "Sign up",
+    "signout": "Log out"
+  },
+  "themes": {
+    "title": "Themes"
+  },
+  "auth": {
+    "signin": {
+      "title": "Sign in into your account",
+      "description": "Enter your account information below to access.",
+      "google_auth": "Sign in with Google",
+      "github_auth": "Sign in with Github",
+      "continue_with": "or continue with",
+      "email": {
+        "title": "Email",
+        "required": "Email is required",
+        "invalid": "Email is not valid",
+        "min_length": "Email should be at least 4 characters",
+        "placeholder": "Email address"
+      },
+      "password": {
+        "title": "Password",
+        "required": "Password is required",
+        "min_length": "Password must be at least 8 characters",
+        "max_length": "Password must be at most 50 characters"
+      },
+      "forgot_password": "Forgot your password?",
+      "login": "Sign in",
+      "not_registered": "Don't have an account?",
+      "create_account": "Create an account"
+    },
+    "signup": {
+      "organization": {
+        "title": "Organization name",
+        "placeholder": "Your company or agency"
+      },
+      "title": "Create an account",
+      "description": "Enter your account information below to create it.",
+      "first_name": {
+        "title": "First name",
+        "required": "First name is required",
+        "invalid": "First name is not valid",
+        "placeholder": "First name"
+      },
+      "last_name": {
+        "title": "Last name",
+        "required": "Last name is required",
+        "invalid": "Last name is not valid",
+        "placeholder": "Last name"
+      },
+      "email": {
+        "title": "Email",
+        "required": "Email is required",
+        "invalid": "Email is not valid",
+        "placeholder": "Email address"
+      },
+      "phone_number": {
+        "title": "Phone number",
+        "required": "Phone number is required",
+        "invalid": "Phone number is not valid",
+        "placeholder": "Phone number"
+      },
+      "password": {
+        "title": "Password",
+        "required": "Password is required"
+      },
+      "confirm_password": {
+        "title": "Confirm password",
+        "required": "Confirm password is required"
+      },
+      "create": "Create account",
+      "already_have_account": "Already have an account?",
+      "signin": "Sign in"
+    },
+    "email_verification": {
+      "title": "Check your inbox",
+      "description": "We’ve sent a verification code to your email address. Please check your mailbox and enter the code below to verify your email.",
+      "verification_code": "Verification code",
+      "enter_code": "Please, enter the code we sent to your email",
+      "resend_email": "Resend email",
+      "resend_email_time_remaining": "Resend email in {time_remaining}",
+      "error": "Verification Error",
+      "error_description": "Oops! An unexpected error occurred. Please try again.",
+      "error_caption": "Remember to use the link from the email. If the problem persists, please contact the support team."
+    },
+    "messages": {
+      "success": {
+        "signin_success": "Signed in successfully",
+        "signup_success": "Account created successfully",
+        "email_verification_success": "Email verified successfully"
+      },
+      "errors": {
+        "invalid_email": "Email is not valid",
+        "email_already_exists": "Email isn't available",
+        "email_min_length": "Email should be at least 6 characters",
+        "password_required": "Password is required",
+        "password_invalid": "Password is not valid",
+        "password_min_length": "Password must be at least 8 characters",
+        "password_max_length": "Password cannot exceed 20 characters",
+        "password_uppercase": "Password must contain at least one uppercase letter",
+        "password_lowercase": "Password must contain at least one lowercase letter",
+        "password_number": "Password must contain at least one number",
+        "password_special_character": "Password must contain at least one special character",
+        "password_invalid_start": "Password cannot start with a dot or newline",
+        "confirm_password_min_length": "Confirm password must be at least 8 characters",
+        "passwords_dont_match": "Passwords don't match",
+        "phone_number_invalid": "Phone number is not valid",
+        "phone_number_min_length": "Phone number must be at least 10 characters",
+        "first_name_min_length": "First name must be at least 3 characters",
+        "last_name_min_length": "Last name must be at least 3 characters",
+        "invalid_provider": "Provider is invalid",
+        "invalid_credentials": "Invalid credentials. Please check your credentials and try again.",
+        "user_already_exists": "User already exists, please sign in or use a different information",
+        "pin_min_length": "Your verification code must be 6 digits",
+        "token_verification": "An error occurred while verifying the identity",
+        "code_verification": "An error occurred while verifying the code",
+        "request_error": "An unexpected error occurred while processing the request",
+        "invalid_verification_token": "The verification token is invalid",
+        "server_error": "An unexpected error occurred",
+        "organization_name_min_length": "Organization name must be at least 2 characters",
+        "organization_name_max_length": "Organization name must be at most 60 characters",
+        "organization_website_invalid": "Please enter a valid URL (e.g. https://example.com)",
+        "organization_phone_max_length": "Phone number must be at most 30 characters",
+        "organization_country_required": "Please select a country",
+        "organization_country_max_length": "Country must be at most 60 characters",
+        "network_error": "Could not reach the server. Check your connection and try again."
+      }
+    },
+    "create_organization": {
+      "title": "Create organization",
+      "description": "Your organization gets its own isolated workspace. You will be its owner.",
+      "submit": "Create organization",
+      "website": {
+        "title": "Website",
+        "placeholder": "https://yourcompany.com"
+      },
+      "phone": {
+        "title": "Phone",
+        "placeholder": "Enter a phone number"
+      },
+      "country": {
+        "title": "Country",
+        "placeholder": "Select a country"
+      }
+    },
+    "no_organization_state": {
+      "title": "You're not part of an organization yet",
+      "description": "Create your own organization to start managing properties, or join an existing one with an invitation code.",
+      "create_action": "Create organization",
+      "join_action": "Join organization"
+    }
+  },
+  "landing": {
+    "hero": {
+      "badge": "Built for modern real estate managers",
+      "title_line1": "Simplifying property",
+      "title_line2": "operations for",
+      "title_highlight1": "growing",
+      "title_highlight2": "portfolios",
+      "description": "HomiQ centralizes leasing, rent collection, maintenance, and reporting so property teams can scale faster while delivering better tenant experiences.",
+      "cta_primary": "Get Started",
+      "cta_secondary": "Contact Sales"
+    },
+    "mockup": {
+      "search": "Search properties...",
+      "menu": "Menu",
+      "dashboard": "Dashboard",
+      "rent_roll": "Rent Roll",
+      "maintenance": "Maintenance",
+      "lease_renewals": "Lease Renewals",
+      "reports": "Reports",
+      "financials": "Financials",
+      "occupancy_label": "Occupancy",
+      "last_updated": "Last updated: Feb 20, 2026",
+      "live": "Live",
+      "from_last_period": "↑ 8.2% from last period",
+      "units": "Units",
+      "overdue": "Overdue",
+      "revenue_title": "Revenue · All Products",
+      "this_period": "This period",
+      "last_period": "Last period"
+    },
+    "trusted": {
+      "title": "Trusted by property operators, asset managers & owner groups"
+    },
+    "features": {
+      "label": "Features",
+      "title_line1": "Everything You Need to Run &",
+      "title_line2": "Grow Your Real Estate Business",
+      "description": "Manage properties, residents, owners, and finances from one place with workflows designed for teams that operate at scale.",
+      "rent_collection": {
+        "title": "Automated Rent Collection",
+        "description": "Collect rent on time with reminders, autopay, and real-time payment tracking for every unit.",
+        "tag": "Finance"
+      },
+      "maintenance": {
+        "title": "Maintenance Workflows",
+        "description": "Route tenant requests to vendors fast, monitor status, and keep owners informed without extra admin.",
+        "tag": "Operations"
+      },
+      "analytics": {
+        "title": "Portfolio Analytics",
+        "description": "Track occupancy, delinquency, and NOI with clean dashboards built for real estate operations.",
+        "tag": "Insights"
+      },
+      "portals": {
+        "title": "Owner & Tenant Portals",
+        "description": "Give stakeholders secure access to statements, leases, and updates from one shared platform.",
+        "tag": "Access"
+      }
+    },
+    "cta": {
+      "label": "Get started today",
+      "title_line1": "Ready to transform",
+      "title_line2": "your property portfolio?",
+      "description": "Join hundreds of property managers who streamlined their operations with HomiQ. Start free, scale as you grow.",
+      "primary": "Start Free Trial",
+      "secondary": "Book a Demo"
+    }
+  },
+  "sidebar": {
+    "organization": {
+      "name": "Acme Inc",
+      "plan": "Enterprise"
+    },
+    "sections": {
+      "platform": "Platform"
+    },
+    "items": {
+      "dashboard": "Dashboard",
+      "properties": "Properties",
+      "tenants": "Tenants",
+      "contracts": "Contracts",
+      "reports": "Reports"
+    },
+    "user_menu": {
+      "account": "Account",
+      "billing": "Billing",
+      "notifications": "Notifications",
+      "theme": "Theme",
+      "language": "Language",
+      "logout": "Log out"
+    }
+  },
+  "properties": {
+    "list": {
+      "title": "Properties",
+      "description": "Browse and manage your organization's properties.",
+      "description_org": "Browse and manage the properties of {organization}.",
+      "create_action": "Create property",
+      "search_placeholder": "Search by name, address, city…",
+      "filter_type": "Type",
+      "refresh": "Refresh",
+      "error_title": "Something went wrong",
+      "error_description": "We couldn't load your properties. Please try again.",
+      "retry": "Try again",
+      "empty_title": "No properties yet",
+      "empty_description": "Get started by creating your organization's first property. You'll be able to manage units, tenants and maintenance from here.",
+      "no_results": "No properties match \"{query}\".",
+      "units": "{count, plural, one {# unit} other {# units}}"
+    },
+    "types": {
+      "apartment": "Apartment",
+      "house": "House",
+      "commercial": "Commercial",
+      "land": "Land",
+      "other": "Other"
+    },
+    "form": {
+      "name": {
+        "title": "Name",
+        "placeholder": "Sunset Apartments"
+      },
+      "type": {
+        "title": "Type"
+      },
+      "units": {
+        "title": "Units"
+      },
+      "address": {
+        "title": "Address",
+        "placeholder": "123 Main St"
+      },
+      "city": {
+        "title": "City",
+        "placeholder": "Buenos Aires"
+      },
+      "state": {
+        "title": "State / Province",
+        "placeholder": "CABA"
+      },
+      "postal_code": {
+        "title": "Postal code",
+        "placeholder": "C1000"
+      },
+      "country": {
+        "title": "Country",
+        "placeholder": "Select a country"
+      },
+      "description": {
+        "title": "Description",
+        "placeholder": "Notes about this property (optional)"
+      }
+    },
+    "create": {
+      "title": "Create property",
+      "description": "Add a new property to your organization. You can edit these details later.",
+      "submit": "Create property"
+    },
+    "edit": {
+      "title": "Edit property",
+      "description": "Update this property's details. Renaming it will update its URL.",
+      "submit": "Save changes"
+    },
+    "delete": {
+      "title": "Delete property",
+      "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "details": {
+      "back": "Back to properties",
+      "edit": "Edit",
+      "delete": "Delete",
+      "about_title": "About",
+      "info_title": "Property information",
+      "created_at": "Created {date}",
+      "updated_at": "Updated {date}",
+      "organization_title": "Organization",
+      "organization_description": "This property belongs to your current organization.",
+      "organization_name": "Name",
+      "property_id": "Property ID",
+      "modules_title": "Manage this property",
+      "coming_soon": "Coming soon",
+      "units_count": "{count, plural, one {# unit registered} other {# units registered}}",
+      "modules": {
+        "units": "Units",
+        "units_description": "Manage the units of this property.",
+        "tenants": "Tenants",
+        "tenants_description": "Manage tenants and their leases.",
+        "maintenance": "Maintenance",
+        "maintenance_description": "Track maintenance requests and repairs."
+      }
+    },
+    "not_found": {
+      "title": "Property not found",
+      "description": "This property doesn't exist or may have been deleted from your organization.",
+      "back": "Back to properties"
+    },
+    "messages": {
+      "success": {
+        "created": "Property created",
+        "updated": "Property updated",
+        "deleted": "Property deleted"
+      },
+      "errors": {
+        "name_min_length": "The name must be at least 2 characters long",
+        "name_max_length": "The name must be at most 120 characters long",
+        "description_max_length": "The description must be at most 2000 characters long",
+        "address_min_length": "The address must be at least 2 characters long",
+        "address_max_length": "The address must be at most 200 characters long",
+        "city_max_length": "The city must be at most 120 characters long",
+        "state_max_length": "The state must be at most 120 characters long",
+        "country_max_length": "The country must be at most 120 characters long",
+        "postal_code_max_length": "The postal code must be at most 20 characters long",
+        "units_invalid": "Units must be a positive whole number",
+        "insufficient_permissions": "You don't have permission to do this",
+        "create_failed": "Could not create the property",
+        "update_failed": "Could not update the property",
+        "delete_failed": "Could not delete the property"
+      }
+    }
+  }
+}

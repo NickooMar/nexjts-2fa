@@ -1,0 +1,395 @@
+{
+  "general": {
+    "loading": "Cargando...",
+    "languages": {
+      "title": "Idiomas",
+      "spanish": "Español",
+      "english": "Inglés"
+    },
+    "messages": {
+      "success": {},
+      "errors": {
+        "unknown": "Ocurrió un error desconocido"
+      }
+    }
+  },
+  "actions": {
+    "create": "Crear",
+    "create_model": "Crear {model}",
+    "submit": "Enviar"
+  },
+  "navbar": {
+    "home": "Inicio",
+    "signin": "Iniciar sesión",
+    "signup": "Registrarse",
+    "signout": "Cerrar sesión"
+  },
+  "themes": {
+    "title": "Temas"
+  },
+  "auth": {
+    "signin": {
+      "title": "Iniciar sesión en tu cuenta",
+      "description": "Ingresa la información de tu cuenta a continuación para acceder a la plataforma.",
+      "google_auth": "Iniciar sesión con Google",
+      "github_auth": "Iniciar sesión con Github",
+      "continue_with": "o continuar con",
+      "email": {
+        "title": "Correo electrónico",
+        "required": "El correo electrónico es requerido",
+        "invalid": "El correo electrónico no es válido",
+        "placeholder": "Correo electrónico"
+      },
+      "password": {
+        "title": "Contraseña",
+        "required": "La contraseña es requerida"
+      },
+      "forgot_password": "¿Olvidaste tu contraseña?",
+      "login": "Iniciar sesión",
+      "not_registered": "¿No tienes una cuenta?",
+      "create_account": "Crea una cuenta"
+    },
+    "signup": {
+      "organization": {
+        "title": "Nombre de la organización",
+        "placeholder": "Tu empresa o agencia"
+      },
+      "title": "Crea una cuenta",
+      "description": "Ingresa la información de tu cuenta a continuación para crear una.",
+      "first_name": {
+        "title": "Nombre",
+        "required": "El nombre es requerido",
+        "invalid": "El nombre no es válido",
+        "placeholder": "Nombre"
+      },
+      "last_name": {
+        "title": "Apellido",
+        "required": "El apellido es requerido",
+        "invalid": "El apellido no es válido",
+        "placeholder": "Apellido"
+      },
+      "email": {
+        "title": "Correo electrónico",
+        "required": "El correo electrónico es requerido",
+        "invalid": "El correo electrónico no es válido",
+        "placeholder": "Correo electrónico"
+      },
+      "phone_number": {
+        "title": "Número de teléfono",
+        "required": "El número de teléfono es requerido",
+        "invalid": "El número de teléfono no es válido",
+        "min_length": "El número de teléfono debe tener al menos 10 caracteres",
+        "placeholder": "Número de teléfono"
+      },
+      "password": {
+        "title": "Contraseña",
+        "required": "La contraseña es requerida"
+      },
+      "confirm_password": {
+        "title": "Confirmar contraseña",
+        "required": "Confirmar contraseña es requerido"
+      },
+      "create": "Crear cuenta",
+      "already_have_account": "¿Ya tienes una cuenta?",
+      "signin": "Iniciar sesión"
+    },
+    "email_verification": {
+      "title": "Verifica tu correo electrónico",
+      "description": "Hemos enviado un código de verificación a tu correo electrónico. Por favor, verifica tu correo electrónico e ingresa el código a continuación.",
+      "verification_code": "Código de verificación",
+      "enter_code": "Por favor, ingresa el código que enviamos a tu correo electrónico",
+      "resend_email": "Reenviar correo electrónico",
+      "resend_email_time_remaining": "Reenviar correo electrónico en {time_remaining}",
+      "error": "Error de verificación",
+      "error_description": "¡Ups! Ocurrió un error inesperado. Por favor, intenta nuevamente.",
+      "error_caption": "Recorda utilizar el enlace del correo electrónico. Si el problema persiste, por favor contacta al equipo de soporte."
+    },
+    "messages": {
+      "success": {
+        "signin_success": "Inicio de sesión exitoso",
+        "signup_success": "Cuenta creada exitosamente",
+        "email_verification_success": "Correo electrónico verificado exitosamente"
+      },
+      "errors": {
+        "invalid_email": "El correo electrónico es inválido",
+        "email_already_exists": "El email no esta disponible",
+        "email_min_length": "El correo electrónico debe tener al menos 6 caracteres",
+        "password_required": "La contraseña es requerida",
+        "password_invalid": "La contraseña no es válida",
+        "password_min_length": "La contraseña debe tener al menos 8 caracteres",
+        "password_max_length": "La contraseña no puede exceder 20 caracteres",
+        "password_uppercase": "La contraseña debe contener al menos una letra mayúscula",
+        "password_lowercase": "La contraseña debe contener al menos una letra minúscula",
+        "password_number": "La contraseña debe contener al menos un número",
+        "password_special_character": "La contraseña debe contener al menos un carácter especial",
+        "password_invalid_start": "La contraseña no puede comenzar con un punto o nueva línea",
+        "confirm_password_min_length": "La contraseña de confirmación debe tener al menos 8 caracteres",
+        "passwords_dont_match": "Las contraseñas no coinciden",
+        "phone_number_invalid": "El número de teléfono no es válido",
+        "phone_number_min_length": "El número de teléfono debe tener al menos 10 caracteres",
+        "first_name_min_length": "El nombre debe tener al menos 3 caracteres",
+        "last_name_min_length": "El apellido debe tener al menos 3 caracteres",
+        "invalid_provider": "El proveedor es inválido",
+        "invalid_credentials": "Credenciales inválidas. Por favor verifica tus credenciales y vuelve a intentarlo.",
+        "user_already_exists": "El usuario ya existe, por favor inicia sesión o usa una información diferente",
+        "pin_min_length": "El código de verificación debe tener 6 dígitos",
+        "token_verification": "Ocurrió un error al validar la identidad",
+        "code_verification": "Ocurrió un error al validar el código de verificación",
+        "request_error": "Ocurrió un error inesperado al procesar la solicitud",
+        "invalid_verification_token": "El token de verificación es inválido",
+        "server_error": "Ocurrió un error inesperado",
+        "organization_name_min_length": "El nombre de la organización debe tener al menos 2 caracteres",
+        "organization_name_max_length": "El nombre de la organización debe tener como máximo 60 caracteres",
+        "organization_website_invalid": "Por favor ingresá una URL válida (ej. https://empresa.com)",
+        "organization_phone_max_length": "El número de teléfono no puede tener más de 30 caracteres",
+        "organization_country_required": "Por favor seleccioná un país",
+        "organization_country_max_length": "El país no puede tener más de 60 caracteres",
+        "network_error": "No se pudo conectar con el servidor. Verificá tu conexión e intentá nuevamente."
+      }
+    },
+    "create_organization": {
+      "title": "Crear organización",
+      "description": "Tu organización tendrá su propio espacio de trabajo aislado. Serás su propietario.",
+      "submit": "Crear organización",
+      "website": {
+        "title": "Sitio web",
+        "placeholder": "https://tuempresa.com"
+      },
+      "phone": {
+        "title": "Teléfono",
+        "placeholder": "Ingresá un número de teléfono"
+      },
+      "country": {
+        "title": "País",
+        "placeholder": "Seleccioná un país"
+      }
+    },
+    "no_organization_state": {
+      "title": "Todavía no formás parte de una organización",
+      "description": "Creá tu propia organización para empezar a gestionar propiedades o uníte a una existente con un código de invitación.",
+      "create_action": "Crear organización",
+      "join_action": "Unirse a una organización"
+    }
+  },
+  "landing": {
+    "hero": {
+      "badge": "Diseñado para gestores inmobiliarios modernos",
+      "title_line1": "Simplificando las operaciones",
+      "title_line2": "inmobiliarias para",
+      "title_highlight1": "portafolios",
+      "title_highlight2": "en Crecimiento",
+      "description": "HomiQ centraliza arrendamientos, cobro de alquileres, mantenimiento y reportes para que los equipos inmobiliarios escalen más rápido ofreciendo mejores experiencias a los inquilinos.",
+      "cta_primary": "Comenzar",
+      "cta_secondary": "Contactar Ventas"
+    },
+    "mockup": {
+      "search": "Buscar propiedades...",
+      "menu": "Menú",
+      "dashboard": "Dashboard",
+      "rent_roll": "Registro de Alquileres",
+      "maintenance": "Mantenimiento",
+      "lease_renewals": "Renovaciones de Contratos",
+      "reports": "Reportes",
+      "financials": "Finanzas",
+      "occupancy_label": "Ocupación",
+      "last_updated": "Última actualización: 20 Feb, 2026",
+      "live": "En vivo",
+      "from_last_period": "↑ 8.2% respecto al período anterior",
+      "units": "Unidades",
+      "overdue": "Vencidos",
+      "revenue_title": "Ingresos · Todos los Productos",
+      "this_period": "Este período",
+      "last_period": "Período anterior"
+    },
+    "trusted": {
+      "title": "Confiado por operadores inmobiliarios, gestores de activos y grupos propietarios"
+    },
+    "features": {
+      "label": "Funcionalidades",
+      "title_line1": "Todo lo que Necesitas para Gestionar y",
+      "title_line2": "Hacer Crecer tu Negocio Inmobiliario",
+      "description": "Administra propiedades, residentes, propietarios y finanzas desde un solo lugar con flujos de trabajo diseñados para equipos que operan a escala.",
+      "rent_collection": {
+        "title": "Cobro Automatizado de Alquileres",
+        "description": "Cobra alquileres a tiempo con recordatorios, pago automático y seguimiento de pagos en tiempo real para cada unidad.",
+        "tag": "Finanzas"
+      },
+      "maintenance": {
+        "title": "Flujos de Mantenimiento",
+        "description": "Dirige solicitudes de inquilinos a proveedores rápidamente, monitorea el estado y mantén informados a los propietarios sin administración adicional.",
+        "tag": "Operaciones"
+      },
+      "analytics": {
+        "title": "Analíticas del Portafolio",
+        "description": "Rastrea ocupación, morosidad e ingreso neto operativo con dashboards claros diseñados para operaciones inmobiliarias.",
+        "tag": "Informes"
+      },
+      "portals": {
+        "title": "Portales para Propietarios e Inquilinos",
+        "description": "Brinda a las partes interesadas acceso seguro a estados de cuenta, contratos y actualizaciones desde una plataforma compartida.",
+        "tag": "Acceso"
+      }
+    },
+    "cta": {
+      "label": "Comienza hoy",
+      "title_line1": "¿Listo para transformar",
+      "title_line2": "tu portafolio inmobiliario?",
+      "description": "Únete a cientos de administradores de propiedades que optimizaron sus operaciones con HomiQ. Comienza gratis, escala a medida que crezcas.",
+      "primary": "Prueba Gratuita",
+      "secondary": "Agendar una Demo"
+    }
+  },
+  "sidebar": {
+    "organization": {
+      "name": "Acme Inc",
+      "plan": "Empresa"
+    },
+    "sections": {
+      "platform": "Plataforma"
+    },
+    "items": {
+      "dashboard": "Dashboard",
+      "properties": "Propiedades",
+      "tenants": "Inquilinos",
+      "contracts": "Contratos",
+      "reports": "Reportes"
+    },
+    "user_menu": {
+      "account": "Cuenta",
+      "billing": "Facturación",
+      "notifications": "Notificaciones",
+      "theme": "Tema",
+      "language": "Idioma",
+      "logout": "Cerrar sesión"
+    }
+  },
+  "properties": {
+    "list": {
+      "title": "Propiedades",
+      "description": "Explorá y administrá las propiedades de tu organización.",
+      "description_org": "Explorá y administrá las propiedades de {organization}.",
+      "create_action": "Crear propiedad",
+      "search_placeholder": "Buscar por nombre, dirección, ciudad…",
+      "filter_type": "Tipo",
+      "refresh": "Actualizar",
+      "error_title": "Algo salió mal",
+      "error_description": "No pudimos cargar tus propiedades. Intentá nuevamente.",
+      "retry": "Reintentar",
+      "empty_title": "Todavía no hay propiedades",
+      "empty_description": "Empezá creando la primera propiedad de tu organización. Desde acá vas a poder administrar unidades, inquilinos y mantenimiento.",
+      "no_results": "Ninguna propiedad coincide con \"{query}\".",
+      "units": "{count, plural, one {# unidad} other {# unidades}}"
+    },
+    "types": {
+      "apartment": "Departamento",
+      "house": "Casa",
+      "commercial": "Comercial",
+      "land": "Terreno",
+      "other": "Otro"
+    },
+    "form": {
+      "name": {
+        "title": "Nombre",
+        "placeholder": "Departamentos Atardecer"
+      },
+      "type": {
+        "title": "Tipo"
+      },
+      "units": {
+        "title": "Unidades"
+      },
+      "address": {
+        "title": "Dirección",
+        "placeholder": "Av. Principal 123"
+      },
+      "city": {
+        "title": "Ciudad",
+        "placeholder": "Buenos Aires"
+      },
+      "state": {
+        "title": "Provincia / Estado",
+        "placeholder": "CABA"
+      },
+      "postal_code": {
+        "title": "Código postal",
+        "placeholder": "C1000"
+      },
+      "country": {
+        "title": "País",
+        "placeholder": "Seleccioná un país"
+      },
+      "description": {
+        "title": "Descripción",
+        "placeholder": "Notas sobre esta propiedad (opcional)"
+      }
+    },
+    "create": {
+      "title": "Crear propiedad",
+      "description": "Agregá una nueva propiedad a tu organización. Podés editar estos datos más adelante.",
+      "submit": "Crear propiedad"
+    },
+    "edit": {
+      "title": "Editar propiedad",
+      "description": "Actualizá los datos de esta propiedad. Si la renombrás, su URL también cambia.",
+      "submit": "Guardar cambios"
+    },
+    "delete": {
+      "title": "Eliminar propiedad",
+      "description": "¿Seguro que querés eliminar \"{name}\"? Esta acción no se puede deshacer.",
+      "cancel": "Cancelar",
+      "confirm": "Eliminar"
+    },
+    "details": {
+      "back": "Volver a propiedades",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "about_title": "Acerca de",
+      "info_title": "Información de la propiedad",
+      "created_at": "Creada el {date}",
+      "updated_at": "Actualizada el {date}",
+      "organization_title": "Organización",
+      "organization_description": "Esta propiedad pertenece a tu organización actual.",
+      "organization_name": "Nombre",
+      "property_id": "ID de la propiedad",
+      "modules_title": "Administrar esta propiedad",
+      "coming_soon": "Próximamente",
+      "units_count": "{count, plural, one {# unidad registrada} other {# unidades registradas}}",
+      "modules": {
+        "units": "Unidades",
+        "units_description": "Administrá las unidades de esta propiedad.",
+        "tenants": "Inquilinos",
+        "tenants_description": "Administrá inquilinos y sus contratos.",
+        "maintenance": "Mantenimiento",
+        "maintenance_description": "Seguí los pedidos de mantenimiento y reparaciones."
+      }
+    },
+    "not_found": {
+      "title": "Propiedad no encontrada",
+      "description": "Esta propiedad no existe o fue eliminada de tu organización.",
+      "back": "Volver a propiedades"
+    },
+    "messages": {
+      "success": {
+        "created": "Propiedad creada",
+        "updated": "Propiedad actualizada",
+        "deleted": "Propiedad eliminada"
+      },
+      "errors": {
+        "name_min_length": "El nombre debe tener al menos 2 caracteres",
+        "name_max_length": "El nombre debe tener como máximo 120 caracteres",
+        "description_max_length": "La descripción debe tener como máximo 2000 caracteres",
+        "address_min_length": "La dirección debe tener al menos 2 caracteres",
+        "address_max_length": "La dirección debe tener como máximo 200 caracteres",
+        "city_max_length": "La ciudad debe tener como máximo 120 caracteres",
+        "state_max_length": "La provincia debe tener como máximo 120 caracteres",
+        "country_max_length": "El país debe tener como máximo 120 caracteres",
+        "postal_code_max_length": "El código postal debe tener como máximo 20 caracteres",
+        "units_invalid": "Las unidades deben ser un número entero positivo",
+        "insufficient_permissions": "No tenés permisos para hacer esto",
+        "create_failed": "No se pudo crear la propiedad",
+        "update_failed": "No se pudo actualizar la propiedad",
+        "delete_failed": "No se pudo eliminar la propiedad"
+      }
+    }
+  }
+}
