@@ -11,7 +11,7 @@ import { ThemeSwitcher } from "../Theme/ThemeSwitcher";
 
 export const Navbar = () => {
   const t = useTranslations("navbar");
-  const { data: session } = useSession({ required: false });
+  const { data: session, status } = useSession({ required: false });
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -28,7 +28,7 @@ export const Navbar = () => {
           </Link>
         </div>
         <div className="flex items-center gap-4">
-          {!session?.user && (
+          {status === "unauthenticated" && (
             <>
               <Link href="/auth/signin">
                 <Button variant="outline" size="sm">
