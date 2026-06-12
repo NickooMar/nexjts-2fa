@@ -16,6 +16,7 @@ export interface CreatePropertyRecord {
   description?: string;
   city?: string;
   state?: string;
+  stateCode?: string;
   country?: string;
   postalCode?: string;
   type?: PropertyType;
@@ -52,6 +53,7 @@ export class PropertyRepository {
       address: input.address,
       city: input.city,
       state: input.state,
+      stateCode: input.stateCode,
       country: input.country,
       postalCode: input.postalCode,
       type: input.type ?? 'apartment',
@@ -60,6 +62,11 @@ export class PropertyRepository {
       createdBy: createdBy ? new Types.ObjectId(createdBy) : undefined,
     });
     return new Property(created.toObject());
+  }
+
+  /** Property count for the tenant (plan-limit enforcement). */
+  async count(dbName: string): Promise<number> {
+    return this.model(dbName).countDocuments();
   }
 
   async findAll(dbName: string): Promise<Property[]> {

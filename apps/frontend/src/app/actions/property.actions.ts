@@ -1,6 +1,6 @@
 "use server";
 
-import { apiFetch } from "@/lib/api";
+import { ApiRequestError, apiFetch } from "@/lib/api";
 import { revalidatePath } from "next/cache";
 import {
   Property,
@@ -10,6 +10,15 @@ import {
 
 const errorMessage = (error: unknown) =>
   error instanceof Error ? error.message : "unknown_error";
+
+const errorCode = (error: unknown) => {
+  if (error instanceof ApiRequestError) {
+    const details = error.details as { code?: unknown; message?: unknown } | undefined;
+    if (typeof details?.code === "string") return details.code;
+    if (typeof details?.message === "string") return details.message;
+  }
+  return errorMessage(error);
+};
 
 /**
  * List the current tenant's properties. The tenant is resolved server-side from
@@ -53,7 +62,12 @@ export const getPropertyAction = async (
  */
 export const createPropertyAction = async (
   input: CreatePropertyInput
-): Promise<{ success: boolean; property?: Property; error?: string }> => {
+): Promise<{
+  success: boolean;
+  property?: Property;
+  error?: string;
+  errorDetails?: unknown;
+}> => {
   try {
     const data = await apiFetch<{ success: boolean; property: Property }>(
       "/properties",
@@ -63,7 +77,11 @@ export const createPropertyAction = async (
     return { success: true, property: data.property };
   } catch (error) {
     console.error(error);
-    return { success: false, error: errorMessage(error) };
+    return {
+      success: false,
+      error: errorCode(error),
+      errorDetails: error instanceof ApiRequestError ? error.details : undefined,
+    };
   }
 };
 

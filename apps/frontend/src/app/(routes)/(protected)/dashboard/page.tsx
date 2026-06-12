@@ -385,7 +385,11 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="h-[280px] w-full rounded-lg border border-border/70 bg-background/70 p-2">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer
+                  width="100%"
+                  height="100%"
+                  initialDimension={{ width: 800, height: 264 }}
+                >
                   <AreaChart
                     data={currentRevenueData}
                     margin={{ top: 12, right: 10, left: -12, bottom: 0 }}

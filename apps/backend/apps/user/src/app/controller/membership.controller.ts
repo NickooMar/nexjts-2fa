@@ -38,6 +38,11 @@ export class MembershipController {
     return this.membershipService.listMembers(tenantId);
   }
 
+  @MessagePattern({ cmd: MembershipPatterns.COUNT_BY_TENANT })
+  countByTenant(tenantId: string): Observable<number> {
+    return this.membershipService.countByTenant(tenantId);
+  }
+
   @MessagePattern({ cmd: MembershipPatterns.FIND_BY_USER })
   findByUser(userId: string): Observable<Membership[]> {
     return this.membershipService.findByUser(userId);

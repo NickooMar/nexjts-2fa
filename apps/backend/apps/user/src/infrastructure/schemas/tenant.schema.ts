@@ -35,6 +35,14 @@ export class TenantDocument {
 
   @Prop({ type: String, required: true, trim: true })
   country: string;
+
+  /** Object-storage key of the organization logo (bytes live in S3/MinIO). */
+  @Prop({ type: String, required: false })
+  logoKey?: string;
+
+  /** Object-storage key of the organization banner/cover image. */
+  @Prop({ type: String, required: false })
+  bannerKey?: string;
 }
 
 export const TenantSchema = SchemaFactory.createForClass(TenantDocument);

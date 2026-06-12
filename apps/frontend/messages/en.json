@@ -164,6 +164,13 @@
       "country": {
         "title": "Country",
         "placeholder": "Select a country"
+      },
+      "branding": {
+        "logo": "Logo (optional)",
+        "banner": "Banner (optional)",
+        "choose": "Choose an image",
+        "remove": "Remove image",
+        "upload_error": "The organization was created, but its images could not be uploaded."
       }
     },
     "no_organization_state": {
@@ -254,7 +261,8 @@
       "properties": "Properties",
       "tenants": "Tenants",
       "contracts": "Contracts",
-      "reports": "Reports"
+      "reports": "Reports",
+      "billing": "Billing"
     },
     "user_menu": {
       "account": "Account",
@@ -280,7 +288,10 @@
       "empty_title": "No properties yet",
       "empty_description": "Get started by creating your organization's first property. You'll be able to manage units, tenants and maintenance from here.",
       "no_results": "No properties match \"{query}\".",
-      "units": "{count, plural, one {# unit} other {# units}}"
+      "units": "{count, plural, one {# unit} other {# units}}",
+      "quick_actions": "Quick actions",
+      "view_details": "View details",
+      "results_count": "{count, plural, one {# property} other {# properties}}"
     },
     "types": {
       "apartment": "Apartment",
@@ -306,11 +317,13 @@
       },
       "city": {
         "title": "City",
-        "placeholder": "Buenos Aires"
+        "placeholder": "Select a city",
+        "disabled": "Select a state first"
       },
       "state": {
         "title": "State / Province",
-        "placeholder": "CABA"
+        "placeholder": "Select a state",
+        "disabled": "Select a country first"
       },
       "postal_code": {
         "title": "Postal code",
@@ -319,6 +332,13 @@
       "country": {
         "title": "Country",
         "placeholder": "Select a country"
+      },
+      "location": {
+        "search": "Search…",
+        "loading": "Loading…",
+        "no_states": "No states found.",
+        "no_cities": "No cities found.",
+        "no_countries": "No countries found."
       },
       "description": {
         "title": "Description",
@@ -392,6 +412,379 @@
         "update_failed": "Could not update the property",
         "delete_failed": "Could not delete the property"
       }
+    },
+    "media": {
+      "drop_images": "Drag & drop photos here, or click to browse",
+      "drop_documents": "Drag & drop documents here, or click to browse",
+      "images_hint": "JPG, PNG, WebP, AVIF or GIF — up to {size} each",
+      "documents_hint": "PDF, DOC, XLS, CSV or TXT — up to {size} each",
+      "rejected_title": "{count, plural, one {# file was rejected} other {# files were rejected}}",
+      "rejected_type": "Unsupported file type.",
+      "rejected_size": "Files must be under {limit}.",
+      "rejected_size_generic": "The file is too large.",
+      "rejected_count": "Too many files selected.",
+      "upload_success": "Photos uploaded",
+      "upload_error": "Upload failed. Please try again.",
+      "limit_reached": "This property has reached its media limit.",
+      "delete_success": "Photo deleted",
+      "delete_error": "Could not delete. Please try again.",
+      "cover_success": "Cover photo updated",
+      "cover_error": "Could not set the cover photo.",
+      "cover_badge": "Cover",
+      "set_cover": "Set as cover",
+      "delete_photo": "Delete photo",
+      "move_left": "Move earlier",
+      "move_right": "Move later",
+      "reorder_error": "Could not save the new order.",
+      "no_photos": "No photos yet. Add some above.",
+      "no_photos_yet": "No photos yet",
+      "photos_count": "{count} of {max} photos",
+      "open_fullscreen": "View fullscreen",
+      "close_fullscreen": "Close fullscreen",
+      "previous_photo": "Previous photo",
+      "next_photo": "Next photo",
+      "manage_title": "Manage photos",
+      "manage_description": "Upload, reorder, set the cover, or remove photos.",
+      "manage_action": "Manage photos",
+      "documents_title": "Documents",
+      "no_documents": "No documents uploaded yet.",
+      "document_upload_success": "Documents uploaded",
+      "document_delete_success": "Document deleted",
+      "preview_document": "Preview",
+      "download_document": "Download",
+      "delete_document": "Delete document",
+      "download_error": "Could not generate the download link.",
+      "uploading": "Uploading…"
+    },
+    "new": {
+      "back": "Back to properties",
+      "title": "Create property",
+      "description": "Set up your property step by step: general details, contracts and tenants.",
+      "previous": "Previous",
+      "next": "Next",
+      "submit": "Create property",
+      "steps": {
+        "general": {
+          "label": "General information",
+          "hint": "Details & photos",
+          "title": "General information",
+          "description": "The property's basic details. You can edit everything later."
+        },
+        "contracts": {
+          "label": "Contracts",
+          "hint": "Optional",
+          "title": "Contracts",
+          "description": "Add the property's contracts with their scanned copies and documents. This step is optional — you can skip it and add contracts later."
+        },
+        "tenants": {
+          "label": "Tenants",
+          "hint": "Optional",
+          "title": "Tenants",
+          "description": "Link the people occupying this property. Pick them from your existing roster or create new ones. This step is optional."
+        }
+      },
+      "images": {
+        "title": "Photos",
+        "description": "Add a landscape/cover photo and any other related images.",
+        "cover_hint": "The highlighted image is the cover shown on property cards. Hover an image to change it.",
+        "cover_badge": "Cover",
+        "set_cover": "Use as cover",
+        "remove": "Remove image"
+      },
+      "files": {
+        "remove": "Remove file"
+      },
+      "progress": {
+        "property": "Creating property…",
+        "images": "Uploading photos…",
+        "contracts": "Saving contracts…",
+        "tenants": "Linking tenants…"
+      },
+      "messages": {
+        "created": "Property created",
+        "warnings": {
+          "images_failed": "The property was created, but some photos could not be uploaded. You can retry from the property page.",
+          "contracts_failed": "The property was created, but some contracts could not be saved. You can add them from the property page.",
+          "tenants_failed": "The property was created, but some tenants could not be linked. You can add them from the property page."
+        }
+      },
+      "upgrade_modal": {
+        "eyebrow": "Upgrade to keep creating",
+        "title": "Property limit reached",
+        "description": "You've reached the maximum number of properties included in your current plan. Upgrade your subscription to continue creating properties.",
+        "usage": {
+          "current_plan": "Current plan",
+          "properties_used": "Properties used",
+          "summary": "{used} of {limit} properties used"
+        },
+        "cta": {
+          "title": "Upgrade and resume instantly",
+          "description": "Pick a plan below and we'll retry this same property creation as soon as the upgrade succeeds."
+        },
+        "permissions": {
+          "title": "Billing permission required",
+          "description": "Only organization administrators can upgrade subscriptions.",
+          "help": "Please contact your organization owner to upgrade the plan, then come back to continue creating this property."
+        },
+        "errors": {
+          "billing_unavailable_title": "Billing services are temporarily unavailable.",
+          "billing_unavailable_description": "We couldn't load your current subscription details right now.",
+          "plans_unavailable_title": "Unable to load available plans.",
+          "plans_unavailable_description": "Please try again to see upgrade options.",
+          "retry": "Try again"
+        },
+        "actions": {
+          "close": "Close"
+        }
+      }
+    },
+    "contracts": {
+      "empty_description": "No contracts yet. Add the lease, sale or management agreements tied to this property — or skip this step.",
+      "add_action": "Add contract",
+      "add_title": "New contract",
+      "edit_title": "Edit contract",
+      "add_submit": "Add contract",
+      "save_changes": "Save changes",
+      "cancel": "Cancel",
+      "edit": "Edit contract",
+      "remove": "Remove contract",
+      "types": {
+        "rental": "Rental",
+        "sale": "Sale",
+        "management": "Management",
+        "other": "Other"
+      },
+      "statuses": {
+        "draft": "Draft",
+        "active": "Active",
+        "expired": "Expired",
+        "terminated": "Terminated"
+      },
+      "frequencies": {
+        "monthly": "Monthly",
+        "quarterly": "Quarterly",
+        "semiannual": "Semiannual",
+        "yearly": "Yearly",
+        "one_time": "One-time"
+      },
+      "form": {
+        "title": {
+          "title": "Title",
+          "placeholder": "12-month lease — Unit 2B"
+        },
+        "type": {
+          "title": "Type"
+        },
+        "status": {
+          "title": "Status"
+        },
+        "start_date": {
+          "title": "Start date"
+        },
+        "end_date": {
+          "title": "End date"
+        },
+        "amount": {
+          "title": "Amount"
+        },
+        "currency": {
+          "title": "Currency",
+          "placeholder": "Select"
+        },
+        "frequency": {
+          "title": "Payment frequency",
+          "placeholder": "Select"
+        },
+        "deposit": {
+          "title": "Deposit"
+        },
+        "notes": {
+          "title": "Notes",
+          "placeholder": "Notes about this contract (optional)"
+        }
+      },
+      "files": {
+        "images": "Scanned images",
+        "documents": "Documents"
+      },
+      "messages": {
+        "errors": {
+          "contract_title_min_length": "The title must be at least 2 characters long",
+          "contract_title_max_length": "The title must be at most 160 characters long",
+          "contract_notes_max_length": "The notes must be at most 2000 characters long",
+          "contract_dates_invalid": "The end date must be after the start date",
+          "contract_amount_invalid": "Enter a valid amount"
+        }
+      }
+    },
+    "tenants": {
+      "existing_title": "Select existing tenants",
+      "existing_empty": "Your organization has no tenants yet. Create the first one below.",
+      "search_placeholder": "Search by name, email, phone…",
+      "no_results": "No tenants match \"{query}\".",
+      "no_contact_info": "No contact information",
+      "occupies_count": "{count, plural, one {# property} other {# properties}}",
+      "new_title": "Create new tenants",
+      "new_badge": "New",
+      "add_action": "Add tenant",
+      "add_title": "New tenant",
+      "add_submit": "Add tenant",
+      "cancel": "Cancel",
+      "remove": "Remove tenant",
+      "form": {
+        "full_name": {
+          "title": "Full name",
+          "placeholder": "Jane Doe"
+        },
+        "email": {
+          "title": "Email",
+          "placeholder": "jane@example.com"
+        },
+        "phone": {
+          "title": "Phone",
+          "placeholder": "+54 11 5555-5555"
+        },
+        "document_id": {
+          "title": "ID / Document number",
+          "placeholder": "DNI, passport…"
+        },
+        "notes": {
+          "title": "Notes",
+          "placeholder": "Notes about this tenant (optional)"
+        }
+      },
+      "messages": {
+        "errors": {
+          "tenant_name_min_length": "The name must be at least 2 characters long",
+          "tenant_name_max_length": "The name must be at most 160 characters long",
+          "tenant_email_invalid": "Enter a valid email address",
+          "tenant_phone_max_length": "The phone must be at most 30 characters long",
+          "tenant_document_max_length": "The document must be at most 60 characters long",
+          "tenant_notes_max_length": "The notes must be at most 1000 characters long"
+        }
+      }
+    }
+  },
+  "billing": {
+    "page": {
+      "title": "Billing",
+      "description": "Manage your organization's plan, usage and payment history.",
+      "description_org": "Manage the plan, usage and payment history of {organization}.",
+      "error_title": "Something went wrong",
+      "error_description": "We couldn't load your billing information. Please try again.",
+      "retry": "Try again"
+    },
+    "status": {
+      "trialing": "Trial",
+      "active": "Active",
+      "past_due": "Past due",
+      "suspended": "Suspended",
+      "cancelled": "Cancelled",
+      "expired": "Expired"
+    },
+    "cycle": {
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    },
+    "cycle_short": {
+      "monthly": "mo",
+      "yearly": "yr"
+    },
+    "current_plan": {
+      "title": "Current plan",
+      "period_end": "Current period ends",
+      "trial_ends": "Trial ends",
+      "operational": "Service status",
+      "operational_yes": "Operational",
+      "operational_no": "Blocked — payment required",
+      "cancels_on": "Cancels on {date}"
+    },
+    "usage": {
+      "title": "Usage",
+      "subtitle": "Usage this period ({period})",
+      "unlimited": "Unlimited",
+      "per_month": "/ month"
+    },
+    "limits": {
+      "properties": "Properties",
+      "storageGb": "Storage",
+      "activeListings": "Active listings",
+      "members": "Members",
+      "apiRequestsPerMonth": "API requests",
+      "fileUploadsPerMonth": "File uploads",
+      "leadsPerMonth": "Leads",
+      "customDomains": "Custom domains",
+      "integrations": "Integrations"
+    },
+    "features": {
+      "crm": "CRM",
+      "analytics": "Analytics",
+      "aiDescriptions": "AI descriptions",
+      "whatsappIntegration": "WhatsApp integration",
+      "customBranding": "Custom branding",
+      "apiAccess": "API access",
+      "prioritySupport": "Priority support"
+    },
+    "plans": {
+      "title": "Plans",
+      "current": "Current plan",
+      "trial": "{days}-day free trial"
+    },
+    "actions": {
+      "upgrade": "Upgrade",
+      "downgrade": "Downgrade",
+      "cancel": "Cancel subscription",
+      "resume": "Resume subscription",
+      "retry_payment": "Retry payment"
+    },
+    "confirm": {
+      "upgrade_title": "Upgrade to {plan}?",
+      "downgrade_title": "Downgrade to {plan}?",
+      "description": "You will be switched to the {plan} plan at {price} {cycle}. Plan changes apply immediately.",
+      "back": "Back",
+      "confirm": "Confirm"
+    },
+    "cancel_dialog": {
+      "title": "Cancel your subscription?",
+      "description": "Your plan stays active until {date}. After that, your organization moves to the Free plan and features above its limits are blocked.",
+      "keep": "Keep my plan",
+      "confirm": "Cancel subscription"
+    },
+    "history": {
+      "title": "Billing history",
+      "subtitle": "Invoices & payments",
+      "invoices": "Invoices",
+      "payments": "Payments",
+      "no_invoices": "No invoices yet.",
+      "no_payments": "No payments yet.",
+      "attempt": "Attempt #{number}"
+    },
+    "invoice_status": {
+      "draft": "Draft",
+      "open": "Open",
+      "paid": "Paid",
+      "void": "Void",
+      "uncollectible": "Uncollectible"
+    },
+    "payment_status": {
+      "pending": "Pending",
+      "succeeded": "Succeeded",
+      "failed": "Failed",
+      "refunded": "Refunded"
+    },
+    "toasts": {
+      "plan_changed": "Your plan was updated.",
+      "cancelled": "Subscription cancelled — active until the period ends.",
+      "resumed": "Subscription resumed.",
+      "payment_retried": "Payment succeeded — subscription reactivated.",
+      "payment_retry_failed": "Payment failed again. Check your payment method.",
+      "action_failed": "Something went wrong. Please try again."
+    },
+    "errors": {
+      "payment_failed": "Payment failed. Please check your payment method.",
+      "already_subscribed": "You are already on this plan.",
+      "downgrade_exceeds_limits": "Your current usage exceeds this plan's limits. Reduce usage before downgrading.",
+      "plan_change_failed": "Unable to process your upgrade. Please try again."
     }
   }
 }

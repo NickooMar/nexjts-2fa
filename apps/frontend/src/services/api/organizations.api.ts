@@ -17,6 +17,8 @@ import {
   listOrganizationsAction,
   createOrganizationAction,
   switchOrganizationAction,
+  getOrganizationBrandingAction,
+  uploadOrganizationBrandingAction,
 } from "@/app/actions/organization.actions";
 import { ApiError } from "@/lib/react-query/types";
 import {
@@ -91,4 +93,28 @@ export async function updateMemberRole(params: {
 }): Promise<void> {
   const result = await updateMemberRoleAction(params.userId, params.role);
   if (!result.success) throw new ApiError(result.error ?? "update_failed");
+}
+
+export interface OrganizationBranding {
+  logoUrl: string | null;
+  bannerUrl: string | null;
+}
+
+export async function fetchOrganizationBranding(): Promise<OrganizationBranding> {
+  const result = await getOrganizationBrandingAction();
+  if (!result.success || !result.branding) {
+    throw new ApiError(result.error ?? "unknown_error");
+  }
+  return result.branding;
+}
+
+export async function uploadOrganizationBranding(params: {
+  slot: "logo" | "banner";
+  file: File;
+}): Promise<string | undefined> {
+  const formData = new FormData();
+  formData.append("file", params.file);
+  const result = await uploadOrganizationBrandingAction(params.slot, formData);
+  if (!result.success) throw new ApiError(result.error ?? "upload_failed");
+  return result.url;
 }

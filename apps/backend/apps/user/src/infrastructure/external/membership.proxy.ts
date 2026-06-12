@@ -45,6 +45,14 @@ export class MembershipProxy {
     );
   }
 
+  /** Active member count (plan-limit enforcement). */
+  countByTenant(tenantId: string): Observable<number> {
+    return this.userClient.send<number>(
+      { cmd: MembershipPatterns.COUNT_BY_TENANT },
+      tenantId,
+    );
+  }
+
   updateRole(
     userId: string,
     tenantId: string,

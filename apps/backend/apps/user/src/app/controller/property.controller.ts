@@ -35,6 +35,11 @@ export class PropertyController {
     return this.propertyService.findAll(payload.dbName);
   }
 
+  @MessagePattern({ cmd: PropertyPatterns.COUNT })
+  count(payload: { dbName: string }): Observable<number> {
+    return this.propertyService.count(payload.dbName);
+  }
+
   @MessagePattern({ cmd: PropertyPatterns.FIND_BY_ID })
   findById(payload: {
     dbName: string;

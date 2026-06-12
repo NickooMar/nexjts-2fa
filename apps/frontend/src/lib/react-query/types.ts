@@ -25,11 +25,13 @@ export type ApiErrorCode = (typeof NON_RETRYABLE_ERROR_CODES)[number] | string;
  */
 export class ApiError extends Error {
   readonly code: ApiErrorCode;
+  readonly details?: unknown;
 
-  constructor(code: ApiErrorCode) {
+  constructor(code: ApiErrorCode, details?: unknown) {
     super(code);
     this.name = "ApiError";
     this.code = code;
+    this.details = details;
   }
 
   /** True when retrying is pointless (auth, permissions, not-found, ...). */
@@ -57,6 +59,8 @@ declare module "@tanstack/react-query" {
       errorMessage?: string;
       /** Maps backend error codes to user-facing messages. */
       errorMessages?: Record<string, string>;
+      /** Errors handled by the component itself (skip the global toast). */
+      suppressErrorCodes?: string[];
     };
     queryMeta: {
       /** Toast shown when the query fails (background refetches stay silent). */

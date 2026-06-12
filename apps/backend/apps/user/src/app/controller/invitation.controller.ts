@@ -22,4 +22,9 @@ export class InvitationController {
   accept(payload: { code: string; userId: string }): Observable<any> {
     return this.invitationService.accept(payload);
   }
+
+  @MessagePattern({ cmd: InvitationPatterns.PEEK })
+  peek(payload: { code: string }): Observable<Invitation> {
+    return this.invitationService.peek(payload.code);
+  }
 }

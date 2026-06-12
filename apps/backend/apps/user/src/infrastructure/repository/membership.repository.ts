@@ -66,6 +66,14 @@ export class MembershipRepository extends BaseRepository<MembershipDocument> {
     return docs.map((doc) => new Membership(doc));
   }
 
+  /** Active member count for a tenant (plan-limit enforcement). */
+  async countByTenant(tenantId: string): Promise<number> {
+    return this.membershipModel.countDocuments({
+      tenantId: new Types.ObjectId(tenantId),
+      status: 'active',
+    });
+  }
+
   async findByUserAndTenant(
     userId: string,
     tenantId: string,

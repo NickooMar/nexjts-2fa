@@ -14,6 +14,7 @@ export function toPropertyInput(values: PropertyFormState): CreatePropertyInput 
     description: values.description?.trim() || undefined,
     city: values.city?.trim() || undefined,
     state: values.state?.trim() || undefined,
+    stateCode: values.stateCode?.trim() || undefined,
     country: values.country?.trim() || undefined,
     postalCode: values.postalCode?.trim() || undefined,
   };
@@ -27,6 +28,7 @@ export function toFormValues(property: Property): PropertyFormState {
     address: property.address,
     city: property.city ?? "",
     state: property.state ?? "",
+    stateCode: property.stateCode ?? "",
     country: property.country ?? "",
     postalCode: property.postalCode ?? "",
     type: property.type,

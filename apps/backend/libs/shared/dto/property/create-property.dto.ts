@@ -49,6 +49,11 @@ export class CreatePropertyDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(10)
+  stateCode?: string;
+
+  @IsOptional()
+  @IsString()
   @MaxLength(120)
   country?: string;
 

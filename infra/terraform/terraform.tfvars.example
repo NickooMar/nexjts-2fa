@@ -1,0 +1,19 @@
+# Copy to terraform.tfvars and adjust. terraform.tfvars is gitignored.
+
+project     = "homiq"
+environment = "dev"
+region      = "us-east-1"
+
+# Verified Resend sender. Email sending fails until this is a real verified address.
+resend_from_email = "no-reply@yourdomain.com"
+
+# Optional: serve over HTTPS on a custom domain.
+# Requires an ACM cert in the SAME region as the ALB and a DNS record
+# pointing the domain at the ALB (see `alb_dns_name` output).
+# domain_name     = "app.yourdomain.com"
+# certificate_arn = "arn:aws:acm:us-east-1:123456789012:certificate/xxxx"
+
+# Scale knobs (defaults are the cheapest valid Fargate sizes).
+# desired_count   = 1
+# backend_cpu     = 256
+# backend_memory  = 512

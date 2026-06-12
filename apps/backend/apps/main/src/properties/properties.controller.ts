@@ -11,10 +11,25 @@ import {
   ForbiddenException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  map,
+  switchMap,
+  from,
+  throwError,
+  firstValueFrom,
+} from 'rxjs';
 import { PropertyProxy } from './property.proxy';
-import { ROLES_THAT_MANAGE_PROPERTIES } from 'apps/constants';
+import { StorageService } from 'libs/storage/storage.service';
+import { MediaUrlService } from '../media/media-url.service';
+import {
+  BillingEventPatterns,
+  ROLES_THAT_MANAGE_PROPERTIES,
+} from 'apps/constants';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { PlanEnforcementService } from '../billing/plan-enforcement.service';
+import { BillingProxy } from 'apps/billing/src/infrastructure/external/billing.proxy';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { CreatePropertyDto } from 'libs/shared/dto/property/create-property.dto';
 import { UpdatePropertyDto } from 'libs/shared/dto/property/update-property.dto';
@@ -41,7 +56,13 @@ const handlePropertyError = (fallback: string) => (error: any) => {
 @Controller({ path: 'properties', version: '1' })
 @UseGuards(JwtAuthGuard)
 export class PropertiesController {
-  constructor(private readonly propertyProxy: PropertyProxy) {}
+  constructor(
+    private readonly propertyProxy: PropertyProxy,
+    private readonly mediaUrl: MediaUrlService,
+    private readonly storage: StorageService,
+    private readonly billingProxy: BillingProxy,
+    private readonly planEnforcement: PlanEnforcementService,
+  ) {}
 
   /** Any member of the organization may read; writes need manager or above. */
   private assertCanManage(user: AuthUser): Observable<never> | null {
@@ -56,6 +77,10 @@ export class PropertiesController {
   @Get()
   findAll(@CurrentTenant() tenant: TenantContext): Observable<any> {
     return this.propertyProxy.findAll(tenant.dbName).pipe(
+      // Swap internal storage keys for browser-usable (signed/public) URLs.
+      switchMap((properties) =>
+        from(this.mediaUrl.enrichPropertyList(properties)),
+      ),
       map((properties) => ({ success: true, properties })),
       catchError(handlePropertyError('Failed to list properties')),
     );
@@ -67,25 +92,47 @@ export class PropertiesController {
     @Param('idOrSlug') idOrSlug: string,
   ): Observable<any> {
     return this.propertyProxy.findOne(tenant.dbName, idOrSlug).pipe(
+      switchMap((property) =>
+        from(this.mediaUrl.enrichPropertyDetail(property)),
+      ),
       map((property) => ({ success: true, property })),
       catchError(handlePropertyError('Failed to fetch property')),
     );
   }
 
   @Post()
-  create(
+  async create(
     @CurrentUser() user: AuthUser,
     @CurrentTenant() tenant: TenantContext,
     @Body() input: CreatePropertyDto,
-  ): Observable<any> {
-    return (
-      this.assertCanManage(user) ??
+  ): Promise<any> {
+    if (!ROLES_THAT_MANAGE_PROPERTIES.includes(user.role as never)) {
+      throw new ForbiddenException('insufficient_permissions');
+    }
+
+    // Server-side plan enforcement: the live count is authoritative, so a
+    // full plan can never be exceeded — regardless of what the client shows.
+    const current = await firstValueFrom(
+      this.propertyProxy.count(tenant.dbName),
+    );
+    await this.planEnforcement.assertCanCreateProperty(
+      tenant.tenantId,
+      current,
+    );
+
+    return firstValueFrom(
       this.propertyProxy
         .create(tenant.dbName, tenant.tenantId, input, tenant.userId)
         .pipe(
-          map((property) => ({ success: true, property })),
+          map((property) => {
+            this.billingProxy.emitUsageEvent(
+              BillingEventPatterns.PROPERTY_CREATED,
+              { organizationId: tenant.tenantId },
+            );
+            return { success: true, property };
+          }),
           catchError(handlePropertyError('Failed to create property')),
-        )
+        ),
     );
   }
 
@@ -114,7 +161,19 @@ export class PropertiesController {
     return (
       this.assertCanManage(user) ??
       this.propertyProxy.delete(tenant.dbName, idOrSlug).pipe(
-        map((result) => ({ success: true, deleted: result?.deleted ?? true })),
+        map((result) => {
+          // Metadata records are gone; purge the orphaned bucket objects
+          // best-effort (a failure here must not fail the delete).
+          const mediaKeys: string[] = result?.mediaKeys ?? [];
+          if (mediaKeys.length > 0) {
+            void this.storage.deleteMany(mediaKeys).catch(() => undefined);
+          }
+          this.billingProxy.emitUsageEvent(
+            BillingEventPatterns.PROPERTY_DELETED,
+            { organizationId: tenant.tenantId },
+          );
+          return { success: true, deleted: result?.deleted ?? true };
+        }),
         catchError(handlePropertyError('Failed to delete property')),
       )
     );

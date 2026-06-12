@@ -12,6 +12,18 @@ type ApiRequestOptions = Omit<RequestInit, "body"> & {
   body?: unknown;
 };
 
+export class ApiRequestError extends Error {
+  readonly status: number;
+  readonly details?: unknown;
+
+  constructor(message: string, options: { status: number; details?: unknown }) {
+    super(message);
+    this.name = "ApiRequestError";
+    this.status = options.status;
+    this.details = options.details;
+  }
+}
+
 /**
  * Server-side fetch helper for tenant-scoped, authenticated gateway requests.
  *
@@ -46,8 +58,73 @@ export async function apiFetch<T>(
   });
 
   if (!response.ok) {
-    const message = await response.text().catch(() => response.statusText);
-    throw new Error(message || `request_failed_${response.status}`);
+    const raw = await response.text().catch(() => response.statusText);
+    const contentType = response.headers.get("content-type") ?? "";
+    if (raw && contentType.includes("application/json")) {
+      let payload:
+        | {
+            message?: string | string[];
+            code?: string;
+          }
+        | null = null;
+      try {
+        payload = JSON.parse(raw) as {
+          message?: string | string[];
+          code?: string;
+        };
+      } catch {
+        payload = null;
+      }
+      if (payload) {
+        const message = Array.isArray(payload.message)
+          ? payload.message.join(", ")
+          : payload.code ?? payload.message ?? raw;
+        throw new ApiRequestError(message, {
+          status: response.status,
+          details: payload,
+        });
+      }
+    }
+    throw new ApiRequestError(raw || `request_failed_${response.status}`, {
+      status: response.status,
+    });
+  }
+
+  return response.json() as Promise<T>;
+}
+
+/**
+ * Multipart variant of {@link apiFetch} for file uploads. Content-Type is
+ * left to fetch so the multipart boundary is set correctly.
+ */
+export async function apiUpload<T>(
+  path: string,
+  formData: FormData,
+  options: { method?: "POST" | "PUT" | "PATCH" } = {}
+): Promise<T> {
+  const session = await auth();
+  const accessToken = session?.accessToken;
+  const tenantId = session?.user?.tenantId;
+
+  if (!accessToken) {
+    throw new Error("unauthenticated");
+  }
+
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    method: options.method ?? "POST",
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      ...(tenantId ? { "x-tenant-id": tenantId } : {}),
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const raw = await response.text().catch(() => response.statusText);
+    throw new ApiRequestError(raw || `request_failed_${response.status}`, {
+      status: response.status,
+    });
   }
 
   return response.json() as Promise<T>;

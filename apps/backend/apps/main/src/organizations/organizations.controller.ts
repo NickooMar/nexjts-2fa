@@ -5,13 +5,35 @@ import {
   Patch,
   UseGuards,
   Controller,
+  HttpException,
   ForbiddenException,
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Observable, catchError, map, switchMap, throwError } from 'rxjs';
-import { ROLES_THAT_MANAGE_MEMBERS } from 'apps/constants';
+import {
+  Observable,
+  catchError,
+  firstValueFrom,
+  from,
+  map,
+  switchMap,
+  tap,
+  throwError,
+} from 'rxjs';
+import {
+  BillingEventPatterns,
+  ROLES_THAT_MANAGE_MEMBERS,
+} from 'apps/constants';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { PlanEnforcementService } from '../billing/plan-enforcement.service';
+import { BillingProxy } from 'apps/billing/src/infrastructure/external/billing.proxy';
+import { LoginProtectionService } from '../security/login-protection.service';
+import {
+  InvitationThrottle,
+  JoinOrganizationThrottle,
+  SwitchOrganizationThrottle,
+  CreateOrganizationThrottle,
+} from '../security/throttle-policies';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { AuthProxy } from 'apps/auth/src/infrastructure/external/auth.proxy';
 import { MembershipProxy } from 'apps/user/src/infrastructure/external/membership.proxy';
@@ -44,7 +66,18 @@ export class OrganizationsController {
     private readonly membershipProxy: MembershipProxy,
     private readonly invitationProxy: InvitationProxy,
     private readonly authProxy: AuthProxy,
+    private readonly billingProxy: BillingProxy,
+    private readonly loginProtection: LoginProtectionService,
+    private readonly planEnforcement: PlanEnforcementService,
   ) {}
+
+  /** Plan enforcement: target org must have a free member seat. */
+  private async assertMemberSeatAvailable(tenantId: string): Promise<void> {
+    const current = await firstValueFrom(
+      this.membershipProxy.countByTenant(tenantId),
+    );
+    await this.planEnforcement.assertCanAddMember(tenantId, current);
+  }
 
   /** Organizations the current user belongs to (for the org switcher). */
   @Get()
@@ -64,6 +97,7 @@ export class OrganizationsController {
    * re-issued tokens scoped to the new org).
    */
   @Post()
+  @CreateOrganizationThrottle()
   createOrganization(
     @CurrentUser() user: AuthUser,
     @Body() input: CreateOrganizationDto,
@@ -77,6 +111,16 @@ export class OrganizationsController {
         input.country,
       )
       .pipe(
+        tap((result) => {
+          // Bootstrap billing for the new org (default plan + usage seed).
+          const organizationId = result?.tenant?._id;
+          if (organizationId) {
+            this.billingProxy.emitUsageEvent(
+              BillingEventPatterns.ORGANIZATION_CREATED,
+              { organizationId: String(organizationId) },
+            );
+          }
+        }),
         catchError((error) => {
           throw new InternalServerErrorException(
             error?.message || 'Failed to create organization',
@@ -87,6 +131,7 @@ export class OrganizationsController {
 
   /** Generate an invitation code for the caller's current org (owner/admin). */
   @Post('invitations')
+  @InvitationThrottle()
   createInvitation(
     @CurrentUser() user: AuthUser,
     @Body() input: CreateInvitationDto,
@@ -102,27 +147,31 @@ export class OrganizationsController {
       );
     }
 
-    return this.invitationProxy
-      .create({
-        tenantId: user.tenantId,
-        role: input.role,
-        createdBy: user._id,
-      })
-      .pipe(
-        map((invitation) => ({
-          success: true,
-          invitation: {
-            code: invitation.code,
-            role: invitation.role,
-            expiresAt: invitation.expiresAt,
-          },
-        })),
-        catchError((error) => {
-          throw new InternalServerErrorException(
-            error?.message || 'Failed to create invitation',
-          );
+    // Reject invitations once the plan's member limit is reached — there is
+    // no seat for the invitee to take.
+    return from(this.assertMemberSeatAvailable(user.tenantId)).pipe(
+      switchMap(() =>
+        this.invitationProxy.create({
+          tenantId: user.tenantId,
+          role: input.role,
+          createdBy: user._id,
         }),
-      );
+      ),
+      map((invitation) => ({
+        success: true,
+        invitation: {
+          code: invitation.code,
+          role: invitation.role,
+          expiresAt: invitation.expiresAt,
+        },
+      })),
+      catchError((error) => {
+        if (error instanceof HttpException) throw error;
+        throw new InternalServerErrorException(
+          error?.message || 'Failed to create invitation',
+        );
+      }),
+    );
   }
 
   /**
@@ -130,39 +179,68 @@ export class OrganizationsController {
    * scoped to the joined org so the session lands inside it.
    */
   @Post('join')
+  @JoinOrganizationThrottle()
   joinOrganization(
     @CurrentUser() user: AuthUser,
     @Body() input: AcceptInvitationDto,
   ): Observable<any> {
-    return this.invitationProxy
-      .accept({ code: input.code, userId: user._id })
-      .pipe(
-        switchMap(({ membership, tenant }) =>
-          this.authProxy
-            .switchTenant(user._id, String(membership.tenantId))
-            .pipe(
-              map((result) => ({
-                success: true,
-                tenant: tenant
-                  ? { _id: tenant._id, name: tenant.name, slug: tenant.slug }
-                  : null,
-                tokens: result.tokens,
-              })),
-            ),
+    // Invitation codes are bearer credentials: lock out users who keep
+    // guessing invalid/expired codes.
+    return from(
+      this.loginProtection.assertNotLocked('invite-join', user._id),
+    ).pipe(
+      // Resolve the target org from the code (read-only) so the plan's
+      // member limit is enforced *before* the membership is created.
+      switchMap(() => this.invitationProxy.peek(input.code)),
+      switchMap((invitation) =>
+        from(
+          this.assertMemberSeatAvailable(String(invitation.tenantId)),
         ),
-        catchError((error) => {
-          const message = error?.message || 'Failed to join organization';
-          const known = CLIENT_ERRORS.find((code) => message.includes(code));
-          if (known) {
-            throw new BadRequestException(known);
+      ),
+      switchMap(() =>
+        this.invitationProxy.accept({ code: input.code, userId: user._id }),
+      ),
+      tap(({ membership }) => {
+        void this.loginProtection.recordSuccess('invite-join', user._id);
+        this.billingProxy.emitUsageEvent(BillingEventPatterns.MEMBER_ADDED, {
+          organizationId: String(membership.tenantId),
+        });
+      }),
+      switchMap(({ membership, tenant }) =>
+        this.authProxy.switchTenant(user._id, String(membership.tenantId)).pipe(
+          map((result) => ({
+            success: true,
+            tenant: tenant
+              ? { _id: tenant._id, name: tenant.name, slug: tenant.slug }
+              : null,
+            tokens: result.tokens,
+          })),
+        ),
+      ),
+      catchError((error) => {
+        if (error instanceof HttpException && error.getStatus() === 402) {
+          // Plan limit of the target org — not a guessing attempt.
+          throw error;
+        }
+        const message = error?.message || 'Failed to join organization';
+        const known = CLIENT_ERRORS.find((code) => message.includes(code));
+        if (known) {
+          if (known !== 'already_a_member') {
+            void this.loginProtection.recordFailure('invite-join', user._id);
           }
-          throw new InternalServerErrorException(message);
-        }),
-      );
+          throw new BadRequestException(known);
+        }
+        if (error?.response?.code === 'temporarily_locked') {
+          throw error;
+        }
+        throw new InternalServerErrorException(message);
+      }),
+    );
   }
 
   /** Re-issue tokens scoped to another organization the user belongs to. */
   @Post('switch')
+  @SwitchOrganizationThrottle()
   switchOrganization(
     @CurrentUser() user: AuthUser,
     @Body() input: SwitchTenantRequestDto,

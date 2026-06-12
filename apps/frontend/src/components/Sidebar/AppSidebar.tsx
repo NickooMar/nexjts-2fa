@@ -7,6 +7,7 @@ import {
   Building,
   Users,
   FileText,
+  CreditCard,
   FileSignature,
 } from "lucide-react";
 import {

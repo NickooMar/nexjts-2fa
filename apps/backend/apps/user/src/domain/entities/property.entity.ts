@@ -20,6 +20,8 @@ export class Property extends BaseEntity {
 
   state?: string;
 
+  stateCode?: string;
+
   country?: string;
 
   postalCode?: string;

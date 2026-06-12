@@ -42,4 +42,18 @@ export class InvitationProxy {
         }),
       );
   }
+
+  /** Read-only invitation lookup (no side effects). */
+  peek(code: string): Observable<Invitation> {
+    return this.userClient
+      .send<Invitation>({ cmd: InvitationPatterns.PEEK }, { code })
+      .pipe(
+        catchError((error) => {
+          if (error instanceof RpcException) {
+            return throwError(() => error);
+          }
+          return throwError(() => new RpcException(error.message));
+        }),
+      );
+  }
 }

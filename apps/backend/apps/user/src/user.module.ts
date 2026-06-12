@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { validationSchema } from 'apps/env.validation';
 import { UserService } from './domain/services/user.service';
+import { MediaService } from './domain/services/media.service';
+import { MediaController } from './app/controller/media.controller';
+import { MediaAssetRepository } from './infrastructure/repository/media-asset.repository';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserSchema } from './infrastructure/schemas/user.schema';
 import { TenantSchema } from './infrastructure/schemas/tenant.schema';
@@ -21,6 +24,12 @@ import { InvitationController } from './app/controller/invitation.controller';
 import { PropertyRepository } from './infrastructure/repository/property.repository';
 import { MembershipRepository } from './infrastructure/repository/membership.repository';
 import { InvitationRepository } from './infrastructure/repository/invitation.repository';
+import { ContractService } from './domain/services/contract.service';
+import { ContractController } from './app/controller/contract.controller';
+import { ContractRepository } from './infrastructure/repository/contract.repository';
+import { PropertyTenantService } from './domain/services/property-tenant.service';
+import { PropertyTenantController } from './app/controller/property-tenant.controller';
+import { PropertyTenantRepository } from './infrastructure/repository/property-tenant.repository';
 import { TenantConnectionService } from './infrastructure/tenancy/tenant-connection.service';
 
 @Module({
@@ -49,22 +58,31 @@ import { TenantConnectionService } from './infrastructure/tenancy/tenant-connect
   ],
   controllers: [
     UserController,
+    MediaController,
     TenantController,
+    ContractController,
     PropertyController,
     MembershipController,
     InvitationController,
+    PropertyTenantController,
   ],
   providers: [
     UserService,
     UserRepository,
+    MediaService,
+    MediaAssetRepository,
     TenantService,
     TenantRepository,
+    ContractService,
+    ContractRepository,
     PropertyService,
     PropertyRepository,
     MembershipService,
     MembershipRepository,
     InvitationService,
     InvitationRepository,
+    PropertyTenantService,
+    PropertyTenantRepository,
     TenantConnectionService,
   ],
 })

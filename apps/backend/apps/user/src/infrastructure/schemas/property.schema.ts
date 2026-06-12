@@ -43,6 +43,9 @@ export class PropertyDocument {
   state?: string;
 
   @Prop({ type: String, required: false, trim: true })
+  stateCode?: string;
+
+  @Prop({ type: String, required: false, trim: true })
   country?: string;
 
   @Prop({ type: String, required: false, trim: true })

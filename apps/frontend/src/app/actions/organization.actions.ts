@@ -1,7 +1,7 @@
 "use server";
 
 import { signIn } from "@/auth";
-import { apiFetch } from "@/lib/api";
+import { apiFetch, apiUpload } from "@/lib/api";
 import { revalidatePath } from "next/cache";
 import {
   Organization,
@@ -107,6 +107,55 @@ export const createOrganizationAction = async (
 
     revalidatePath("/", "layout");
     return { success: true };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "unknown_error",
+    };
+  }
+};
+
+/**
+ * Upload the current organization's logo or banner (owner/admin only). The
+ * file travels under the `file` field; replacing an existing image purges the
+ * previous object server-side.
+ */
+export const uploadOrganizationBrandingAction = async (
+  slot: "logo" | "banner",
+  formData: FormData
+): Promise<{ success: boolean; url?: string; error?: string }> => {
+  try {
+    const data = await apiUpload<{
+      success: boolean;
+      logoUrl?: string;
+      bannerUrl?: string;
+    }>(`/organizations/branding/${slot}`, formData, { method: "PUT" });
+    revalidatePath("/", "layout");
+    return { success: true, url: data.logoUrl ?? data.bannerUrl };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "unknown_error",
+    };
+  }
+};
+
+/**
+ * Current organization's branding (logo/banner URLs), resolved server-side.
+ */
+export const getOrganizationBrandingAction = async (): Promise<{
+  success: boolean;
+  branding?: { logoUrl: string | null; bannerUrl: string | null };
+  error?: string;
+}> => {
+  try {
+    const data = await apiFetch<{
+      success: boolean;
+      branding: { logoUrl: string | null; bannerUrl: string | null };
+    }>("/organizations/branding");
+    return { success: true, branding: data.branding };
   } catch (error) {
     console.error(error);
     return {

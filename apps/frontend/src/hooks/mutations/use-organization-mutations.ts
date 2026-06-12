@@ -10,6 +10,7 @@ import {
   updateMemberRole,
   createOrganization,
   switchOrganization,
+  uploadOrganizationBranding,
 } from "@/services/api/organizations.api";
 
 interface MutationMessages {
@@ -91,6 +92,32 @@ export function useSwitchOrganization(
     onSuccess: async () => {
       await onTenantChanged();
       options?.onSuccess?.();
+    },
+  });
+}
+
+/**
+ * Upload the current organization's logo or banner. Used right after
+ * creating an organization (the session already points at the new tenant)
+ * and from any future org-settings screen.
+ */
+export function useUploadOrganizationBranding(
+  options?: MutationMessages & { onSuccess?: (url?: string) => void }
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: uploadOrganizationBranding,
+    meta: {
+      successMessage: options?.successMessage,
+      errorMessage: options?.errorMessage,
+      errorMessages: options?.errorMessages,
+    },
+    onSuccess: (url) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.organizations.all(),
+      });
+      options?.onSuccess?.(url);
     },
   });
 }

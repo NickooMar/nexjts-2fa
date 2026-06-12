@@ -31,6 +31,22 @@ export class InvitationService {
   }
 
   /**
+   * Read-only lookup of a pending invitation by code. Lets the gateway
+   * resolve the target organization (for plan-limit checks) before redeeming.
+   */
+  peek(code: string): Observable<Invitation> {
+    return from(
+      (async () => {
+        const invitation = await this.invitationRepository.findByCode(code);
+        if (!invitation || invitation.status !== 'pending') {
+          throw new RpcException('invalid_invitation');
+        }
+        return invitation;
+      })(),
+    );
+  }
+
+  /**
    * Redeem an invitation code: validates the invitation, guards against
    * duplicate membership, creates the membership, and marks the invitation
    * accepted. Returns the new membership plus the joined tenant for display.

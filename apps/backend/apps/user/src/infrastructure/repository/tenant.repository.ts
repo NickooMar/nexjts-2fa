@@ -46,6 +46,39 @@ export class TenantRepository extends BaseRepository<TenantDocument> {
   }
 
   /**
+   * Swap the logo/banner storage key. Returns the updated tenant plus the
+   * replaced key so the caller can purge the old object from the bucket.
+   */
+  async updateBranding(
+    tenantId: string,
+    field: 'logoKey' | 'bannerKey',
+    storageKey: string | null,
+  ): Promise<{ tenant: Tenant; previousKey?: string } | null> {
+    if (!Types.ObjectId.isValid(tenantId)) return null;
+    const previous = await this.tenantModel
+      .findById(new Types.ObjectId(tenantId))
+      .select(field)
+      .lean();
+    if (!previous) return null;
+
+    const updated = await this.tenantModel
+      .findByIdAndUpdate(
+        new Types.ObjectId(tenantId),
+        storageKey
+          ? { $set: { [field]: storageKey } }
+          : { $unset: { [field]: 1 } },
+        { new: true },
+      )
+      .lean();
+    if (!updated) return null;
+
+    return {
+      tenant: new Tenant(updated),
+      previousKey: previous[field] ?? undefined,
+    };
+  }
+
+  /**
    * Derive a slug from the organization name and guarantee uniqueness by
    * appending a short numeric suffix when a collision is found.
    */

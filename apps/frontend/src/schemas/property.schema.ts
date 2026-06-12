@@ -31,6 +31,9 @@ export const propertySchema = (t: (key: string) => string) =>
       .max(120, { message: t("messages.errors.state_max_length") })
       .optional()
       .or(z.literal("")),
+    // ISO code of the selected state, persisted alongside the display name as
+    // the stable identifier. Driven by the dependent location selectors.
+    stateCode: z.string().trim().max(10).optional().or(z.literal("")),
     country: z
       .string()
       .trim()

@@ -162,6 +162,13 @@
       "country": {
         "title": "País",
         "placeholder": "Seleccioná un país"
+      },
+      "branding": {
+        "logo": "Logo (opcional)",
+        "banner": "Portada (opcional)",
+        "choose": "Elegir una imagen",
+        "remove": "Quitar imagen",
+        "upload_error": "La organización se creó, pero no se pudieron subir sus imágenes."
       }
     },
     "no_organization_state": {
@@ -252,7 +259,8 @@
       "properties": "Propiedades",
       "tenants": "Inquilinos",
       "contracts": "Contratos",
-      "reports": "Reportes"
+      "reports": "Reportes",
+      "billing": "Facturación"
     },
     "user_menu": {
       "account": "Cuenta",
@@ -278,7 +286,10 @@
       "empty_title": "Todavía no hay propiedades",
       "empty_description": "Empezá creando la primera propiedad de tu organización. Desde acá vas a poder administrar unidades, inquilinos y mantenimiento.",
       "no_results": "Ninguna propiedad coincide con \"{query}\".",
-      "units": "{count, plural, one {# unidad} other {# unidades}}"
+      "units": "{count, plural, one {# unidad} other {# unidades}}",
+      "quick_actions": "Acciones rápidas",
+      "view_details": "Ver detalles",
+      "results_count": "{count, plural, one {# propiedad} other {# propiedades}}"
     },
     "types": {
       "apartment": "Departamento",
@@ -304,11 +315,13 @@
       },
       "city": {
         "title": "Ciudad",
-        "placeholder": "Buenos Aires"
+        "placeholder": "Seleccioná una ciudad",
+        "disabled": "Seleccioná una provincia primero"
       },
       "state": {
         "title": "Provincia / Estado",
-        "placeholder": "CABA"
+        "placeholder": "Seleccioná una provincia",
+        "disabled": "Seleccioná un país primero"
       },
       "postal_code": {
         "title": "Código postal",
@@ -317,6 +330,13 @@
       "country": {
         "title": "País",
         "placeholder": "Seleccioná un país"
+      },
+      "location": {
+        "search": "Buscar…",
+        "loading": "Cargando…",
+        "no_states": "No se encontraron provincias.",
+        "no_cities": "No se encontraron ciudades.",
+        "no_countries": "No se encontraron países."
       },
       "description": {
         "title": "Descripción",
@@ -390,6 +410,379 @@
         "update_failed": "No se pudo actualizar la propiedad",
         "delete_failed": "No se pudo eliminar la propiedad"
       }
+    },
+    "media": {
+      "drop_images": "Arrastra y suelta fotos aquí, o haz clic para buscar",
+      "drop_documents": "Arrastra y suelta documentos aquí, o haz clic para buscar",
+      "images_hint": "JPG, PNG, WebP, AVIF o GIF — hasta {size} cada una",
+      "documents_hint": "PDF, DOC, XLS, CSV o TXT — hasta {size} cada uno",
+      "rejected_title": "{count, plural, one {Se rechazó # archivo} other {Se rechazaron # archivos}}",
+      "rejected_type": "Tipo de archivo no soportado.",
+      "rejected_size": "Los archivos deben pesar menos de {limit}.",
+      "rejected_size_generic": "El archivo es demasiado grande.",
+      "rejected_count": "Seleccionaste demasiados archivos.",
+      "upload_success": "Fotos subidas",
+      "upload_error": "Falló la subida. Intenta de nuevo.",
+      "limit_reached": "Esta propiedad alcanzó su límite de archivos.",
+      "delete_success": "Foto eliminada",
+      "delete_error": "No se pudo eliminar. Intenta de nuevo.",
+      "cover_success": "Foto de portada actualizada",
+      "cover_error": "No se pudo establecer la portada.",
+      "cover_badge": "Portada",
+      "set_cover": "Usar como portada",
+      "delete_photo": "Eliminar foto",
+      "move_left": "Mover antes",
+      "move_right": "Mover después",
+      "reorder_error": "No se pudo guardar el nuevo orden.",
+      "no_photos": "Aún no hay fotos. Agrega algunas arriba.",
+      "no_photos_yet": "Aún no hay fotos",
+      "photos_count": "{count} de {max} fotos",
+      "open_fullscreen": "Ver en pantalla completa",
+      "close_fullscreen": "Cerrar pantalla completa",
+      "previous_photo": "Foto anterior",
+      "next_photo": "Foto siguiente",
+      "manage_title": "Administrar fotos",
+      "manage_description": "Sube, reordena, elige la portada o elimina fotos.",
+      "manage_action": "Administrar fotos",
+      "documents_title": "Documentos",
+      "no_documents": "Aún no hay documentos subidos.",
+      "document_upload_success": "Documentos subidos",
+      "document_delete_success": "Documento eliminado",
+      "preview_document": "Vista previa",
+      "download_document": "Descargar",
+      "delete_document": "Eliminar documento",
+      "download_error": "No se pudo generar el enlace de descarga.",
+      "uploading": "Subiendo…"
+    },
+    "new": {
+      "back": "Volver a propiedades",
+      "title": "Crear propiedad",
+      "description": "Configurá tu propiedad paso a paso: datos generales, contratos e inquilinos.",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "submit": "Crear propiedad",
+      "steps": {
+        "general": {
+          "label": "Información general",
+          "hint": "Datos y fotos",
+          "title": "Información general",
+          "description": "Los datos básicos de la propiedad. Podés editar todo más adelante."
+        },
+        "contracts": {
+          "label": "Contratos",
+          "hint": "Opcional",
+          "title": "Contratos",
+          "description": "Agregá los contratos de la propiedad con sus copias escaneadas y documentos. Este paso es opcional — podés saltearlo y agregar contratos más adelante."
+        },
+        "tenants": {
+          "label": "Inquilinos",
+          "hint": "Opcional",
+          "title": "Inquilinos",
+          "description": "Vinculá a las personas que ocupan esta propiedad. Elegilas de tu listado existente o creá nuevas. Este paso es opcional."
+        }
+      },
+      "images": {
+        "title": "Fotos",
+        "description": "Agregá una foto de portada/paisaje y otras imágenes relacionadas.",
+        "cover_hint": "La imagen resaltada es la portada que se muestra en las tarjetas. Pasá el cursor sobre una imagen para cambiarla.",
+        "cover_badge": "Portada",
+        "set_cover": "Usar como portada",
+        "remove": "Quitar imagen"
+      },
+      "files": {
+        "remove": "Quitar archivo"
+      },
+      "progress": {
+        "property": "Creando propiedad…",
+        "images": "Subiendo fotos…",
+        "contracts": "Guardando contratos…",
+        "tenants": "Vinculando inquilinos…"
+      },
+      "messages": {
+        "created": "Propiedad creada",
+        "warnings": {
+          "images_failed": "La propiedad se creó, pero algunas fotos no se pudieron subir. Podés reintentar desde la página de la propiedad.",
+          "contracts_failed": "La propiedad se creó, pero algunos contratos no se pudieron guardar. Podés agregarlos desde la página de la propiedad.",
+          "tenants_failed": "La propiedad se creó, pero algunos inquilinos no se pudieron vincular. Podés agregarlos desde la página de la propiedad."
+        }
+      },
+      "upgrade_modal": {
+        "eyebrow": "Mejora tu plan para seguir creando",
+        "title": "Límite de propiedades alcanzado",
+        "description": "Alcanzaste la cantidad máxima de propiedades incluida en tu plan actual. Mejorá tu suscripción para seguir creando propiedades.",
+        "usage": {
+          "current_plan": "Plan actual",
+          "properties_used": "Propiedades usadas",
+          "summary": "{used} de {limit} propiedades usadas"
+        },
+        "cta": {
+          "title": "Mejorá y retomá al instante",
+          "description": "Elegí un plan y volveremos a intentar crear esta misma propiedad apenas la mejora se complete."
+        },
+        "permissions": {
+          "title": "Se requiere permiso de facturación",
+          "description": "Solo los administradores de la organización pueden mejorar suscripciones.",
+          "help": "Contactá al owner de tu organización para mejorar el plan y después volvé para continuar creando esta propiedad."
+        },
+        "errors": {
+          "billing_unavailable_title": "Los servicios de facturación no están disponibles temporalmente.",
+          "billing_unavailable_description": "No pudimos cargar los detalles de tu suscripción en este momento.",
+          "plans_unavailable_title": "No pudimos cargar los planes disponibles.",
+          "plans_unavailable_description": "Intentá nuevamente para ver las opciones de mejora.",
+          "retry": "Reintentar"
+        },
+        "actions": {
+          "close": "Cerrar"
+        }
+      }
+    },
+    "contracts": {
+      "empty_description": "Todavía no hay contratos. Agregá los contratos de alquiler, venta o administración de esta propiedad — o salteá este paso.",
+      "add_action": "Agregar contrato",
+      "add_title": "Nuevo contrato",
+      "edit_title": "Editar contrato",
+      "add_submit": "Agregar contrato",
+      "save_changes": "Guardar cambios",
+      "cancel": "Cancelar",
+      "edit": "Editar contrato",
+      "remove": "Quitar contrato",
+      "types": {
+        "rental": "Alquiler",
+        "sale": "Venta",
+        "management": "Administración",
+        "other": "Otro"
+      },
+      "statuses": {
+        "draft": "Borrador",
+        "active": "Vigente",
+        "expired": "Vencido",
+        "terminated": "Rescindido"
+      },
+      "frequencies": {
+        "monthly": "Mensual",
+        "quarterly": "Trimestral",
+        "semiannual": "Semestral",
+        "yearly": "Anual",
+        "one_time": "Pago único"
+      },
+      "form": {
+        "title": {
+          "title": "Título",
+          "placeholder": "Alquiler 12 meses — Unidad 2B"
+        },
+        "type": {
+          "title": "Tipo"
+        },
+        "status": {
+          "title": "Estado"
+        },
+        "start_date": {
+          "title": "Fecha de inicio"
+        },
+        "end_date": {
+          "title": "Fecha de fin"
+        },
+        "amount": {
+          "title": "Monto"
+        },
+        "currency": {
+          "title": "Moneda",
+          "placeholder": "Seleccionar"
+        },
+        "frequency": {
+          "title": "Frecuencia de pago",
+          "placeholder": "Seleccionar"
+        },
+        "deposit": {
+          "title": "Depósito"
+        },
+        "notes": {
+          "title": "Notas",
+          "placeholder": "Notas sobre este contrato (opcional)"
+        }
+      },
+      "files": {
+        "images": "Imágenes escaneadas",
+        "documents": "Documentos"
+      },
+      "messages": {
+        "errors": {
+          "contract_title_min_length": "El título debe tener al menos 2 caracteres",
+          "contract_title_max_length": "El título debe tener como máximo 160 caracteres",
+          "contract_notes_max_length": "Las notas deben tener como máximo 2000 caracteres",
+          "contract_dates_invalid": "La fecha de fin debe ser posterior a la de inicio",
+          "contract_amount_invalid": "Ingresá un monto válido"
+        }
+      }
+    },
+    "tenants": {
+      "existing_title": "Seleccionar inquilinos existentes",
+      "existing_empty": "Tu organización todavía no tiene inquilinos. Creá el primero abajo.",
+      "search_placeholder": "Buscar por nombre, email, teléfono…",
+      "no_results": "Ningún inquilino coincide con \"{query}\".",
+      "no_contact_info": "Sin información de contacto",
+      "occupies_count": "{count, plural, one {# propiedad} other {# propiedades}}",
+      "new_title": "Crear nuevos inquilinos",
+      "new_badge": "Nuevo",
+      "add_action": "Agregar inquilino",
+      "add_title": "Nuevo inquilino",
+      "add_submit": "Agregar inquilino",
+      "cancel": "Cancelar",
+      "remove": "Quitar inquilino",
+      "form": {
+        "full_name": {
+          "title": "Nombre completo",
+          "placeholder": "Juana Pérez"
+        },
+        "email": {
+          "title": "Email",
+          "placeholder": "juana@ejemplo.com"
+        },
+        "phone": {
+          "title": "Teléfono",
+          "placeholder": "+54 11 5555-5555"
+        },
+        "document_id": {
+          "title": "DNI / Documento",
+          "placeholder": "DNI, pasaporte…"
+        },
+        "notes": {
+          "title": "Notas",
+          "placeholder": "Notas sobre este inquilino (opcional)"
+        }
+      },
+      "messages": {
+        "errors": {
+          "tenant_name_min_length": "El nombre debe tener al menos 2 caracteres",
+          "tenant_name_max_length": "El nombre debe tener como máximo 160 caracteres",
+          "tenant_email_invalid": "Ingresá un email válido",
+          "tenant_phone_max_length": "El teléfono debe tener como máximo 30 caracteres",
+          "tenant_document_max_length": "El documento debe tener como máximo 60 caracteres",
+          "tenant_notes_max_length": "Las notas deben tener como máximo 1000 caracteres"
+        }
+      }
+    }
+  },
+  "billing": {
+    "page": {
+      "title": "Facturación",
+      "description": "Gestiona el plan, el uso y el historial de pagos de tu organización.",
+      "description_org": "Gestiona el plan, el uso y el historial de pagos de {organization}.",
+      "error_title": "Algo salió mal",
+      "error_description": "No pudimos cargar tu información de facturación. Inténtalo de nuevo.",
+      "retry": "Reintentar"
+    },
+    "status": {
+      "trialing": "Prueba",
+      "active": "Activa",
+      "past_due": "Pago vencido",
+      "suspended": "Suspendida",
+      "cancelled": "Cancelada",
+      "expired": "Expirada"
+    },
+    "cycle": {
+      "monthly": "Mensual",
+      "yearly": "Anual"
+    },
+    "cycle_short": {
+      "monthly": "mes",
+      "yearly": "año"
+    },
+    "current_plan": {
+      "title": "Plan actual",
+      "period_end": "El período actual termina",
+      "trial_ends": "La prueba termina",
+      "operational": "Estado del servicio",
+      "operational_yes": "Operativo",
+      "operational_no": "Bloqueado — se requiere pago",
+      "cancels_on": "Se cancela el {date}"
+    },
+    "usage": {
+      "title": "Uso",
+      "subtitle": "Uso de este período ({period})",
+      "unlimited": "Ilimitado",
+      "per_month": "/ mes"
+    },
+    "limits": {
+      "properties": "Propiedades",
+      "storageGb": "Almacenamiento",
+      "activeListings": "Publicaciones activas",
+      "members": "Miembros",
+      "apiRequestsPerMonth": "Solicitudes API",
+      "fileUploadsPerMonth": "Archivos subidos",
+      "leadsPerMonth": "Leads",
+      "customDomains": "Dominios personalizados",
+      "integrations": "Integraciones"
+    },
+    "features": {
+      "crm": "CRM",
+      "analytics": "Analíticas",
+      "aiDescriptions": "Descripciones con IA",
+      "whatsappIntegration": "Integración con WhatsApp",
+      "customBranding": "Marca personalizada",
+      "apiAccess": "Acceso API",
+      "prioritySupport": "Soporte prioritario"
+    },
+    "plans": {
+      "title": "Planes",
+      "current": "Plan actual",
+      "trial": "Prueba gratis de {days} días"
+    },
+    "actions": {
+      "upgrade": "Mejorar",
+      "downgrade": "Bajar de plan",
+      "cancel": "Cancelar suscripción",
+      "resume": "Reanudar suscripción",
+      "retry_payment": "Reintentar pago"
+    },
+    "confirm": {
+      "upgrade_title": "¿Mejorar a {plan}?",
+      "downgrade_title": "¿Bajar a {plan}?",
+      "description": "Cambiarás al plan {plan} por {price} ({cycle}). Los cambios de plan se aplican de inmediato.",
+      "back": "Volver",
+      "confirm": "Confirmar"
+    },
+    "cancel_dialog": {
+      "title": "¿Cancelar tu suscripción?",
+      "description": "Tu plan seguirá activo hasta el {date}. Después, tu organización pasará al plan Gratis y las funciones por encima de sus límites quedarán bloqueadas.",
+      "keep": "Mantener mi plan",
+      "confirm": "Cancelar suscripción"
+    },
+    "history": {
+      "title": "Historial de facturación",
+      "subtitle": "Facturas y pagos",
+      "invoices": "Facturas",
+      "payments": "Pagos",
+      "no_invoices": "Aún no hay facturas.",
+      "no_payments": "Aún no hay pagos.",
+      "attempt": "Intento #{number}"
+    },
+    "invoice_status": {
+      "draft": "Borrador",
+      "open": "Abierta",
+      "paid": "Pagada",
+      "void": "Anulada",
+      "uncollectible": "Incobrable"
+    },
+    "payment_status": {
+      "pending": "Pendiente",
+      "succeeded": "Exitoso",
+      "failed": "Fallido",
+      "refunded": "Reembolsado"
+    },
+    "toasts": {
+      "plan_changed": "Tu plan fue actualizado.",
+      "cancelled": "Suscripción cancelada — activa hasta el fin del período.",
+      "resumed": "Suscripción reanudada.",
+      "payment_retried": "Pago exitoso — suscripción reactivada.",
+      "payment_retry_failed": "El pago volvió a fallar. Revisa tu método de pago.",
+      "action_failed": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "errors": {
+      "payment_failed": "El pago falló. Revisa tu método de pago.",
+      "already_subscribed": "Ya estás en este plan.",
+      "downgrade_exceeds_limits": "Tu uso actual supera los límites de este plan. Reduce el uso antes de bajar de plan.",
+      "plan_change_failed": "No pudimos procesar la mejora. Intentá nuevamente."
     }
   }
 }

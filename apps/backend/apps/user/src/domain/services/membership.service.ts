@@ -43,6 +43,11 @@ export class MembershipService {
     return from(this.resolveMembers(tenantId));
   }
 
+  /** Active member count (plan-limit enforcement). */
+  countByTenant(tenantId: string): Observable<number> {
+    return from(this.membershipRepository.countByTenant(tenantId));
+  }
+
   findByUser(userId: string): Observable<Membership[]> {
     return from(this.membershipRepository.findByUser(userId));
   }

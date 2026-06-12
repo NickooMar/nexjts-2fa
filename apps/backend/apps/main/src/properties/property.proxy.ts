@@ -46,6 +46,11 @@ export class PropertyProxy {
     return this.userClient.send({ cmd: PropertyPatterns.FIND_ALL }, { dbName });
   }
 
+  /** Authoritative property count (plan-limit enforcement). */
+  count(dbName: string): Observable<number> {
+    return this.userClient.send({ cmd: PropertyPatterns.COUNT }, { dbName });
+  }
+
   findById(dbName: string, id: string): Observable<any> {
     return this.userClient.send(
       { cmd: PropertyPatterns.FIND_BY_ID },

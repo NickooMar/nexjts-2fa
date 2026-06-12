@@ -20,6 +20,10 @@ export class Tenant extends BaseEntity {
 
   country?: string;
 
+  logoKey?: string;
+
+  bannerKey?: string;
+
   createdAt: Date;
 
   updatedAt: Date;

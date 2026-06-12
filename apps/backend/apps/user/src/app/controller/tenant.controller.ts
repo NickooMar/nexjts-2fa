@@ -24,4 +24,17 @@ export class TenantController {
   findBySlug(slug: string): Observable<Tenant | null> {
     return this.tenantService.findBySlug(slug);
   }
+
+  @MessagePattern({ cmd: TenantPatterns.UPDATE_BRANDING })
+  updateBranding(payload: {
+    tenantId: string;
+    field: 'logoKey' | 'bannerKey';
+    storageKey: string | null;
+  }): Observable<{ tenant: Tenant; previousKey?: string }> {
+    return this.tenantService.updateBranding(
+      payload.tenantId,
+      payload.field,
+      payload.storageKey,
+    );
+  }
 }

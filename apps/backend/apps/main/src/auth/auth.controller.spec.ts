@@ -10,6 +10,9 @@ import { RpcException } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SignupRequestDto } from 'libs/shared/dto/auth/signup.dto';
 import { AuthProxy } from 'apps/auth/src/infrastructure/external/auth.proxy';
+import { CaptchaGuard } from '../security/captcha.guard';
+import { LoginProtectionGuard } from '../security/login-protection.guard';
+import { LoginProtectionService } from '../security/login-protection.service';
 
 describe('Main AuthController', () => {
   let controller: AuthController;
@@ -17,6 +20,12 @@ describe('Main AuthController', () => {
 
   const mockAuthProxy = {
     signup: jest.fn(),
+  };
+
+  const mockLoginProtection = {
+    assertNotLocked: jest.fn().mockResolvedValue(undefined),
+    recordFailure: jest.fn().mockResolvedValue({ locked: false }),
+    recordSuccess: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeEach(async () => {
@@ -27,8 +36,17 @@ describe('Main AuthController', () => {
           provide: AuthProxy,
           useValue: mockAuthProxy,
         },
+        {
+          provide: LoginProtectionService,
+          useValue: mockLoginProtection,
+        },
       ],
-    }).compile();
+    })
+      .overrideGuard(CaptchaGuard)
+      .useValue({ canActivate: () => true })
+      .overrideGuard(LoginProtectionGuard)
+      .useValue({ canActivate: () => true })
+      .compile();
 
     controller = module.get<AuthController>(AuthController);
     authProxy = module.get<AuthProxy>(AuthProxy);

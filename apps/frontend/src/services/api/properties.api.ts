@@ -40,7 +40,7 @@ export async function createProperty(
 ): Promise<Property> {
   const result = await createPropertyAction(input);
   if (!result.success || !result.property) {
-    throw new ApiError(result.error ?? "create_failed");
+    throw new ApiError(result.error ?? "create_failed", result.errorDetails);
   }
   return result.property;
 }

@@ -1,13 +1,6 @@
 "use client";
 
 import {
-  Card,
-  CardTitle,
-  CardHeader,
-  CardContent,
-  CardDescription,
-} from "@/components/ui/card";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
@@ -16,28 +9,30 @@ import {
 import {
   Plus,
   Search,
-  MapPin,
   Building2,
   ListFilter,
-  DoorOpen,
   RefreshCw,
 } from "lucide-react";
-import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ErrorState } from "@/components/ui/states/error-state";
 import { EmptyState } from "@/components/ui/states/empty-state";
-import { CardGridSkeleton } from "@/components/ui/states/loading-state";
 import {
   Property,
   PropertyType,
   PROPERTY_TYPES,
 } from "@/types/property/property.types";
 import { useProperties } from "@/hooks/queries/use-properties";
-import { CreatePropertyDialog } from "@/components/Property/CreatePropertyDialog";
+import {
+  PropertyCard,
+  PropertyCardSkeleton,
+} from "@/components/Property/PropertyCard";
+import { EditPropertyDialog } from "@/components/Property/EditPropertyDialog";
+import { DeletePropertyDialog } from "@/components/Property/DeletePropertyDialog";
 
 interface PropertiesClientProps {
   canManage: boolean;
@@ -51,15 +46,18 @@ const PropertiesClient = ({
   initialProperties,
 }: PropertiesClientProps) => {
   const t = useTranslations("properties");
+  const router = useRouter();
 
   const [search, setSearch] = useState("");
-  const [createOpen, setCreateOpen] = useState(false);
   const [typeFilters, setTypeFilters] = useState<PropertyType[]>([]);
+  // Quick actions from the cards share one dialog instance per action.
+  const [editTarget, setEditTarget] = useState<Property | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Property | null>(null);
 
   const { data, isPending, isError, isFetching, refetch } = useProperties({
     initialData: initialProperties,
   });
-  const properties = data ?? [];
+  const properties = useMemo(() => data ?? [], [data]);
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -90,71 +88,93 @@ const PropertiesClient = ({
   };
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-6 p-6">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div className="mx-auto w-full max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
+      {/* Header */}
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             {t("list.title")}
           </h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground sm:text-base">
             {organizationName
               ? t("list.description_org", { organization: organizationName })
               : t("list.description")}
           </p>
         </div>
         {canManage && (
-          <Button onClick={() => setCreateOpen(true)} className="gap-2">
+          <Button
+            size="lg"
+            onClick={() => router.push("/properties/new")}
+            className="gap-2 shadow-sm"
+          >
             <Plus className="size-4" />
             {t("list.create_action")}
           </Button>
         )}
       </header>
 
+      {/* Toolbar */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={search}
-            className="pl-9"
+            className="h-10 rounded-xl pl-9"
             placeholder={t("list.search_placeholder")}
             onChange={(event) => setSearch(event.target.value)}
           />
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="gap-2">
-              <ListFilter className="size-4" />
-              {t("list.filter_type")}
-              {typeFilters.length > 0 && (
-                <Badge variant="secondary">{typeFilters.length}</Badge>
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            {PROPERTY_TYPES.map((type) => (
-              <DropdownMenuCheckboxItem
-                key={type}
-                checked={typeFilters.includes(type)}
-                onCheckedChange={() => toggleTypeFilter(type)}
-              >
-                {t(`types.${type}`)}
-              </DropdownMenuCheckboxItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => refetch()}
-          disabled={isFetching}
-          aria-label={t("list.refresh")}
-        >
-          <RefreshCw className={`size-4 ${isFetching ? "animate-spin" : ""}`} />
-        </Button>
+        <div className="flex gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="h-10 gap-2 rounded-xl">
+                <ListFilter className="size-4" />
+                {t("list.filter_type")}
+                {typeFilters.length > 0 && (
+                  <Badge variant="secondary">{typeFilters.length}</Badge>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              {PROPERTY_TYPES.map((type) => (
+                <DropdownMenuCheckboxItem
+                  key={type}
+                  checked={typeFilters.includes(type)}
+                  onCheckedChange={() => toggleTypeFilter(type)}
+                >
+                  {t(`types.${type}`)}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => refetch()}
+            disabled={isFetching}
+            aria-label={t("list.refresh")}
+            className="size-10 rounded-xl"
+          >
+            <RefreshCw
+              className={`size-4 ${isFetching ? "animate-spin" : ""}`}
+            />
+          </Button>
+        </div>
       </div>
 
+      {/* Result count */}
+      {!isPending && properties.length > 0 && (
+        <p className="text-sm text-muted-foreground">
+          {t("list.results_count", { count: filtered.length })}
+        </p>
+      )}
+
       {isPending ? (
-        <CardGridSkeleton />
+        <section className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <PropertyCardSkeleton key={index} />
+          ))}
+        </section>
       ) : isError && data === undefined ? (
         <ErrorState
           title={t("list.error_title")}
@@ -170,7 +190,10 @@ const PropertiesClient = ({
           description={t("list.empty_description")}
           action={
             canManage && (
-              <Button onClick={() => setCreateOpen(true)} className="mt-2 gap-2">
+              <Button
+                onClick={() => router.push("/properties/new")}
+                className="mt-2 gap-2"
+              >
                 <Plus className="size-4" />
                 {t("list.create_action")}
               </Button>
@@ -178,57 +201,42 @@ const PropertiesClient = ({
           }
         />
       ) : filtered.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
+        <div className="rounded-2xl border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
           {t("list.no_results", { query: search })}
         </div>
       ) : (
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <section className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((property) => (
-            <Link
+            <PropertyCard
               key={property._id}
-              href={`/properties/${property.slug ?? property._id}`}
-              className="group focus-visible:outline-none"
-            >
-              <Card className="h-full transition-colors group-hover:border-primary/40 group-focus-visible:ring-2 group-focus-visible:ring-ring">
-                <CardHeader className="space-y-2 pb-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted">
-                      <Building2 className="size-5" />
-                    </div>
-                    <Badge variant="secondary" className="capitalize">
-                      {t(`types.${property.type}`)}
-                    </Badge>
-                  </div>
-                  <CardTitle className="text-base leading-tight">
-                    {property.name}
-                  </CardTitle>
-                  {property.description && (
-                    <CardDescription className="line-clamp-2">
-                      {property.description}
-                    </CardDescription>
-                  )}
-                </CardHeader>
-                <CardContent className="space-y-2 text-sm text-muted-foreground">
-                  <p className="flex items-center gap-2">
-                    <MapPin className="size-4 shrink-0" />
-                    <span className="truncate">
-                      {[property.address, property.city, property.country]
-                        .filter(Boolean)
-                        .join(", ")}
-                    </span>
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <DoorOpen className="size-4 shrink-0" />
-                    {t("list.units", { count: property.units })}
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
+              property={property}
+              canManage={canManage}
+              onEdit={setEditTarget}
+              onDelete={setDeleteTarget}
+            />
           ))}
         </section>
       )}
 
-      <CreatePropertyDialog open={createOpen} onOpenChange={setCreateOpen} />
+      {editTarget && (
+        <EditPropertyDialog
+          open
+          property={editTarget}
+          onOpenChange={(open) => !open && setEditTarget(null)}
+          onUpdated={() => setEditTarget(null)}
+        />
+      )}
+      {deleteTarget && (
+        <DeletePropertyDialog
+          open
+          property={deleteTarget}
+          onOpenChange={(open) => !open && setDeleteTarget(null)}
+          onDeleted={() => {
+            setDeleteTarget(null);
+            router.refresh();
+          }}
+        />
+      )}
     </div>
   );
 };

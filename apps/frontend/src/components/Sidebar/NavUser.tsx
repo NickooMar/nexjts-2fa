@@ -9,6 +9,7 @@ import {
   BadgeCheck,
   ChevronsUpDown,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuItem,
@@ -37,6 +38,33 @@ import { useTransition } from "react";
 import { routing } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
+
+type UserMenuItem = {
+  labelKey:
+    | "user_menu.account"
+    | "user_menu.billing"
+    | "user_menu.notifications";
+  href: string;
+  icon: LucideIcon;
+};
+
+const userMenuItems = [
+  {
+    labelKey: "user_menu.account",
+    href: "/account",
+    icon: BadgeCheck,
+  },
+  {
+    labelKey: "user_menu.billing",
+    href: "/billing",
+    icon: CreditCard,
+  },
+  {
+    labelKey: "user_menu.notifications",
+    href: "/notifications",
+    icon: Bell,
+  },
+] satisfies ReadonlyArray<UserMenuItem>;
 
 export function NavUser({
   user,
@@ -138,18 +166,16 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                {t("user_menu.account")}
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                {t("user_menu.billing")}
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                {t("user_menu.notifications")}
-              </DropdownMenuItem>
+              {userMenuItems.map((item) => (
+                <DropdownMenuItem
+                  key={item.labelKey}
+                  className="cursor-pointer"
+                  onClick={() => router.push(item.href)}
+                >
+                  <item.icon />
+                  {t(item.labelKey)}
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuSub>

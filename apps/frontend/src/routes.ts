@@ -1,1 +1,9 @@
-export const privateRoutes = ["/home", "/test", "/dashboard", "/properties"];
+export const privateRoutes = [
+  "/account",
+  "/home",
+  "/test",
+  "/billing",
+  "/dashboard",
+  "/notifications",
+  "/properties",
+];

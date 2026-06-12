@@ -4,7 +4,7 @@ import {
   MutationCache,
   isServer,
 } from "@tanstack/react-query";
-import { showToast } from "nextjs-toast-notify";
+import { toast } from "react-hot-toast";
 import { ApiError, isNonRetryableError } from "./types";
 
 const toastOptions = {
@@ -22,7 +22,11 @@ const toastOptions = {
  */
 function resolveErrorMessage(
   error: Error,
-  meta?: { errorMessage?: string; errorMessages?: Record<string, string> }
+  meta?: {
+    errorMessage?: string;
+    errorMessages?: Record<string, string>;
+    suppressErrorCodes?: string[];
+  }
 ): string {
   if (meta?.errorMessages && error instanceof ApiError) {
     const match = Object.keys(meta.errorMessages).find((code) =>
@@ -31,6 +35,16 @@ function resolveErrorMessage(
     if (match) return meta.errorMessages[match];
   }
   return meta?.errorMessage ?? error.message;
+}
+
+function shouldSuppressErrorToast(
+  error: Error,
+  meta?: { suppressErrorCodes?: string[] }
+): boolean {
+  return (
+    error instanceof ApiError &&
+    meta?.suppressErrorCodes?.some((code) => error.code.includes(code)) === true
+  );
 }
 
 function makeQueryClient(): QueryClient {
@@ -63,19 +77,20 @@ function makeQueryClient(): QueryClient {
         // background refetch failures keep showing cached data silently.
         if (query.state.data !== undefined) return;
         if (query.meta?.errorMessage) {
-          showToast.error(query.meta.errorMessage, toastOptions);
+          toast.error(query.meta.errorMessage, toastOptions);
         }
       },
     }),
     mutationCache: new MutationCache({
       onSuccess: (_data, _variables, _context, mutation) => {
         if (mutation.meta?.successMessage) {
-          showToast.success(mutation.meta.successMessage, toastOptions);
+          toast.success(mutation.meta.successMessage, toastOptions);
         }
       },
       onError: (error, _variables, _context, mutation) => {
+        if (shouldSuppressErrorToast(error as Error, mutation.meta)) return;
         const message = resolveErrorMessage(error, mutation.meta);
-        showToast.error(message, toastOptions);
+        toast.error(message, toastOptions);
       },
     }),
   });
