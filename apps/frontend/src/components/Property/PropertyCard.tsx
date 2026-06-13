@@ -58,6 +58,8 @@ export function PropertyCard({
   const router = useRouter();
   const href = `/properties/${property.slug ?? property._id}`;
 
+  console.log("PropertyCard render", { property });
+
   const location = [property.address, property.city, property.country]
     .filter(Boolean)
     .join(", ");
@@ -89,7 +91,7 @@ export function PropertyCard({
         <Badge
           className={cn(
             "absolute left-3 top-3 border-0 capitalize shadow-sm",
-            TYPE_BADGE_CLASSES[property.type] ?? TYPE_BADGE_CLASSES.other
+            TYPE_BADGE_CLASSES[property.type] ?? TYPE_BADGE_CLASSES.other,
           )}
         >
           {t(`types.${property.type}`)}
@@ -150,10 +152,6 @@ export function PropertyCard({
             {property.description}
           </p>
         )}
-        <div className="mt-auto flex items-center gap-1.5 pt-2 text-sm font-medium">
-          <DoorOpen className="size-4 text-muted-foreground" />
-          {t("list.units", { count: property.units })}
-        </div>
       </div>
     </article>
   );
