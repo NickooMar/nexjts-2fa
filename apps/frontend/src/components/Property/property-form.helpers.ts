@@ -4,13 +4,22 @@ import {
   CreatePropertyInput,
 } from "@/types/property/property.types";
 
+interface ToPropertyInputOptions {
+  includeUnits?: boolean;
+}
+
 /** Map form values to the API payload, dropping empty optional fields. */
-export function toPropertyInput(values: PropertyFormState): CreatePropertyInput {
+export function toPropertyInput(
+  values: PropertyFormState,
+  options: ToPropertyInputOptions = {}
+): CreatePropertyInput {
+  const { includeUnits = true } = options;
+
   return {
     name: values.name.trim(),
     address: values.address.trim(),
     type: values.type,
-    units: values.units,
+    ...(includeUnits ? { units: values.units } : {}),
     description: values.description?.trim() || undefined,
     city: values.city?.trim() || undefined,
     state: values.state?.trim() || undefined,

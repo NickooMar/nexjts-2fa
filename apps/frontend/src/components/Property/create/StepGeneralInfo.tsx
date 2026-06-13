@@ -47,7 +47,7 @@ export function StepGeneralInfo({
           <Form {...form}>
             {/* Submission is owned by the wizard footer; no <form> here so a
                 stray Enter press can't trigger a premature submit. */}
-            <PropertyFormFields form={form} />
+            <PropertyFormFields form={form} showUnits={false} />
           </Form>
         </CardContent>
       </Card>

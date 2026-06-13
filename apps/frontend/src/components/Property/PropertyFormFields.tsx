@@ -7,10 +7,12 @@ import {
   FormMessage,
   FormControl,
 } from "@/components/ui/form";
+import { buttonVariants } from "@/components/ui/button";
 import { UseFormReturn } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import flags from "react-phone-number-input/flags";
 import type { Country } from "react-phone-number-input";
+import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -27,6 +29,7 @@ import {
 
 interface PropertyFormFieldsProps {
   form: UseFormReturn<PropertyFormState>;
+  showUnits?: boolean;
 }
 
 /** Country flag shown beside each option, matching the phone input's UX. */
@@ -43,7 +46,10 @@ function countryFlag(option: ComboboxOption) {
  * Shared field set for the create and edit property dialogs so both flows
  * stay in sync as the model grows.
  */
-export function PropertyFormFields({ form }: PropertyFormFieldsProps) {
+export function PropertyFormFields({
+  form,
+  showUnits = true,
+}: PropertyFormFieldsProps) {
   const t = useTranslations("properties");
 
   // Dependent location selectors: country → state → city. Each level loads
@@ -76,34 +82,52 @@ export function PropertyFormFields({ form }: PropertyFormFieldsProps) {
         )}
       />
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t("form.type.title")}</FormLabel>
-              <FormControl>
-                <select
-                  {...field}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {PROPERTY_TYPES.map((type) => (
-                    <option key={type} value={type}>
+      <FormField
+        control={form.control}
+        name="type"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>{t("form.type.title")}</FormLabel>
+            <FormControl>
+              <div
+                role="radiogroup"
+                aria-label={t("form.type.title")}
+                className="grid grid-cols-2 gap-2 sm:grid-cols-5"
+              >
+                {PROPERTY_TYPES.map((type) => {
+                  const isSelected = field.value === type;
+                  return (
+                    <button
+                      key={type}
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelected}
+                      onClick={() => field.onChange(type)}
+                      className={cn(
+                        buttonVariants({
+                          variant: isSelected ? "default" : "outline",
+                          size: "sm",
+                        }),
+                        "h-10 w-full rounded-full px-3 text-sm capitalize"
+                      )}
+                    >
                       {t(`types.${type}`)}
-                    </option>
-                  ))}
-                </select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                    </button>
+                  );
+                })}
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      {showUnits && (
         <FormField
           control={form.control}
           name="units"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="sm:max-w-[50%]">
               <FormLabel>{t("form.units.title")}</FormLabel>
               <FormControl>
                 <Input {...field} type="number" min={0} />
@@ -112,25 +136,7 @@ export function PropertyFormFields({ form }: PropertyFormFieldsProps) {
             </FormItem>
           )}
         />
-      </div>
-
-      <FormField
-        control={form.control}
-        name="address"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>{t("form.address.title")}</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                type="text"
-                placeholder={t("form.address.placeholder")}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      )}
 
       <div className="grid gap-4 sm:grid-cols-3">
         <FormField
@@ -222,23 +228,42 @@ export function PropertyFormFields({ form }: PropertyFormFieldsProps) {
         />
       </div>
 
-      <FormField
-        control={form.control}
-        name="postalCode"
-        render={({ field }) => (
-          <FormItem className="sm:max-w-[50%]">
-            <FormLabel>{t("form.postal_code.title")}</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                type="text"
-                placeholder={t("form.postal_code.placeholder")}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("form.address.title")}</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="text"
+                  placeholder={t("form.address.placeholder")}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="postalCode"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("form.postal_code.title")}</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="text"
+                  placeholder={t("form.postal_code.placeholder")}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
 
       <FormField
         control={form.control}

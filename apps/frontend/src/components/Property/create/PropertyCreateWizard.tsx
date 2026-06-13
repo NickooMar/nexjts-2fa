@@ -179,7 +179,7 @@ export function PropertyCreateWizard({
     });
 
     const submission: WizardSubmission = {
-      property: toPropertyInput(form.getValues()),
+      property: toPropertyInput(form.getValues(), { includeUnits: false }),
       images: orderedImages.map((draft) => draft.file),
       contracts: contracts.map((draft) => ({
         input: toContractInput(draft.values),
