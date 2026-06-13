@@ -94,7 +94,7 @@ async function registerAndVerify(conn, email, label) {
     const created = await api('/organizations', {
       method: 'POST',
       token: u1.accessToken,
-      body: { name: `E2E Acme Holdings ${TS}` },
+      body: { name: `E2E Acme Holdings ${TS}`, country: 'Argentina' },
     });
     check('create org succeeds', created.data?.success === true, `status ${created.status}`);
     check('create org returns scoped tokens', !!created.data?.tokens?.accessToken);
@@ -174,7 +174,7 @@ async function registerAndVerify(conn, email, label) {
     const globex = await api('/organizations', {
       method: 'POST',
       token: u2.accessToken,
-      body: { name: `E2E Globex ${TS}` },
+      body: { name: `E2E Globex ${TS}`, country: 'Argentina' },
     });
     u2 = globex.data.tokens;
     globexSlug = jwt(u2.accessToken).tenantSlug;
@@ -254,6 +254,86 @@ async function registerAndVerify(conn, email, label) {
       body: {},
     });
     check('owner CAN invite via signin token too', noOrgInvite.status === 201 || noOrgInvite.status === 200);
+
+    console.log('\n— 8. Property owners —');
+    // Fresh property to attach owners to (owner-scoped token = user1 on Acme).
+    const ownerProp = await api('/properties', {
+      method: 'POST',
+      token: u1.accessToken,
+      body: { name: `Owner Tower ${TS}`, address: '9 Owner Ave' },
+    });
+    const ownerProperty = ownerProp.data?.property ?? ownerProp.data;
+    const propRef = ownerProperty?.slug ?? ownerProperty?._id;
+    check('owners: property for owners created', !!propRef, `ref=${propRef}`);
+
+    // Create an owner already attached to the property.
+    const owner1 = await api(`/owners?propertyId=${ownerProperty._id}`, {
+      method: 'POST',
+      token: u1.accessToken,
+      body: { fullName: 'Olivia Owner', email: 'olivia@example.com' },
+    });
+    check('owners: create owner attached on create',
+      owner1.data?.success === true && !!owner1.data?.owner?._id,
+      `status ${owner1.status}`);
+    const owner1Id = owner1.data?.owner?._id;
+
+    const list1 = await api(`/properties/${propRef}/owners`, { token: u1.accessToken });
+    check('owners: property lists the attached owner',
+      list1.data?.owners?.length === 1 && list1.data.owners[0]._id === owner1Id);
+
+    // Standalone owner (no property), then attach it.
+    const owner2 = await api('/owners', {
+      method: 'POST',
+      token: u1.accessToken,
+      body: { fullName: 'Owen Holder', phone: '+5491133224455' },
+    });
+    const owner2Id = owner2.data?.owner?._id;
+    check('owners: create standalone owner', !!owner2Id);
+
+    const attach = await api(`/properties/${propRef}/owners/attach`, {
+      method: 'POST',
+      token: u1.accessToken,
+      body: { ownerIds: [owner2Id] },
+    });
+    check('owners: attach existing owner → roster of 2',
+      attach.data?.success === true && attach.data?.owners?.length === 2);
+
+    // Idempotent: attaching the same owner again does not duplicate.
+    const attachDup = await api(`/properties/${propRef}/owners/attach`, {
+      method: 'POST',
+      token: u1.accessToken,
+      body: { ownerIds: [owner2Id] },
+    });
+    check('owners: duplicate attach is a no-op (still 2)',
+      attachDup.data?.owners?.length === 2);
+
+    // A manager may also manage owners (ROLES_THAT_MANAGE_PROPERTIES).
+    const managerOwner = await api('/owners', {
+      method: 'POST',
+      token: switched.data.tokens.accessToken,
+      body: { fullName: 'Manny Manager-Owner' },
+    });
+    check('owners: manager can create owners', managerOwner.data?.success === true,
+      `status ${managerOwner.status}`);
+
+    // Detach owner1; the roster shrinks but the record survives.
+    const detach = await api(`/properties/${propRef}/owners/${owner1Id}`, {
+      method: 'DELETE',
+      token: u1.accessToken,
+    });
+    check('owners: detach owner from property', detach.data?.success === true);
+
+    const list2 = await api(`/properties/${propRef}/owners`, { token: u1.accessToken });
+    check('owners: property roster shrinks to 1 after detach',
+      list2.data?.owners?.length === 1 && list2.data.owners[0]._id === owner2Id);
+
+    const roster = await api('/owners', { token: u1.accessToken });
+    check('owners: detached owner survives in org roster',
+      roster.data?.owners?.some((o) => o._id === owner1Id));
+
+    const ownerCount = await tenantConn.db.collection('propertyowners').countDocuments();
+    check('owners: physically isolated in tenant DB', ownerCount >= 3,
+      `tenant_${acmeSlug}.propertyowners = ${ownerCount}`);
   } finally {
     console.log('\n— Cleanup of e2e artifacts —');
     const users = await conn.db.collection('users').find({ email: { $in: [EMAIL1, EMAIL2] } }).toArray();

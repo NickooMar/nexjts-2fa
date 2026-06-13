@@ -21,6 +21,11 @@ import {
   TenantsController,
   PropertyTenantsController,
 } from './tenants/tenants.controller';
+import { PropertyOwnerProxy } from './owners/property-owner.proxy';
+import {
+  OwnersController,
+  PropertyOwnersController,
+} from './owners/owners.controller';
 import { BillingController } from './billing/billing.controller';
 import { BillingWebhookController } from './billing/billing-webhook.controller';
 import { PlanEnforcementService } from './billing/plan-enforcement.service';
@@ -103,6 +108,8 @@ import { LocationsController } from './locations/locations.controller';
     PropertiesController,
     PropertyMediaController,
     PropertyTenantsController,
+    OwnersController,
+    PropertyOwnersController,
     OrganizationsController,
     OrganizationBrandingController,
     LocationsController,
@@ -119,6 +126,7 @@ import { LocationsController } from './locations/locations.controller';
     MembershipProxy,
     InvitationProxy,
     PropertyTenantProxy,
+    PropertyOwnerProxy,
     PlanEnforcementService,
     LocationsService,
     // Meters apiRequestsPerMonth per organization (batched, zero latency).

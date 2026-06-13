@@ -11,6 +11,7 @@ import { PropertyRepository } from '../../infrastructure/repository/property.rep
 import { ContractRepository } from '../../infrastructure/repository/contract.repository';
 import { MediaAssetRepository } from '../../infrastructure/repository/media-asset.repository';
 import { PropertyTenantRepository } from '../../infrastructure/repository/property-tenant.repository';
+import { PropertyOwnerRepository } from '../../infrastructure/repository/property-owner.repository';
 
 /** Property reads are enriched with their media so the gateway needs one RPC. */
 export interface PropertyWithMedia extends Property {
@@ -26,6 +27,7 @@ export class PropertyService {
     private readonly mediaRepository: MediaAssetRepository,
     private readonly contractRepository: ContractRepository,
     private readonly propertyTenantRepository: PropertyTenantRepository,
+    private readonly propertyOwnerRepository: PropertyOwnerRepository,
   ) {}
 
   create(
@@ -135,7 +137,7 @@ export class PropertyService {
 
   /**
    * Deleting a property cascades: its contracts (and their media metadata)
-   * are removed and tenants are unlinked (their records survive). All
+   * are removed and tenants + owners are unlinked (their records survive). All
    * orphaned storage keys are returned so the gateway (which owns the bucket)
    * can purge the actual objects.
    */
@@ -173,6 +175,10 @@ export class PropertyService {
         );
 
         await this.propertyTenantRepository.detachAllFromProperty(
+          dbName,
+          propertyId,
+        );
+        await this.propertyOwnerRepository.detachAllFromProperty(
           dbName,
           propertyId,
         );

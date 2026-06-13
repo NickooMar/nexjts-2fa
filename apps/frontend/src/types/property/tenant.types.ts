@@ -1,29 +1,13 @@
 /**
- * A property tenant: a person renting/occupying a property. Stored in the
- * organization's own database — unrelated to the "tenant" (= organization)
- * of the multi-tenancy model.
+ * A property tenant: a person renting/occupying a property. Shares its shape
+ * with {@link PropertyContact}.
  */
-export interface PropertyTenant {
-  _id: string;
-  uuid: string;
-  fullName: string;
-  email?: string;
-  phone?: string;
-  documentId?: string;
-  notes?: string;
-  /** Properties this tenant currently occupies. */
-  propertyIds: string[];
-  createdBy?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import {
+  PropertyContact,
+  CreatePropertyContactInput,
+  UpdatePropertyContactInput,
+} from "./contact.types";
 
-export interface CreatePropertyTenantInput {
-  fullName: string;
-  email?: string;
-  phone?: string;
-  documentId?: string;
-  notes?: string;
-}
-
-export type UpdatePropertyTenantInput = Partial<CreatePropertyTenantInput>;
+export type PropertyTenant = PropertyContact;
+export type CreatePropertyTenantInput = CreatePropertyContactInput;
+export type UpdatePropertyTenantInput = UpdatePropertyContactInput;

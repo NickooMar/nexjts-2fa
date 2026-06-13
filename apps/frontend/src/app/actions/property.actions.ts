@@ -11,6 +11,9 @@ import {
 const errorMessage = (error: unknown) =>
   error instanceof Error ? error.message : "unknown_error";
 
+const hasStatus = (error: unknown, status: number) =>
+  error instanceof ApiRequestError && error.status === status;
+
 const errorCode = (error: unknown) => {
   if (error instanceof ApiRequestError) {
     const details = error.details as { code?: unknown; message?: unknown } | undefined;
@@ -52,6 +55,9 @@ export const getPropertyAction = async (
     );
     return { success: true, property: data.property };
   } catch (error) {
+    if (hasStatus(error, 404)) {
+      return { success: false, error: errorCode(error) };
+    }
     console.error(error);
     return { success: false, error: errorMessage(error) };
   }
@@ -119,6 +125,7 @@ export const deletePropertyAction = async (
       { method: "DELETE" }
     );
     revalidatePath("/properties");
+    revalidatePath(`/properties/${idOrSlug}`);
     return { success: true };
   } catch (error) {
     console.error(error);

@@ -22,18 +22,19 @@ import { PropertyLimitErrorDetails } from "@/types/property/property.types";
 import { StepGeneralInfo } from "./StepGeneralInfo";
 import { StepContracts } from "./StepContracts";
 import { StepTenants } from "./StepTenants";
+import { StepOwners } from "./StepOwners";
 import { PropertyLimitUpgradeModal } from "./PropertyLimitUpgradeModal";
 import {
   ImageDraft,
   ContractDraft,
-  NewTenantDraft,
+  NewContactDraft,
   toImageDrafts,
   toContractInput,
-  toTenantInput,
+  toContactInput,
   revokeImageDrafts,
 } from "./wizard.helpers";
 
-const STEP_IDS = ["general", "contracts", "tenants"] as const;
+const STEP_IDS = ["general", "contracts", "tenants", "owners"] as const;
 
 function isPropertyLimitErrorDetails(
   value: unknown
@@ -96,7 +97,11 @@ export function PropertyCreateWizard({
 
   // Step 3 — tenants
   const [selectedTenantIds, setSelectedTenantIds] = useState<string[]>([]);
-  const [newTenants, setNewTenants] = useState<NewTenantDraft[]>([]);
+  const [newTenants, setNewTenants] = useState<NewContactDraft[]>([]);
+
+  // Step 4 — owners
+  const [selectedOwnerIds, setSelectedOwnerIds] = useState<string[]>([]);
+  const [newOwners, setNewOwners] = useState<NewContactDraft[]>([]);
 
   // Revoke preview object URLs when the wizard unmounts.
   const imagesRef = useRef<{ gallery: ImageDraft[]; contracts: ContractDraft[] }>(
@@ -182,7 +187,9 @@ export function PropertyCreateWizard({
         documents: draft.documents.map((document) => document.file),
       })),
       existingTenantIds: selectedTenantIds,
-      newTenants: newTenants.map((draft) => toTenantInput(draft.values)),
+      newTenants: newTenants.map((draft) => toContactInput(draft.values)),
+      existingOwnerIds: selectedOwnerIds,
+      newOwners: newOwners.map((draft) => toContactInput(draft.values)),
     };
 
     await createWizard.mutateAsync(submission).catch((error) => {
@@ -276,6 +283,21 @@ export function PropertyCreateWizard({
               )
             }
             onChangeNewTenants={setNewTenants}
+          />
+        </div>
+        <div className={cn(step !== 3 && "hidden")}>
+          <StepOwners
+            selectedOwnerIds={selectedOwnerIds}
+            newOwners={newOwners}
+            disabled={isSubmitting}
+            onToggleExisting={(ownerId) =>
+              setSelectedOwnerIds((current) =>
+                current.includes(ownerId)
+                  ? current.filter((id) => id !== ownerId)
+                  : [...current, ownerId]
+              )
+            }
+            onChangeNewOwners={setNewOwners}
           />
         </div>
       </main>

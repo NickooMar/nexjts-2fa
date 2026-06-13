@@ -10,9 +10,10 @@ import {
   uploadContractDocuments,
 } from "@/services/api/contracts.api";
 import { attachTenants, createTenant } from "@/services/api/tenants.api";
+import { attachOwners, createOwner } from "@/services/api/owners.api";
 import { Property, CreatePropertyInput } from "@/types/property/property.types";
 import { CreateContractInput } from "@/types/property/contract.types";
-import { CreatePropertyTenantInput } from "@/types/property/tenant.types";
+import { CreatePropertyContactInput } from "@/types/property/contact.types";
 
 /** One contract collected by the wizard: details + its files. */
 export interface ContractDraftSubmission {
@@ -29,17 +30,27 @@ export interface WizardSubmission {
   /** Existing roster tenants to attach. */
   existingTenantIds: string[];
   /** Brand-new tenants, created already attached to the property. */
-  newTenants: CreatePropertyTenantInput[];
+  newTenants: CreatePropertyContactInput[];
+  /** Existing roster owners to attach. */
+  existingOwnerIds: string[];
+  /** Brand-new owners, created already attached to the property. */
+  newOwners: CreatePropertyContactInput[];
 }
 
 /** Progress phases surfaced while the submission chain runs. */
-export type WizardPhase = "property" | "images" | "contracts" | "tenants";
+export type WizardPhase =
+  | "property"
+  | "images"
+  | "contracts"
+  | "tenants"
+  | "owners";
 
 /** Non-fatal step failures (the property itself was created). */
 export type WizardWarning =
   | "images_failed"
   | "contracts_failed"
-  | "tenants_failed";
+  | "tenants_failed"
+  | "owners_failed";
 
 export interface WizardResult {
   property: Property;
@@ -114,6 +125,24 @@ async function submitWizard(
     }
   }
 
+  if (
+    submission.existingOwnerIds.length > 0 ||
+    submission.newOwners.length > 0
+  ) {
+    onPhase?.("owners");
+    if (submission.existingOwnerIds.length > 0) {
+      await attachOwners({
+        propertyIdOrSlug: idOrSlug,
+        ownerIds: submission.existingOwnerIds,
+      }).catch(() => warnings.add("owners_failed"));
+    }
+    for (const owner of submission.newOwners) {
+      await createOwner({ input: owner, propertyId: property._id }).catch(
+        () => warnings.add("owners_failed")
+      );
+    }
+  }
+
   return { property, warnings: [...warnings] };
 }
 
@@ -147,6 +176,7 @@ export function useCreatePropertyWizard(
       // page fetch a fresh, complete snapshot.
       queryClient.invalidateQueries({ queryKey: queryKeys.properties.all() });
       queryClient.invalidateQueries({ queryKey: queryKeys.tenants.all() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.owners.all() });
       queryClient.invalidateQueries({ queryKey: queryKeys.contracts.all() });
       options?.onSuccess?.(result);
     },

@@ -1,7 +1,7 @@
 import { ContractFormState } from "@/schemas/contract.schema";
-import { TenantFormState } from "@/schemas/tenant.schema";
+import { ContactFormState } from "@/schemas/contact.schema";
 import { CreateContractInput } from "@/types/property/contract.types";
-import { CreatePropertyTenantInput } from "@/types/property/tenant.types";
+import { CreatePropertyContactInput } from "@/types/property/contact.types";
 
 /** A locally selected image, previewable before anything is uploaded. */
 export interface ImageDraft {
@@ -24,11 +24,14 @@ export interface ContractDraft {
   documents: FileDraft[];
 }
 
-/** A brand-new tenant collected by step 3, pending submission. */
-export interface NewTenantDraft {
+/** A brand-new contact (tenant or owner) collected by a step, pending submission. */
+export interface NewContactDraft {
   id: string;
-  values: TenantFormState;
+  values: ContactFormState;
 }
+
+/** Back-compat alias for the tenants step. */
+export type NewTenantDraft = NewContactDraft;
 
 let draftSequence = 0;
 /** Stable local ids for list keys (never sent to the backend). */
@@ -64,10 +67,10 @@ export function toContractInput(values: ContractFormState): CreateContractInput 
   };
 }
 
-/** Map tenant form values to the API payload, dropping empty fields. */
-export function toTenantInput(
-  values: TenantFormState
-): CreatePropertyTenantInput {
+/** Map contact form values to the API payload, dropping empty fields. */
+export function toContactInput(
+  values: ContactFormState
+): CreatePropertyContactInput {
   return {
     fullName: values.fullName.trim(),
     email: values.email?.trim() || undefined,
@@ -76,3 +79,6 @@ export function toTenantInput(
     notes: values.notes?.trim() || undefined,
   };
 }
+
+/** Back-compat alias for the tenants step. */
+export const toTenantInput = toContactInput;

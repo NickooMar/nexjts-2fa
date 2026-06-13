@@ -381,6 +381,16 @@
         "tenants_description": "Administrá inquilinos y sus contratos.",
         "maintenance": "Mantenimiento",
         "maintenance_description": "Seguí los pedidos de mantenimiento y reparaciones."
+      },
+      "owners": {
+        "title": "Propietarios",
+        "empty": "Todavía no hay propietarios vinculados a esta propiedad.",
+        "add": "Agregar propietario",
+        "remove": "Quitar propietario",
+        "dialog_title": "Gestionar propietarios",
+        "dialog_description": "Vinculá propietarios existentes o creá nuevos para esta propiedad.",
+        "save": "Guardar",
+        "cancel": "Cancelar"
       }
     },
     "not_found": {
@@ -479,6 +489,12 @@
           "hint": "Opcional",
           "title": "Inquilinos",
           "description": "Vinculá a las personas que ocupan esta propiedad. Elegilas de tu listado existente o creá nuevas. Este paso es opcional."
+        },
+        "owners": {
+          "label": "Propietarios",
+          "hint": "Opcional",
+          "title": "Propietarios",
+          "description": "Vinculá a las personas que son dueñas de esta propiedad. Elegilas de tu listado existente o creá nuevas. Este paso es opcional."
         }
       },
       "images": {
@@ -496,14 +512,16 @@
         "property": "Creando propiedad…",
         "images": "Subiendo fotos…",
         "contracts": "Guardando contratos…",
-        "tenants": "Vinculando inquilinos…"
+        "tenants": "Vinculando inquilinos…",
+        "owners": "Vinculando propietarios…"
       },
       "messages": {
         "created": "Propiedad creada",
         "warnings": {
           "images_failed": "La propiedad se creó, pero algunas fotos no se pudieron subir. Podés reintentar desde la página de la propiedad.",
           "contracts_failed": "La propiedad se creó, pero algunos contratos no se pudieron guardar. Podés agregarlos desde la página de la propiedad.",
-          "tenants_failed": "La propiedad se creó, pero algunos inquilinos no se pudieron vincular. Podés agregarlos desde la página de la propiedad."
+          "tenants_failed": "La propiedad se creó, pero algunos inquilinos no se pudieron vincular. Podés agregarlos desde la página de la propiedad.",
+          "owners_failed": "La propiedad se creó, pero algunos propietarios no se pudieron vincular. Podés agregarlos desde la página de la propiedad."
         }
       },
       "upgrade_modal": {
@@ -653,12 +671,68 @@
       },
       "messages": {
         "errors": {
-          "tenant_name_min_length": "El nombre debe tener al menos 2 caracteres",
-          "tenant_name_max_length": "El nombre debe tener como máximo 160 caracteres",
-          "tenant_email_invalid": "Ingresá un email válido",
-          "tenant_phone_max_length": "El teléfono debe tener como máximo 30 caracteres",
-          "tenant_document_max_length": "El documento debe tener como máximo 60 caracteres",
-          "tenant_notes_max_length": "Las notas deben tener como máximo 1000 caracteres"
+          "name_min_length": "El nombre debe tener al menos 2 caracteres",
+          "name_max_length": "El nombre debe tener como máximo 160 caracteres",
+          "email_invalid": "Ingresá un email válido",
+          "phone_max_length": "El teléfono debe tener como máximo 30 caracteres",
+          "document_max_length": "El documento debe tener como máximo 60 caracteres",
+          "notes_max_length": "Las notas deben tener como máximo 1000 caracteres"
+        }
+      }
+    },
+    "owners": {
+      "existing_title": "Seleccionar propietarios existentes",
+      "existing_empty": "Tu organización todavía no tiene propietarios. Creá el primero abajo.",
+      "search_placeholder": "Buscar por nombre, email, teléfono…",
+      "no_results": "Ningún propietario coincide con \"{query}\".",
+      "no_contact_info": "Sin información de contacto",
+      "occupies_count": "{count, plural, one {# propiedad} other {# propiedades}}",
+      "new_title": "Crear nuevos propietarios",
+      "new_badge": "Nuevo",
+      "add_action": "Agregar propietario",
+      "add_title": "Nuevo propietario",
+      "add_submit": "Agregar propietario",
+      "cancel": "Cancelar",
+      "remove": "Quitar propietario",
+      "form": {
+        "full_name": {
+          "title": "Nombre completo",
+          "placeholder": "Juana Pérez"
+        },
+        "email": {
+          "title": "Email",
+          "placeholder": "juana@ejemplo.com"
+        },
+        "phone": {
+          "title": "Teléfono",
+          "placeholder": "+54 11 5555-5555"
+        },
+        "document_id": {
+          "title": "DNI / Documento",
+          "placeholder": "DNI, pasaporte…"
+        },
+        "notes": {
+          "title": "Notas",
+          "placeholder": "Notas sobre este propietario (opcional)"
+        }
+      },
+      "messages": {
+        "success": {
+          "attached": "Propietarios vinculados a la propiedad.",
+          "created": "Propietario creado.",
+          "detached": "Propietario quitado de la propiedad."
+        },
+        "errors": {
+          "name_min_length": "El nombre debe tener al menos 2 caracteres",
+          "name_max_length": "El nombre debe tener como máximo 160 caracteres",
+          "email_invalid": "Ingresá un email válido",
+          "phone_max_length": "El teléfono debe tener como máximo 30 caracteres",
+          "document_max_length": "El documento debe tener como máximo 60 caracteres",
+          "notes_max_length": "Las notas deben tener como máximo 1000 caracteres",
+          "attach_failed": "Algunos propietarios no se pudieron vincular. Intentá de nuevo.",
+          "create_failed": "No se pudo crear el propietario. Intentá de nuevo.",
+          "detach_failed": "No se pudo quitar el propietario. Intentá de nuevo.",
+          "insufficient_permissions": "No tenés permisos para gestionar propietarios."
         }
       }
     }

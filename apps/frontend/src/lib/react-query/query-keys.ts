@@ -63,6 +63,15 @@ const tenants = {
     [...tenants.all(), "by-property", propertyIdOrSlug] as const,
 };
 
+/** Property owners — a roster separate from tenants. */
+const owners = {
+  all: () => ["owners"] as const,
+  lists: () => [...owners.all(), "list"] as const,
+  list: () => [...owners.lists()] as const,
+  byProperty: (propertyIdOrSlug: string) =>
+    [...owners.all(), "by-property", propertyIdOrSlug] as const,
+};
+
 /**
  * Geographic reference data. Global and static (not tenant-scoped), so these
  * keys carry no tenant id and the data is cached aggressively — see
@@ -83,6 +92,7 @@ export const queryKeys = {
   properties,
   contracts,
   tenants,
+  owners,
   billing,
   locations,
 } as const;

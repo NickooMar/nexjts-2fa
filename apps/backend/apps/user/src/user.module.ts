@@ -30,6 +30,9 @@ import { ContractRepository } from './infrastructure/repository/contract.reposit
 import { PropertyTenantService } from './domain/services/property-tenant.service';
 import { PropertyTenantController } from './app/controller/property-tenant.controller';
 import { PropertyTenantRepository } from './infrastructure/repository/property-tenant.repository';
+import { PropertyOwnerService } from './domain/services/property-owner.service';
+import { PropertyOwnerController } from './app/controller/property-owner.controller';
+import { PropertyOwnerRepository } from './infrastructure/repository/property-owner.repository';
 import { TenantConnectionService } from './infrastructure/tenancy/tenant-connection.service';
 
 @Module({
@@ -65,6 +68,7 @@ import { TenantConnectionService } from './infrastructure/tenancy/tenant-connect
     MembershipController,
     InvitationController,
     PropertyTenantController,
+    PropertyOwnerController,
   ],
   providers: [
     UserService,
@@ -83,6 +87,8 @@ import { TenantConnectionService } from './infrastructure/tenancy/tenant-connect
     InvitationRepository,
     PropertyTenantService,
     PropertyTenantRepository,
+    PropertyOwnerService,
+    PropertyOwnerRepository,
     TenantConnectionService,
   ],
 })

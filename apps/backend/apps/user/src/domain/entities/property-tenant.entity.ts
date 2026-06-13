@@ -1,25 +1,7 @@
-import { BaseEntity } from 'libs/shared/repositories/base.entity';
+import { PropertyContact } from './property-contact.entity';
 
-export class PropertyTenant extends BaseEntity {
-  _id: any;
-
-  uuid: string;
-
-  fullName: string;
-
-  email?: string;
-
-  phone?: string;
-
-  documentId?: string;
-
-  notes?: string;
-
-  propertyIds: any[];
-
-  createdBy?: any;
-
-  createdAt: Date;
-
-  updatedAt: Date;
-}
+/**
+ * A person renting/occupying a property — *not* the control-plane `Tenant`
+ * (organization) document. Shares its shape with {@link PropertyContact}.
+ */
+export class PropertyTenant extends PropertyContact {}

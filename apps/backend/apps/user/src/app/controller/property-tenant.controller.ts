@@ -64,12 +64,12 @@ export class PropertyTenantController {
   attach(payload: {
     dbName: string;
     propertyId: string;
-    tenantIds: string[];
+    contactIds: string[];
   }): Observable<PropertyTenant[]> {
     return this.propertyTenantService.attach(
       payload.dbName,
       payload.propertyId,
-      payload.tenantIds,
+      payload.contactIds,
     );
   }
 
@@ -77,12 +77,12 @@ export class PropertyTenantController {
   detach(payload: {
     dbName: string;
     propertyId: string;
-    tenantId: string;
+    contactId: string;
   }): Observable<{ detached: boolean }> {
     return this.propertyTenantService.detach(
       payload.dbName,
       payload.propertyId,
-      payload.tenantId,
+      payload.contactId,
     );
   }
 

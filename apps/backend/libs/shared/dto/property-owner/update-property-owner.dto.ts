@@ -1,3 +1,3 @@
 import { UpdatePropertyContactDto } from '../property-contact/property-contact.dto';
 
-export class UpdatePropertyTenantDto extends UpdatePropertyContactDto {}
+export class UpdatePropertyOwnerDto extends UpdatePropertyContactDto {}

@@ -33,6 +33,7 @@ import { DeletePropertyDialog } from "@/components/Property/DeletePropertyDialog
 import { PropertyGallery } from "@/components/Property/media/PropertyGallery";
 import { PropertyDocuments } from "@/components/Property/media/PropertyDocuments";
 import { ManagePhotosDialog } from "@/components/Property/media/ManagePhotosDialog";
+import { PropertyOwnersSection } from "@/components/Property/contacts/PropertyOwnersSection";
 
 interface PropertyDetailsClientProps {
   property: Property;
@@ -75,7 +76,7 @@ const PropertyDetailsClient = ({
   };
 
   const onDeleted = () => {
-    router.push("/properties");
+    router.replace("/properties");
   };
 
   const location = [
@@ -240,6 +241,12 @@ const PropertyDetailsClient = ({
             </div>
             <PropertyDocuments property={property} canManage={canManage} />
           </section>
+
+          {/* Owners */}
+          <PropertyOwnersSection
+            propertyIdOrSlug={property.slug ?? property._id}
+            canManage={canManage}
+          />
         </div>
 
         {/* Sidebar */}

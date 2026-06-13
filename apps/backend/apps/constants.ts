@@ -149,6 +149,21 @@ export const PropertyTenantPatterns = {
 } as const;
 
 /**
+ * Property owners are the people who own a property (stored in the tenant
+ * database, in a roster separate from renters). Same shape as property
+ * tenants — see PropertyTenantPatterns.
+ */
+export const PropertyOwnerPatterns = {
+  CREATE: 'PROPERTY_OWNER_CREATE',
+  UPDATE: 'PROPERTY_OWNER_UPDATE',
+  DELETE: 'PROPERTY_OWNER_DELETE',
+  ATTACH: 'PROPERTY_OWNER_ATTACH',
+  DETACH: 'PROPERTY_OWNER_DETACH',
+  FIND_ALL: 'PROPERTY_OWNER_FIND_ALL',
+  FIND_BY_PROPERTY: 'PROPERTY_OWNER_FIND_BY_PROPERTY',
+} as const;
+
+/**
  * Entities that can own media assets. Property media lives in the tenant
  * database; organization branding (logo/banner) lives on the control-plane
  * tenant document instead — see TenantPatterns.UPDATE_BRANDING.
